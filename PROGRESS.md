@@ -1,0 +1,42 @@
+# PROGRESS.md
+
+Tracks completed implementation changes. Format and hard-gate rules defined in root [CLAUDE.md](CLAUDE.md) — "Logging, Reporting & Progress Tracking". Entries are appended per session, tagged with that session's ID; only the owning session may edit or audit its own entries.
+
+## Foundation
+
+- [x] Scaffold approved foundation folder structure
+  - Date: 2026-08-03
+  - Session: CC-20260803-k7q2
+  - What changed: Created `backend/`, `frontend/`, `directives/`, `tests/`, `docs/` top-level trees (NOW-status subfolders only, per the approved architecture proposal), a `README.md` in each new major folder, `docs/ARCHITECTURE.md`, and this file. No product code, no dependencies, no changes to `CLAUDE.md` or `.claude/`.
+  - Verification: `Get-ChildItem -Recurse -Directory` (see session transcript) confirms all 17 listed paths exist; `.claude/` and `CLAUDE.md` unchanged. `tsc --noEmit` not applicable — no TypeScript code shipped this change.
+  - Notes: No project requirements doc has been located yet — this structure is derived solely from CLAUDE.md's own Folder Responsibilities section, not confirmed product requirements (see `docs/ARCHITECTURE.md` "Assumptions logged"). Deliberately skipped: `scripts/`, `nginx/`, `tmp/`, `preview-db-init/` (LATER), `execution/` and `system/` (legacy/generated, DO-NOT-TOUCH per CLAUDE.md Folder Responsibilities), root `intelligence/` and `backend/src/{services/agents,intelligence,scripts,seeds}` (CONDITIONAL, scope unconfirmed). Assumption logged: `frontend/` created alongside `backend/` despite prior NOW/LATER ambiguity — reversible, local blast radius, no governance boundary crossed, per Default Resolution Strategy. No git repository exists in this working directory yet, so no commit body carries the equivalent of an autonomy-log entry; this note is the substitute per CLAUDE.md's stated fallback ("until that writer exists, include the same information in the commit message body and PROGRESS.md note").
+
+- [x] Add root-level README.md
+  - Date: 2026-08-03
+  - Session: CC-20260803-k7q2
+  - What changed: Created `README.md` at repo root — project front door pointing to `CLAUDE.md` (governance), `docs/ARCHITECTURE.md` (structure), and each subfolder README. "What this is" and "Getting started" sections left as explicit placeholders since no project definition or runnable code exists yet.
+  - Verification: `Test-Path README.md` returns `True`; file content reviewed inline, no other file touched.
+  - Notes: Intentionally not populated with product description — would require inventing the product, which is out of scope per standing instruction. Revisit once the requirements doc/brief is located.
+
+## Skills Lab
+
+- [x] Scaffold `data-quality-gate` skill and sample dataset for Week 1 Agent Skills lab
+  - Date: 2026-08-03
+  - Session: CC-20260803-m3vq
+  - What changed: Created `.claude/skills/` (did not previously exist) and `.claude/skills/data-quality-gate/SKILL.md` (procedural instruction body: requires a dataset path, uses a supplied quality contract when present, checks schema/freshness/volume/key-uniqueness/duplicates/required-fields/nulls/numeric rules, outputs a Check/Evidence/Status/Recommended-Action table, ends with PASS/WARN/FAIL and PUBLISH/BLOCK, explicitly never modifies source data; no `allowed-tools` field yet per instructions). Also created `skill-lab/orders.csv` (12 sample order rows with one intentionally duplicated `order_id`, one blank `region`, one negative `revenue`, one `load_timestamp` >48h old) and `skill-lab/quality-contract.md` (uniqueness/required/positive-revenue/24h-freshness/min-10-rows rules) for the skill to validate against in a later step. Skill was not invoked; nothing was committed.
+  - Verification: `Test-Path` confirms `.claude/skills/data-quality-gate/SKILL.md`, `skill-lab/orders.csv`, and `skill-lab/quality-contract.md` all exist; contents reviewed inline. `tsc --noEmit` not applicable — no TypeScript shipped.
+  - Notes: `skill-lab/` is a new top-level folder not listed in CLAUDE.md's Folder Responsibilities table; logged as a reversible, local-blast-radius assumption for this lab exercise per the Default Resolution Strategy — no governance boundary crossed. `.claude/skills/` is DRI-owned per CLAUDE.md ("Claude Code Configuration Ownership"); that rule requires DRI review before *merge*, not before creation, and no commit/merge occurred this session, so no escalation was triggered.
+
+- [x] Harden `data-quality-gate` trigger scope, extract reference doc, add trigger-test prompts (catch-up entry)
+  - Date: 2026-08-03
+  - Session: CC-20260803-t5rn
+  - What changed: Tightened `.claude/skills/data-quality-gate/SKILL.md`'s frontmatter `description` to explicit positive triggers (dataset/CSV/ETL-output validation, publish-readiness) and explicit negative triggers (plain SQL, dashboard design, metric calculation alone do not qualify); added a "When this applies" scope section; moved the eight per-check definitions out of `SKILL.md` into new `.claude/skills/data-quality-gate/references/quality-checks.md` and pointed to it from Step 4. Also created `skill-lab/data-quality-gate-tests.md` (3 trigger prompts, 3 non-trigger prompts, expected-output checklist) and ran three live trigger tests in-session (natural-language ask, direct `/data-quality-gate` invocation, and a plain "write SQL" negative test) — all three matched expectations. The dataset (`skill-lab/orders.csv`) and contract were read-only throughout; not modified. Nothing committed.
+  - Verification: Skill re-invoked twice in-session against unchanged `skill-lab/orders.csv` + `skill-lab/quality-contract.md` and produced the same FAIL/BLOCK verdict both times (duplicate `ORD-1006` key, blank `region` on `ORD-1004`, negative `revenue` on `ORD-1005`, stale `load_timestamp` on `ORD-1008`); the SQL-only prompt did not invoke the skill. File contents reviewed inline. `tsc --noEmit` not applicable — no TypeScript shipped.
+  - Notes: Filed late — this entry is a catch-up per CLAUDE.md's "Catch-up rule" (Logging section), covering work done earlier in this session before a PROGRESS.md entry was written for it. No governance boundary crossed (skill authoring is implementation-level per Autonomy Model).
+
+- [x] Add `etl-failure-triage` skill and sample orders-pipeline failure scenario for Week 2 Agent Skills lab
+  - Date: 2026-08-03
+  - Session: CC-20260803-t5rn
+  - What changed: Created `.claude/skills/etl-failure-triage/SKILL.md` (requires a log/run-output/failure description, reads run metadata when supplied, separates facts from hypotheses, requires an evidence citation per candidate cause, ranks causes, gives one safe diagnostic next step per cause; hard constraints: never modify pipeline code, never rerun jobs, never claim a root cause without evidence; output sections: Incident Summary, Evidence, Ranked Causes, Next Tests, Escalation Recommendation) and `.claude/skills/etl-failure-triage/references/common-failures.md` (catalog of 7 common ETL/ELT failure signatures — schema mismatch, mapping/conversion failure, retry exhaustion, timeout, auth/permission, resource exhaustion, upstream drift — with typical evidence fingerprints). Also created a believable sample incident tied to the existing orders dataset: `skill-lab/orders-pipeline-failure.log` (structured JSON log lines for job `orders_ingest_daily`, showing a schema-validation flag on `region = LATAM` for row `ORD-1012`, a `map_region_code` lookup-table miss against `region_code_map v12`, three identical failed attempts, and retry exhaustion) and `skill-lab/pipeline-run-metadata.md` (run/attempt/row-count summary, `region_code_map` reference-data state, and 5-run prior history showing the first failure after 4 consecutive successes). Skill was not invoked and nothing was committed, per instructions.
+  - Verification: `Test-Path`-equivalent file reads confirm all 4 files exist at the stated paths; contents reviewed inline for internal consistency (same `correlation_id` across log and metadata, same offending value `LATAM` and row `ORD-1012` in both). `tsc --noEmit` not applicable — no TypeScript shipped.
+  - Notes: `.claude/skills/` is DRI-owned per CLAUDE.md; this is skill creation, not merge, so no DRI review trigger yet. No governance boundary crossed — skill authoring and sample fixture creation are implementation-level, reversible, and local-blast-radius per the Autonomy Model.

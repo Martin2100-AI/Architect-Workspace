@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claim Triage — Hearthstone Appliance Co.</title>
+<style>
+  :root{
+    --navy:#132a3d; --navy-light:#1f3f59; --teal:#0d9488; --teal-dark:#0b7a70;
+    --amber:#b45309; --amber-bg:#fef3e2; --green:#166534; --green-bg:#eafaf0;
+    --slate:#475569; --slate-light:#94a3b8; --bg:#f4f6f8; --card:#ffffff;
+    --border:#e2e8f0; --shadow: 0 1px 3px rgba(15,23,42,.08), 0 1px 2px rgba(15,23,42,.06);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,sans-serif;background:var(--bg);color:#0f172a;}
+  header{background:var(--navy);color:#fff;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;}
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand svg{width:34px;height:34px;}
+  .brand-name{font-size:17px;font-weight:600;letter-spacing:.2px;}
+  .brand-sub{font-size:12px;color:#9fb3c8;margin-top:1px;}
+  nav.tabs{display:flex;gap:6px;}
+  nav.tabs span{padding:8px 14px;border-radius:8px;font-size:13px;color:#cbd8e4;cursor:default;}
+  nav.tabs span.active{background:var(--navy-light);color:#fff;font-weight:600;}
+  .avatar{width:34px;height:34px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;}
+  main{max-width:1180px;margin:0 auto;padding:28px 32px 60px;}
+  .page-title{font-size:22px;font-weight:700;margin:0 0 4px;}
+  .page-sub{color:var(--slate);font-size:14px;margin:0 0 24px;}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow);}
+  .stat .num{font-size:26px;font-weight:700;color:var(--navy);}
+  .stat .label{font-size:12.5px;color:var(--slate);margin-top:2px;}
+  .stat.good .num{color:var(--green);}
+  .stat.warn .num{color:var(--amber);}
+  .panel{background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;}
+  .panel-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);}
+  .panel-head h2{font-size:15px;margin:0;font-weight:700;}
+  .filters{display:flex;gap:8px;}
+  .filters button{border:1px solid var(--border);background:#fff;border-radius:20px;padding:6px 14px;font-size:12.5px;color:var(--slate);cursor:default;}
+  .filters button.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+  table{width:100%;border-collapse:collapse;}
+  th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--slate-light);padding:10px 20px;border-bottom:1px solid var(--border);}
+  td{padding:14px 20px;border-bottom:1px solid var(--border);font-size:13.5px;vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  .cust{font-weight:600;color:#0f172a;}
+  .meta{color:var(--slate);font-size:12.5px;margin-top:2px;}
+  .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600;}
+  .badge.approved{background:var(--green-bg);color:var(--green);}
+  .badge.escalated{background:var(--amber-bg);color:var(--amber);}
+  .badge svg{width:12px;height:12px;}
+  .reason{font-size:12.5px;color:var(--slate);margin-top:6px;line-height:1.5;}
+  .reason b{color:#0f172a;}
+  .checks{display:flex;gap:6px;margin-top:8px;}
+  .chip{font-size:10.5px;padding:2px 7px;border-radius:5px;font-weight:600;}
+  .chip.pass{background:var(--green-bg);color:var(--green);}
+  .chip.fail{background:var(--amber-bg);color:var(--amber);}
+  .row-btn{border:1px solid var(--border);background:#fff;border-radius:7px;padding:6px 12px;font-size:12.5px;color:var(--navy);font-weight:600;cursor:default;}
+  footer{max-width:1180px;margin:0 auto;padding:0 32px 40px;color:var(--slate-light);font-size:11.5px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="9" fill="#0d9488"/><path d="M11 22 L18 15 L23 20 L29 12" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="29" cy="12" r="2.4" fill="#fff"/></svg>
+    <div>
+      <div class="brand-name">Hearthstone Appliance Co.</div>
+      <div class="brand-sub">Claim Triage — Customer Service</div>
+    </div>
+  </div>
+  <nav class="tabs">
+    <span class="active">Review Queue</span>
+    <span>Auto-Approved</span>
+    <span>All Claims</span>
+  </nav>
+  <div class="avatar">DP</div>
+</header>
+
+<main>
+  <p class="page-title">Good morning, Dana</p>
+  <p class="page-sub">Here's what needs your eyes today — everything else was handled automatically.</p>
+
+  <div class="stats">
+    <div class="stat good"><div class="num">9</div><div class="label">Auto-approved today</div></div>
+    <div class="stat warn"><div class="num">2</div><div class="label">Waiting on your review</div></div>
+    <div class="stat good"><div class="num">0</div><div class="label">False approvals, last 90 days</div></div>
+    <div class="stat"><div class="num">1.8 min</div><div class="label">Avg. time to decision</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Claim Queue</h2>
+      <div class="filters">
+        <button class="on">Needs review (2)</button>
+        <button>Auto-approved (9)</button>
+        <button>All (11)</button>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Customer &amp; Claim</th><th>Product</th><th>Status</th><th></th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="cust">Marcus Webb — Claim #4822</div>
+            <div class="meta">Receipt #RC-71940 · Submitted 8:12 AM</div>
+          </td>
+          <td>
+            Samsung Dryer DV45<br>
+            <span class="meta">"Won't start, no power at all"</span>
+          </td>
+          <td>
+            <span class="badge escalated">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+              Needs review
+            </span>
+            <div class="reason"><b>Out of warranty window</b> — purchased 2023-04-15, 18-month coverage expired 2024-10-15.</div>
+            <div class="checks">
+              <span class="chip fail">Window: FAIL</span>
+              <span class="chip pass">Purchase: matched</span>
+              <span class="chip pass">Defect: matched</span>
+            </div>
+          </td>
+          <td><button class="row-btn">Open claim →</button></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cust">Priya Anand — Claim #4825</div>
+            <div class="meta">Receipt #RC-88213 · Submitted 9:47 AM</div>
+          </td>
+          <td>
+            GE Dishwasher GDT650<br>
+            <span class="meta">"Leaking from the bottom door seal"</span>
+          </td>
+          <td>
+            <span class="badge escalated">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+              Needs review
+            </span>
+            <div class="reason"><b>No matching purchase record</b> — receipt #RC-88213 not found against this customer's account.</div>
+            <div class="checks">
+              <span class="chip fail">Purchase: FAIL</span>
+              <span class="chip pass">Window: n/a</span>
+              <span class="chip pass">Defect: matched</span>
+            </div>
+          </td>
+          <td><button class="row-btn">Open claim →</button></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cust">Sarah Delgado — Claim #4821</div>
+            <div class="meta">Receipt #RC-70118 · Submitted 7:34 AM</div>
+          </td>
+          <td>
+            LG Refrigerator LRFVS3<br>
+            <span class="meta">"Ice maker leaking onto the floor"</span>
+          </td>
+          <td>
+            <span class="badge approved">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5 11-11"/></svg>
+              Auto-approved
+            </span>
+            <div class="reason">Purchased 2025-11-02, in-window. Matched purchase and covered defect (water/ice system leak).</div>
+            <div class="checks">
+              <span class="chip pass">Window: pass</span>
+              <span class="chip pass">Purchase: matched</span>
+              <span class="chip pass">Defect: matched</span>
+            </div>
+          </td>
+          <td><button class="row-btn">View</button></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="cust">Tyrell Combs — Claim #4819</div>
+            <div class="meta">Receipt #RC-69502 · Submitted 6:58 AM</div>
+          </td>
+          <td>
+            Whirlpool Washer WTW5057<br>
+            <span class="meta">"Drum won't spin, error code F5"</span>
+          </td>
+          <td>
+            <span class="badge approved">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M4 12l5 5 11-11"/></svg>
+              Auto-approved
+            </span>
+            <div class="reason">Purchased 2026-02-19, in-window. Matched purchase and covered defect (drive motor failure).</div>
+            <div class="checks">
+              <span class="chip pass">Window: pass</span>
+              <span class="chip pass">Purchase: matched</span>
+              <span class="chip pass">Defect: matched</span>
+            </div>
+          </td>
+          <td><button class="row-btn">View</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<footer>
+  Sample data — all customer names, claim numbers, and receipt IDs on this screen are fictional and for illustration only.
+</footer>
+
+</body>
+</html>
