@@ -146,13 +146,15 @@
       },
       derived: {
         measures: [
-          { id: "M-1", statement: "Sample measure — reduce time-to-first-tour from browse to booked (illustrative only)." }
+          { id: "M-1", statement: "Sample measure — reduce time-to-first-tour from browse to booked (illustrative only)." },
+          { id: "M-2", statement: "Sample measure — increase saved-property-to-tour-request conversion (illustrative only)." }
         ],
-        roles: ["new user", "user", "buyer"],
+        roles: ["new user", "user", "buyer", "system administrator"],
         guardrails: [
-          { id: "REQ-006", statement: "The system must encrypt sensitive data in transit and protect user passwords." }
+          { id: "REQ-006", statement: "The system must encrypt sensitive data in transit and protect user passwords." },
+          { id: "REQ-017", statement: "The system must provide a disclaimer stating that affordability calculations are estimates and are not lending offers or financial advice." }
         ],
-        systems: ["MLS", "Google Maps"],
+        systems: ["MLS", "Google Maps", "Email Services", "Messaging Platforms"],
         counts: { agents_by_autonomy: { supervised: 2 } }
       },
       stories: [
@@ -161,13 +163,74 @@
           title: "Sample story — Property Discovery Feed",
           narrative: "As a user, I want to browse a personalized property feed so that I can find homes that fit me.",
           release: "r0",
+          owner: "Development Team",
           acceptance_criteria: ["Sample criterion one.", "Sample criterion two."],
           due_on: "2026-08-20",
           due_baseline_on: "2026-08-17"
+        },
+        {
+          id: "STORY-SAMPLE-2",
+          title: "Sample story — Basic Property Search",
+          narrative: "As a user, I want to search homes by city and price range so that I can narrow down my options.",
+          release: "r0",
+          owner: "Development Team",
+          acceptance_criteria: ["Sample criterion one.", "Sample criterion two."],
+          due_on: "2026-08-22",
+          due_baseline_on: "2026-08-17"
+        },
+        {
+          id: "STORY-SAMPLE-3",
+          title: "Sample story — Buyer Profile Creation",
+          narrative: "As a buyer, I want to set my price range and preferences so that matches are relevant to me.",
+          release: "r1",
+          owner: "Buyer",
+          acceptance_criteria: ["Sample criterion one."],
+          due_on: "2026-08-30",
+          due_baseline_on: "2026-08-25"
+        },
+        {
+          id: "STORY-SAMPLE-4",
+          title: "Sample story — Trust Spine Implementation",
+          narrative: "As a system administrator, I want sensitive data encrypted in transit so that user accounts stay safe.",
+          release: "r0",
+          owner: "System Administrator",
+          acceptance_criteria: ["Sample criterion one.", "Sample criterion two."],
+          due_on: "2026-08-23",
+          due_baseline_on: "2026-08-19"
         }
       ],
-      releases: [],
-      requirements: [],
+      releases: [
+        {
+          key: "r0",
+          name: "Initial Setup and Core Features",
+          starts_on: "2026-08-15",
+          ends_on: "2026-08-23",
+          story_ids: ["STORY-SAMPLE-1", "STORY-SAMPLE-2", "STORY-SAMPLE-4"],
+          is_demo_target: false
+        },
+        {
+          key: "r1",
+          name: "Enhanced Property Interaction",
+          starts_on: "2026-08-25",
+          ends_on: "2026-09-02",
+          story_ids: ["STORY-SAMPLE-3"],
+          is_demo_target: true
+        }
+      ],
+      requirements: [
+        {
+          id: "REQ-001", statement: "The system must allow users to sign up using email, Google, or Apple.",
+          kind: "FUNC", priority: "must", cluster: "auth", fulfilled_by: ["STORY-SAMPLE-1"]
+        },
+        {
+          id: "REQ-006", statement: "The system must encrypt sensitive data in transit and protect user passwords.",
+          kind: "SAFE", priority: "must", cluster: "security", fulfilled_by: ["STORY-SAMPLE-4"]
+        },
+        {
+          id: "REQ-017", statement: "The system must provide a disclaimer stating that affordability calculations are estimates and are not lending offers or financial advice.",
+          kind: "SAFE", priority: "must", cluster: "compliance", fulfilled_by: []
+        }
+      ],
       agents: []
     };
   }
@@ -183,7 +246,10 @@
         points_awarded: 21
       },
       stories: [
-        { id: "STORY-SAMPLE-1", verification: { state: "in_progress", commit: null, points: 3 } }
+        { id: "STORY-SAMPLE-1", verification: { state: "verified", commit: "a1b2c3d", points: 3 } },
+        { id: "STORY-SAMPLE-2", verification: { state: "submitted", commit: "e4f5a6b", points: 2 } },
+        { id: "STORY-SAMPLE-3", verification: { state: "not_started", commit: null, points: 0 } },
+        { id: "STORY-SAMPLE-4", verification: { state: "in_progress", commit: null, points: 0 } }
       ]
     };
   }
