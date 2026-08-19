@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "project": {
+    "name": "Keysy",
+    "descriptor": "A mobile-first application to simplify the home-buying process with personalized recommendations and affordability insights."
+  },
+  "derived": {
+    "guardrails": [
+      {
+        "id": "GUARDRAIL-TRANSIT-PASSWORDS",
+        "statement": "The system must encrypt sensitive data in transit and protect user passwords."
+      },
+      {
+        "id": "GUARDRAIL-AFFORDABILITY-DISCLAIMER",
+        "statement": "The system must provide a disclaimer stating that affordability calculations are estimates and are not lending offers or financial advice."
+      }
+    ]
+  },
+  "stories": [
+    {
+      "id": "STORY-001",
+      "title": "User Registration and Login",
+      "narrative": "As a new user, I want to create an account and log in, so that I can access the app's features.",
+      "release": "r0",
+      "owner": "Development Team",
+      "acceptance_criteria": [
+        "Given a new user, when they sign up using email, then they should be able to log in successfully.",
+        "Given a user, when they forget their password, then they should be able to reset it.",
+        "Trust: User credentials are securely stored and transmitted."
+      ]
+    },
+    {
+      "id": "STORY-002",
+      "title": "Property Discovery Feed",
+      "release": "r0",
+      "owner": "Development Team"
+    },
+    {
+      "id": "STORY-003",
+      "title": "Basic Property Search",
+      "release": "r0",
+      "owner": "Development Team"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "statement": "The system must allow users to sign up using email, Google, or Apple.",
+      "kind": "FUNC",
+      "priority": "must",
+      "fulfilled_by": []
+    },
+    {
+      "id": "REQ-009",
+      "statement": "The system must allow users to log in and log out securely.",
+      "kind": "FUNC",
+      "priority": "must",
+      "fulfilled_by": ["STORY-001"]
+    }
+  ]
+}

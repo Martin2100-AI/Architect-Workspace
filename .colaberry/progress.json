@@ -3,6 +3,11 @@
   "stories": [
     {
       "id": "STORY-000",
+      "verification": {
+        "state": "verified",
+        "commit": "b23a901",
+        "points": null
+      },
       "criteria": [
         {
           "text": "Given the Command Center, when it is opened, then every tab is reachable and every card drills down one level.",
@@ -22,6 +27,28 @@
         },
         {
           "text": "Trust — no tab shows a number, a connection or a result the project has not actually produced.",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "id": "STORY-001",
+      "verification": {
+        "state": "verified",
+        "commit": "6cb7802",
+        "points": null
+      },
+      "criteria": [
+        {
+          "text": "Given a new user, when they sign up using email, then they should be able to log in successfully.",
+          "passed": true
+        },
+        {
+          "text": "Given a user, when they forget their password, then they should be able to reset it.",
+          "passed": true
+        },
+        {
+          "text": "Trust: User credentials are securely stored and transmitted.",
           "passed": true
         }
       ]
