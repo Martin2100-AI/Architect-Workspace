@@ -1,16 +1,22 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import { requireHttps } from './middleware/requireHttps';
+import { Favorite } from './models/Favorite';
 import { PasswordResetToken } from './models/PasswordResetToken';
 import { TokenBlocklist } from './models/TokenBlocklist';
 import { User } from './models/User';
 import { createAuthRouter } from './routes/authRoutes';
+import { createFavoritesRouter } from './routes/favoritesRoutes';
+import { createPropertyRouter } from './routes/propertyRoutes';
+import { MlsClient } from './services/mlsClient';
 import { EmailSender } from './services/notificationService';
 
 export interface AppDependencies {
   userModel: typeof User;
   resetTokenModel: typeof PasswordResetToken;
   blocklistModel: typeof TokenBlocklist;
+  favoriteModel: typeof Favorite;
   emailSender: EmailSender;
+  mlsClient: MlsClient;
   jwtSecret: string;
   nodeEnv: string;
 }
@@ -32,6 +38,15 @@ export function createApp(deps: AppDependencies): Express {
   });
 
   app.use('/auth', createAuthRouter(deps));
+  app.use('/properties', createPropertyRouter({ mlsClient: deps.mlsClient }));
+  app.use(
+    '/favorites',
+    createFavoritesRouter({
+      favoriteModel: deps.favoriteModel,
+      blocklistModel: deps.blocklistModel,
+      jwtSecret: deps.jwtSecret,
+    }),
+  );
 
   app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
     const errorClass = err instanceof Error ? err.constructor.name : 'UnknownError';

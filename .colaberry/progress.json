@@ -48,11 +48,11 @@
       "criteria": [
         {
           "text": "Given a user, when they open the app, then they should see a feed of properties with key details.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given a property, when it is saved, then it should appear in the user's favorites.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: Property data is fetched from the MLS and displayed accurately.",
