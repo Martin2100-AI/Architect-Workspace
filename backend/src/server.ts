@@ -35,6 +35,7 @@ const app = createApp({
   mlsClient,
   jwtSecret: env.jwtSecret,
   nodeEnv: env.nodeEnv,
+  corsOrigin: env.corsOrigin,
 });
 
 app.listen(env.port, () => {

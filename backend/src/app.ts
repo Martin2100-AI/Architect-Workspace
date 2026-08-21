@@ -1,4 +1,5 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
+import { createCorsMiddleware } from './middleware/cors';
 import { requireHttps } from './middleware/requireHttps';
 import { Favorite } from './models/Favorite';
 import { PasswordResetToken } from './models/PasswordResetToken';
@@ -19,6 +20,7 @@ export interface AppDependencies {
   mlsClient: MlsClient;
   jwtSecret: string;
   nodeEnv: string;
+  corsOrigin?: string;
 }
 
 export function createApp(deps: AppDependencies): Express {
@@ -31,6 +33,7 @@ export function createApp(deps: AppDependencies): Express {
     app.use(requireHttps);
   }
 
+  app.use(createCorsMiddleware(deps.corsOrigin));
   app.use(express.json());
 
   app.get('/health', (_req, res) => {
