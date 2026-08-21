@@ -1,13 +1,8 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "stories": [
     {
       "id": "STORY-000",
-      "verification": {
-        "state": "verified",
-        "commit": "b23a901",
-        "points": null
-      },
       "criteria": [
         {
           "text": "Given the Command Center, when it is opened, then every tab is reachable and every card drills down one level.",
@@ -18,11 +13,11 @@
           "passed": true
         },
         {
-          "text": "Given the data files, when any tab renders, then its content comes from .colaberry/plan.json and .colaberry/progress.json read at runtime rather than from hard-coded values.",
+          "text": "Given the Command Center, when any tab renders, then .colaberry/plan.json and .colaberry/progress.json are both committed in this repo and every tab reads its content from them at runtime rather than from hard-coded values.",
           "passed": true
         },
         {
-          "text": "Given .colaberry/manifest.json, when any tab is shown, then it displays how old the data is and warns when that age exceeds a week.",
+          "text": "Given the Command Center, when any tab is shown, then .colaberry/manifest.json is committed in this repo and every tab shows how old that data is and warns when the age exceeds a week.",
           "passed": true
         },
         {
@@ -33,11 +28,6 @@
     },
     {
       "id": "STORY-001",
-      "verification": {
-        "state": "verified",
-        "commit": "6cb7802",
-        "points": null
-      },
       "criteria": [
         {
           "text": "Given a new user, when they sign up using email, then they should be able to log in successfully.",
@@ -50,6 +40,227 @@
         {
           "text": "Trust: User credentials are securely stored and transmitted.",
           "passed": true
+        }
+      ]
+    },
+    {
+      "id": "STORY-002",
+      "criteria": [
+        {
+          "text": "Given a user, when they open the app, then they should see a feed of properties with key details.",
+          "passed": false
+        },
+        {
+          "text": "Given a property, when it is saved, then it should appear in the user's favorites.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Property data is fetched from the MLS and displayed accurately.",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "id": "STORY-003",
+      "criteria": [
+        {
+          "text": "Given a user, when they search by city, then they should see relevant properties.",
+          "passed": false
+        },
+        {
+          "text": "Given a user, when they apply a price filter, then only properties within that range should appear.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Search results are consistent with the MLS data.",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "id": "STORY-004",
+      "criteria": [
+        {
+          "text": "Given a property, when viewed, then all details including match score should be visible.",
+          "passed": false
+        },
+        {
+          "text": "Given a property, when it is not a match, then the user should understand why.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Match score is calculated based on user preferences and MLS data.",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "id": "STORY-005",
+      "criteria": [
+        {
+          "text": "Given a property, when saved, then it should appear in the selected category.",
+          "passed": false
+        },
+        {
+          "text": "Given a saved property, when removed, then it should no longer appear in favorites.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Saved properties are stored and retrieved accurately.",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "id": "STORY-006",
+      "criteria": [
+        {
+          "text": "Given multiple properties, when compared, then differences should be highlighted.",
+          "passed": false
+        },
+        {
+          "text": "Given a comparison, when a property is removed, then the comparison updates.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Comparison data is accurate and up-to-date.",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "id": "STORY-007",
+      "criteria": [
+        {
+          "text": "Given a map view, when a user zooms, then properties in the visible area should update.",
+          "passed": false
+        },
+        {
+          "text": "Given a property marker, when clicked, then a preview should appear.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Map data is synchronized with MLS listings.",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "id": "STORY-008",
+      "criteria": [
+        {
+          "text": "Given a property, when a tour is requested, then the user should receive a confirmation.",
+          "passed": false
+        },
+        {
+          "text": "Given a tour request, when details are incomplete, then the user should be prompted to complete them.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Tour requests are logged and confirmed accurately.",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "id": "STORY-009",
+      "criteria": [
+        {
+          "text": "Given a user, when they update preferences, then notifications should reflect changes.",
+          "passed": false
+        },
+        {
+          "text": "Given a notification, when disabled, then it should not be sent.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Notification settings are stored and applied correctly.",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "id": "STORY-010",
+      "criteria": [
+        {
+          "text": "Given a property, when affordability is calculated, then all cost components should be displayed.",
+          "passed": false
+        },
+        {
+          "text": "Given a calculation, when inputs are changed, then results should update.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Calculations are accurate and disclaimers are visible.",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "id": "STORY-011",
+      "criteria": [
+        {
+          "text": "Given a property, when shared via email, then the recipient should receive the details.",
+          "passed": false
+        },
+        {
+          "text": "Given a property, when shared via text, then a link should be sent.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Shared links are valid and lead to the correct property details.",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "id": "STORY-012",
+      "criteria": [
+        {
+          "text": "Given sensitive data, when transmitted, then it should be encrypted.",
+          "passed": false
+        },
+        {
+          "text": "Given an integration, when configured, then it should connect to the correct service.",
+          "passed": false
+        },
+        {
+          "text": "Trust: Data security measures are in place and integrations are functional.",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "id": "STORY-014",
+      "criteria": [
+        {
+          "text": "Given a buyer accesses the profile creation page, When they submit valid information, Then a profile is created successfully",
+          "passed": false
+        },
+        {
+          "text": "Given a buyer submits incomplete information, When they attempt to create a profile, Then an error message is displayed",
+          "passed": false
+        },
+        {
+          "text": "Trust: Profile creation actions are logged with a timestamp",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "id": "STORY-015",
+      "criteria": [
+        {
+          "text": "Given a user registers, When the registration is successful, Then the action is logged in the audit trail",
+          "passed": false
+        },
+        {
+          "text": "Given a user requests a password reset, When the reset is initiated, Then the action is logged in the audit trail",
+          "passed": false
+        },
+        {
+          "text": "Trust: All user actions must be recorded in the audit trail with a timestamp",
+          "passed": false
         }
       ]
     }
