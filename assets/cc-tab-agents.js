@@ -53,9 +53,10 @@
       main.appendChild(UI.el("p", { class: "cc-card__label", text: "Owner, not a scoped agent. No skills registered yet. No runs recorded." }));
       owned.forEach(function (s) {
         var v = progress && progress.stories ? progress.stories.filter(function (p) { return p.id === s.id; })[0] : null;
+        var verification = global.CCData.deriveVerification(v);
         main.appendChild(UI.el("div", { class: "cc-card", style: "margin-bottom:10px" }, [
           UI.el("p", { class: "cc-card__label", text: s.id + (s.title ? " — " + s.title : "") }),
-          UI.el("p", {}, [UI.statusDot(UI.verificationLevel(v && v.verification)), document.createTextNode(UI.verificationLabel(v && v.verification))])
+          UI.el("p", {}, [UI.statusDot(UI.verificationLevel(verification)), document.createTextNode(UI.verificationLabel(verification))])
         ]));
       });
       return;

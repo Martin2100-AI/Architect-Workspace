@@ -12,7 +12,8 @@
       var storyIds = (req && req.fulfilled_by) || [];
       var states = storyIds.map(function (id) {
         var p = progressStories.filter(function (s) { return s.id === id; })[0];
-        return { id: id, state: p && p.verification && p.verification.state };
+        var v = global.CCData.deriveVerification(p);
+        return { id: id, state: v && v.state };
       });
       var allVerified = states.length > 0 && states.every(function (s) { return s.state === "verified"; });
       var level = states.length === 0 ? "bad" : allVerified ? "ok" : "warn";

@@ -67,6 +67,23 @@
     }
   }
 
+  // progress.json schema_version 1 carried a { state, commit, points }
+  // verification object per story. schema_version 2 dropped that in favor
+  // of a self-contained { text, passed } criteria list per story — derive
+  // an equivalent verification state from it so older and newer data both
+  // render the same way.
+  function deriveVerification(p) {
+    if (!p) return null;
+    if (p.verification) return p.verification;
+    if (p.criteria) {
+      var total = p.criteria.length;
+      var passed = p.criteria.filter(function (c) { return c.passed; }).length;
+      var state = total > 0 && passed === total ? "verified" : passed > 0 ? "in_progress" : "not_started";
+      return { state: state, commit: null, points: null };
+    }
+    return null;
+  }
+
   function joinStories(plan, progress) {
     var progressById = {};
     ((progress && progress.stories) || []).forEach(function (s) {
@@ -74,17 +91,46 @@
     });
     return ((plan && plan.stories) || []).map(function (s) {
       var p = progressById[s.id] || null;
+      // plan.json is the source of truth for acceptance criteria wording,
+      // but schema_version 2 progress.json carries its own criteria text
+      // for stories the plan hasn't been updated with yet — fall back to
+      // that rather than showing nothing.
+      var acceptanceCriteria = (s.acceptance_criteria && s.acceptance_criteria.length)
+        ? s.acceptance_criteria
+        : (p && p.criteria ? p.criteria.map(function (c) { return c.text; }) : s.acceptance_criteria);
       return {
         id: s.id,
         title: s.title,
         narrative: s.narrative,
         release: s.release,
-        acceptance_criteria: s.acceptance_criteria,
+        acceptance_criteria: acceptanceCriteria,
         due_on: s.due_on,
         due_baseline_on: s.due_baseline_on,
-        verification: p ? p.verification : null
+        verification: deriveVerification(p)
       };
     });
+  }
+
+  // Real progress.json (schema_version 2) has no totals block — derive one
+  // from the joined stories/criteria so the Overview tab still has real
+  // numbers instead of "no data yet". Sample data (schema_version 1) still
+  // carries its own totals, which win when present.
+  function computeTotals(plan, progress) {
+    if (progress && progress.totals) return progress.totals;
+    var stories = joinStories(plan, progress);
+    if (!stories.length) return null;
+    var progressById = {};
+    ((progress && progress.stories) || []).forEach(function (s) { progressById[s.id] = s; });
+    var storiesVerified = 0, criteriaTotal = 0, criteriaPassed = 0;
+    stories.forEach(function (s) {
+      if (s.verification && s.verification.state === "verified") storiesVerified++;
+      var p = progressById[s.id];
+      if (p && p.criteria) {
+        criteriaTotal += p.criteria.length;
+        criteriaPassed += p.criteria.filter(function (c) { return c.passed; }).length;
+      }
+    });
+    return { stories_total: stories.length, stories_verified: storiesVerified, criteria_total: criteriaTotal, criteria_passed: criteriaPassed, points_awarded: null };
   }
 
   function daysBetween(fromIso, toDate) {
@@ -259,6 +305,8 @@
     getMode: getMode,
     setMode: setMode,
     joinStories: joinStories,
+    deriveVerification: deriveVerification,
+    computeTotals: computeTotals,
     describeDataStamp: describeDataStamp,
     formatAbsoluteDate: formatAbsoluteDate,
     sample: {

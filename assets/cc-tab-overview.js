@@ -10,9 +10,9 @@
     "build-end": { label: "Build ends", source: "plan.schedule.build_end", get: function (p) { return p && p.schedule && { value: p.schedule.build_end }; } },
     "demo-day": { label: "Demo day", source: "plan.schedule.demo_day", get: function (p) { return p && p.schedule && { value: p.schedule.demo_day }; } },
     "demo-release": { label: "Demo release", source: "plan.schedule.demo_release_key", get: function (p) { return p && p.schedule && { value: p.schedule.demo_release_key }; } },
-    "stories-verified": { label: "Stories verified", source: "progress.totals.stories_verified / stories_total", get: function (p, pr) { return pr && pr.totals && { value: pr.totals.stories_verified + " of " + pr.totals.stories_total }; } },
-    "criteria-passed": { label: "Criteria passed", source: "progress.totals.criteria_passed / criteria_total", get: function (p, pr) { return pr && pr.totals && { value: pr.totals.criteria_passed + " of " + pr.totals.criteria_total }; } },
-    "points-awarded": { label: "Points awarded", source: "progress.totals.points_awarded", get: function (p, pr) { return pr && pr.totals && typeof pr.totals.points_awarded === "number" && { value: String(pr.totals.points_awarded) }; } }
+    "stories-verified": { label: "Stories verified", source: "progress.totals, or derived from plan.stories + progress.stories criteria", get: function (p, pr, t) { return t && { value: t.stories_verified + " of " + t.stories_total }; } },
+    "criteria-passed": { label: "Criteria passed", source: "progress.totals, or derived from plan.stories + progress.stories criteria", get: function (p, pr, t) { return t && { value: t.criteria_passed + " of " + t.criteria_total }; } },
+    "points-awarded": { label: "Points awarded", source: "progress.totals.points_awarded", get: function (p, pr, t) { return t && typeof t.points_awarded === "number" && { value: String(t.points_awarded) }; } }
   };
 
   function render(main, data, subId) {
@@ -23,7 +23,7 @@
       main.appendChild(UI.breadcrumb("overview", "Overview", def ? def.label : subId));
       if (!def) { main.appendChild(UI.emptyState("Unknown overview item.")); return; }
       main.appendChild(UI.el("h1", { class: "cc-detail-title", text: def.label }));
-      var result = def.get(plan, progress);
+      var result = def.get(plan, progress, global.CCData.computeTotals(plan, progress));
       if (subId === "project" && result) {
         main.appendChild(UI.el("div", { class: "cc-card" }, [
           UI.el("p", { class: "cc-card__label", text: result.name || "Project" }),
@@ -56,11 +56,11 @@
     if (!s) main.appendChild(UI.emptyState("No schedule data yet. This section reads plan.schedule from .colaberry/plan.json."));
 
     main.appendChild(UI.sectionTitle("Headline counts"));
-    var t = progress && progress.totals;
+    var t = global.CCData.computeTotals(plan, progress);
     main.appendChild(UI.el("div", { class: "cc-card-grid" }, [
       UI.cardLink("overview", "stories-verified", "Stories verified", t ? (t.stories_verified + " of " + t.stories_total) : "no data yet"),
       UI.cardLink("overview", "criteria-passed", "Criteria passed", t ? (t.criteria_passed + " of " + t.criteria_total) : "no data yet"),
-      UI.cardLink("overview", "points-awarded", "Points awarded", t ? String(t.points_awarded) : "no data yet")
+      UI.cardLink("overview", "points-awarded", "Points awarded", (t && typeof t.points_awarded === "number") ? String(t.points_awarded) : "no data yet")
     ]));
     if (!t) main.appendChild(UI.emptyState("No progress data yet. This section reads progress.totals from .colaberry/progress.json, which is written by the portal as work is verified — nothing has been verified yet."));
   }
