@@ -40,6 +40,50 @@
       "title": "Basic Property Search",
       "release": "r0",
       "owner": "Development Team"
+    },
+    {
+      "id": "STORY-004",
+      "title": "Property Details and Match Score"
+    },
+    {
+      "id": "STORY-005",
+      "title": "Favorites and Saved Properties"
+    },
+    {
+      "id": "STORY-006",
+      "title": "Property Comparison"
+    },
+    {
+      "id": "STORY-007",
+      "title": "Map View of Properties"
+    },
+    {
+      "id": "STORY-008",
+      "title": "Schedule a Property Tour"
+    },
+    {
+      "id": "STORY-009",
+      "title": "Notification Preferences"
+    },
+    {
+      "id": "STORY-010",
+      "title": "Affordability Calculator"
+    },
+    {
+      "id": "STORY-011",
+      "title": "Share a Property"
+    },
+    {
+      "id": "STORY-012",
+      "title": "Data Security and Third-Party Integrations"
+    },
+    {
+      "id": "STORY-014",
+      "title": "Buyer Profile Creation"
+    },
+    {
+      "id": "STORY-015",
+      "title": "Audit Trail for User Actions"
     }
   ],
   "requirements": [
