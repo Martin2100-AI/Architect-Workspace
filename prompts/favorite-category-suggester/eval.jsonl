@@ -1,0 +1,5 @@
+{"input": {"buyerNote": "I absolutely love this one, the kitchen is gorgeous"}, "expected": {"category": "favorites"}}
+{"input": {"buyerNote": "Not totally sure about this one, the yard is small but I'll keep it in mind"}, "expected": {"category": "maybe"}}
+{"input": {"buyerNote": "This looks great in photos, I need to see it in person before deciding"}, "expected": {"category": "want-to-tour"}}
+{"input": {"buyerNote": "This is the one, I want to put in an offer as soon as possible"}, "expected": {"category": "offer-candidates"}}
+{"input": {"buyerNote": "Love this house, and yes let's schedule a tour to see it in person"}, "expected": {"category": "want-to-tour"}}
