@@ -1,0 +1,1969 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Software Engineer Field Guide â€” Colaberry Enterprise AI Leadership Accelerator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script id="deepdive-metadata" type="application/json">
+{
+  "guide_type": "Software Engineer Field Guide",
+  "curriculum_type": "deep_dive",
+  "week": 4,
+  "discipline": "Software Engineer",
+  "student_id": "mungama2016",
+  "project_id": "COLABERRY-ACCEL-AISA-W4-CLAIMSIGHT",
+  "repository": "colaberry-project",
+  "generated_by": "Claude Code",
+  "generated_date": "2026-08-24",
+  "version": "1.0.0",
+  "build_number": "1"
+}
+</script>
+<style>
+/* ============================================================
+   COLABERRY DESIGN TOKENS
+   ============================================================ */
+:root{
+  --c-cherry:#FB2832;
+  --c-berry:#367895;
+  --c-leaf:#5BA63C;
+  --c-amber:#E8920C;
+  --c-text:#1A1A1A;
+  --c-muted:#6B6B6B;
+  --c-border:#E4E4E3;
+  --c-surface:#FFFFFF;
+  --c-surface-alt:#F8F8F7;
+  --font-body:'Roboto',system-ui,Arial,sans-serif;
+  --font-mono:'Roboto Mono',ui-monospace,Consolas,monospace;
+  --radius:10px;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --c-cherry:#FF5960;
+    --c-berry:#5EA9C4;
+    --c-leaf:#8AC759;
+    --c-amber:#E8920C;
+    --c-text:#F2F0EE;
+    --c-muted:#A8A8A8;
+    --c-border:#2A2A2A;
+    --c-surface:#0F0F0F;
+    --c-surface-alt:#171717;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --c-cherry:#FF5960;
+  --c-berry:#5EA9C4;
+  --c-leaf:#8AC759;
+  --c-amber:#E8920C;
+  --c-text:#F2F0EE;
+  --c-muted:#A8A8A8;
+  --c-border:#2A2A2A;
+  --c-surface:#0F0F0F;
+  --c-surface-alt:#171717;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 16px rgba(0,0,0,.4);
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  background:var(--c-surface-alt);
+  color:var(--c-text);
+  font-size:15.5px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{
+  font-family:var(--font-body);
+  color:var(--c-berry);
+  font-weight:700;
+  line-height:1.25;
+  margin:0 0 .6em 0;
+}
+h1{font-size:2.1rem;font-weight:900;}
+h2{font-size:1.55rem;padding-bottom:.4em;border-bottom:2px solid var(--c-border);}
+h3{font-size:1.2rem;margin-top:1.6em;}
+h4{font-size:1rem;color:var(--c-text);}
+p{margin:0 0 1em 0;}
+a{color:var(--c-berry);}
+.lede{font-size:1.15rem;color:var(--c-muted);max-width:70ch;}
+.muted-text{color:var(--c-muted);font-size:.92rem;}
+code{
+  font-family:var(--font-mono);
+  background:var(--c-surface-alt);
+  border:1px solid var(--c-border);
+  border-radius:4px;
+  padding:.1em .35em;
+  font-size:.88em;
+}
+pre{
+  background:var(--c-surface-alt);
+  border:1px solid var(--c-border);
+  border-radius:var(--radius);
+  padding:1em 1.2em;
+  overflow-x:auto;
+  margin:1em 0;
+}
+pre code{background:none;border:none;padding:0;font-size:.86rem;line-height:1.55;}
+.doc-link{font-weight:500;text-decoration:underline;text-decoration-color:var(--c-border);}
+
+/* ---------- header ---------- */
+#site-header{
+  position:sticky;top:0;z-index:50;
+  background:var(--c-surface);
+  border-bottom:1px solid var(--c-border);
+  box-shadow:var(--shadow);
+}
+.header-inner{
+  max-width:1500px;margin:0 auto;padding:.6rem 1.25rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
+}
+.brand{display:flex;align-items:center;gap:.75rem;min-width:0;}
+#logo-img{height:38px;width:auto;display:block;flex:none;}
+.brand-text{display:flex;flex-direction:column;min-width:0;}
+.brand-title{font-weight:700;font-size:1.02rem;color:var(--c-text);white-space:nowrap;}
+.brand-sub{font-size:.72rem;color:var(--c-muted);white-space:nowrap;}
+.header-tools{display:flex;align-items:center;gap:.6rem;flex:1;justify-content:flex-end;}
+.search-wrap{position:relative;width:100%;max-width:460px;}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--c-muted);}
+#search-box{
+  width:100%;padding:.55rem .8rem .55rem 2.2rem;
+  border:1.5px solid var(--c-border);border-radius:999px;
+  font-family:var(--font-body);font-size:.9rem;
+  background:var(--c-surface-alt);color:var(--c-text);
+}
+#search-box:focus{outline:none;border-color:var(--c-berry);background:var(--c-surface);}
+.search-results{
+  position:absolute;top:calc(100% + 6px);left:0;right:0;
+  background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius);
+  box-shadow:var(--shadow);max-height:420px;overflow-y:auto;z-index:60;
+}
+.search-results.hidden{display:none;}
+.sr-item{padding:.65rem .9rem;border-bottom:1px solid var(--c-border);cursor:pointer;}
+.sr-item:last-child{border-bottom:none;}
+.sr-item:hover{background:var(--c-surface-alt);}
+.sr-title{font-weight:700;font-size:.87rem;color:var(--c-berry);}
+.sr-snippet{font-size:.8rem;color:var(--c-muted);margin-top:.15rem;}
+.sr-empty{padding:.9rem;color:var(--c-muted);font-size:.85rem;}
+mark{background:rgba(251,40,50,.22);color:inherit;border-radius:2px;}
+.icon-btn{
+  border:1px solid var(--c-border);background:var(--c-surface);color:var(--c-text);
+  border-radius:999px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex:none;
+}
+.icon-btn:hover{border-color:var(--c-berry);color:var(--c-berry);}
+
+/* ---------- layout ---------- */
+.shell{max-width:1500px;margin:0 auto;display:flex;align-items:flex-start;gap:2rem;padding:1.5rem 1.25rem 4rem;}
+.sidebar{
+  position:sticky;top:78px;
+  flex:0 0 260px;
+  max-height:calc(100vh - 96px);
+  overflow-y:auto;
+  padding-right:.5rem;
+}
+.nav-group-label{
+  font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--c-muted);margin:1.2rem 0 .4rem;padding-left:.6rem;
+}
+.nav-group-label:first-child{margin-top:0;}
+.nav-link{
+  display:block;padding:.42rem .6rem;border-radius:7px;
+  font-size:.87rem;color:var(--c-text);text-decoration:none;
+  border-left:3px solid transparent;
+}
+.nav-link:hover{background:var(--c-surface-alt);}
+.nav-link.active{
+  background:var(--c-surface-alt);
+  border-left-color:var(--c-cherry);
+  color:var(--c-berry);font-weight:600;
+}
+#main-content{flex:1;min-width:0;}
+.content-section{
+  background:var(--c-surface);
+  border:1px solid var(--c-border);
+  border-radius:var(--radius);
+  padding:2rem 2.2rem;
+  margin-bottom:1.5rem;
+  scroll-margin-top:90px;
+}
+.content-section.part-b-intro{
+  background:var(--c-surface-alt);border-style:dashed;
+}
+.content-section.flash{animation:flash-hl 1.4s ease;}
+@keyframes flash-hl{0%{box-shadow:0 0 0 3px var(--c-cherry);}100%{box-shadow:none;}}
+
+/* ---------- generic components ---------- */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin:1rem 0;}
+.card{
+  background:var(--c-surface-alt);border:1px solid var(--c-border);
+  border-radius:var(--radius);padding:1.1rem 1.3rem;
+}
+.callout{
+  border-radius:var(--radius);padding:1rem 1.2rem;margin:1.2rem 0;
+  border-left:4px solid var(--c-berry);background:var(--c-surface-alt);font-size:.94rem;
+}
+.callout-info{border-left-color:var(--c-berry);}
+.callout-warning{border-left-color:var(--c-amber);}
+.callout-success{border-left-color:var(--c-leaf);}
+.callout-berry{border-left-color:var(--c-berry);}
+.badge{
+  display:inline-block;padding:.15rem .55rem;border-radius:999px;
+  font-size:.72rem;font-weight:700;letter-spacing:.02em;
+}
+.badge-berry{background:var(--c-berry);color:#fff;}
+.check-list{margin:.6rem 0;padding-left:1.3rem;}
+.check-list li{margin-bottom:.4rem;}
+.check-list.bad-list li{color:var(--c-text);}
+.lens-list{padding-left:1.3rem;}
+.lens-list li{margin-bottom:.7rem;}
+
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:.4rem;}
+.dot-cherry{background:var(--c-cherry);}
+.dot-leaf{background:var(--c-leaf);}
+.code-compare .code-card{padding-top:1rem;}
+.code-card.bad{border-left:4px solid var(--c-cherry);}
+.code-card.good{border-left:4px solid var(--c-leaf);}
+
+/* ---------- tables ---------- */
+.table-scroll{overflow-x:auto;}
+.data-table{
+  width:100%;border-collapse:collapse;margin:1rem 0;font-size:.87rem;
+  min-width:520px;
+}
+.data-table th{
+  background:var(--c-berry);color:#fff;text-align:left;
+  padding:.6rem .8rem;font-weight:700;font-size:.78rem;
+  letter-spacing:.02em;text-transform:uppercase;
+}
+.data-table td{padding:.6rem .8rem;border-bottom:1px solid var(--c-border);vertical-align:top;}
+.data-table tbody tr:nth-child(even){background:var(--c-surface-alt);}
+.data-table code{font-size:.82em;}
+.cell-pass{color:var(--c-leaf);font-weight:700;}
+.cell-fail{color:var(--c-cherry);font-weight:700;}
+
+/* ---------- KPI + charts ---------- */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:1.2rem 0 1.8rem;}
+.kpi-tile{
+  background:var(--c-surface-alt);border:1px solid var(--c-border);border-radius:var(--radius);
+  padding:1.1rem 1.2rem;display:flex;flex-direction:column;gap:.25rem;
+  border-top:3px solid var(--c-berry);
+}
+.kpi-label{font-size:.74rem;text-transform:uppercase;letter-spacing:.04em;color:var(--c-muted);font-weight:700;}
+.kpi-value{font-family:var(--font-mono);font-size:1.9rem;font-weight:700;color:var(--c-text);}
+.kpi-delta{font-size:.78rem;font-weight:600;}
+.kpi-delta.up{color:var(--c-leaf);}
+.kpi-delta.down{color:var(--c-cherry);}
+.kpi-delta.neutral{color:var(--c-muted);}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.chart-card{
+  background:var(--c-surface-alt);border:1px solid var(--c-border);border-radius:var(--radius);
+  padding:1.1rem 1.2rem;
+}
+.chart-card h4{margin-bottom:.4rem;}
+.chart-svg{width:100%;height:auto;display:block;}
+.chart-caption{font-size:.78rem;color:var(--c-muted);margin:.6rem 0 0;}
+.chart-num{font-family:var(--font-mono);font-size:12px;font-weight:700;}
+.chart-num-lg{font-family:var(--font-mono);font-size:30px;font-weight:700;}
+.chart-lbl{font-family:var(--font-body);font-size:11px;fill:var(--c-muted);}
+
+/* ---------- diagrams ---------- */
+.diagram-svg{width:100%;height:auto;display:block;margin:1rem 0;}
+.box-berry{fill:var(--c-surface);stroke:var(--c-berry);stroke-width:1.6;}
+.box-cherry{fill:var(--c-surface);stroke:var(--c-cherry);stroke-width:1.6;stroke-dasharray:5 3;}
+.box-leaf{fill:var(--c-surface);stroke:var(--c-leaf);stroke-width:1.6;}
+.box-neutral{fill:var(--c-surface-alt);stroke:var(--c-border);stroke-width:1.4;}
+.diagram-title{font-family:var(--font-body);font-size:13px;font-weight:700;fill:var(--c-text);}
+.diagram-sub{font-family:var(--font-body);font-size:11px;fill:var(--c-muted);}
+.diagram-line{stroke:var(--c-muted);stroke-width:1.5;fill:none;}
+.diagram-line-thin{stroke:var(--c-border);stroke-width:1;fill:none;}
+.diagram-line-thick{stroke-width:3;fill:none;}
+.erd-field{font-family:var(--font-mono);font-size:10.5px;fill:var(--c-text);}
+.erd-card{font-family:var(--font-mono);font-size:11px;fill:var(--c-muted);}
+.seq-actor text{font-weight:700;}
+
+/* ---------- documents ---------- */
+.document{padding:0;overflow:hidden;}
+.doc-card{padding:0;}
+.doc-cover{
+  background:linear-gradient(135deg,var(--c-berry) 0%,#274f61 100%);
+  color:#fff;padding:2.2rem 2.4rem;display:flex;align-items:center;gap:1.5rem;
+}
+.doc-cover-logo{height:44px;width:auto;flex:none;filter:brightness(0) invert(1);}
+.doc-cover-title{display:flex;flex-direction:column;}
+.doc-kicker{font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;color:#dce8ec;font-weight:700;margin-bottom:.3rem;}
+.doc-cover-title h2{color:#fff;border:none;padding:0;margin:0;font-size:1.5rem;}
+.doc-control-strip{
+  display:flex;flex-wrap:wrap;gap:0;background:var(--c-surface-alt);
+  border-bottom:1px solid var(--c-border);
+}
+.doc-control-strip > div{
+  padding:.7rem 1.2rem;border-right:1px solid var(--c-border);
+  display:flex;flex-direction:column;gap:.15rem;flex:1;min-width:140px;
+}
+.doc-control-strip > div:last-child{border-right:none;}
+.dc-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;color:var(--c-muted);font-weight:700;}
+.dc-value{font-family:var(--font-mono);font-size:.84rem;font-weight:500;}
+.status-draft{color:var(--c-amber);font-weight:700;}
+.doc-actions{
+  display:flex;gap:.6rem;padding:1rem 2.2rem;border-bottom:1px solid var(--c-border);
+  background:var(--c-surface);
+}
+.doc-body{padding:1.8rem 2.4rem;}
+.doc-body h3:first-child{margin-top:0;}
+.module-resp{background:var(--c-surface-alt);padding:.6rem .9rem;border-radius:6px;font-size:.9rem;}
+.doc-signoff{padding:0 2.4rem 1.8rem;}
+.signoff-table{width:100%;border-collapse:collapse;font-size:.85rem;}
+.signoff-table th{background:var(--c-surface-alt);color:var(--c-text);text-align:left;padding:.55rem .7rem;border:1px solid var(--c-border);font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;color:var(--c-muted);}
+.signoff-table td{padding:1.1rem .7rem;border:1px solid var(--c-border);}
+.sig-blank{min-width:120px;}
+.doc-footer{
+  display:flex;justify-content:space-between;padding:1rem 2.4rem;
+  background:var(--c-surface-alt);border-top:1px solid var(--c-border);
+  font-size:.74rem;color:var(--c-muted);
+}
+
+/* ---------- buttons ---------- */
+.btn{
+  font-family:var(--font-body);font-size:.85rem;font-weight:600;
+  padding:.55rem 1.1rem;border-radius:7px;border:1.5px solid transparent;
+  cursor:pointer;display:inline-flex;align-items:center;gap:.4rem;
+}
+.btn-primary{background:var(--c-cherry);color:#fff;}
+.btn-primary:hover{filter:brightness(1.06);}
+.btn-secondary{background:var(--c-berry);color:#fff;}
+.btn-secondary:hover{filter:brightness(1.08);}
+.btn-outline{background:transparent;border-color:var(--c-border);color:var(--c-text);}
+.btn-outline:hover{border-color:var(--c-berry);color:var(--c-berry);}
+.btn-sm{padding:.4rem .7rem;font-size:.8rem;}
+
+/* ---------- Ask assistant ---------- */
+.ask-toggle{
+  position:fixed;right:1.5rem;bottom:1.5rem;z-index:80;
+  background:var(--c-cherry);color:#fff;border:none;border-radius:999px;
+  padding:.75rem 1.2rem;font-family:var(--font-body);font-weight:700;font-size:.88rem;
+  display:flex;align-items:center;gap:.5rem;box-shadow:var(--shadow);cursor:pointer;
+}
+.ask-toggle:hover{filter:brightness(1.05);}
+.ask-panel{
+  position:fixed;right:1.5rem;bottom:5.2rem;z-index:80;width:380px;max-width:calc(100vw - 2rem);
+  background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--radius);
+  box-shadow:var(--shadow);display:flex;flex-direction:column;height:480px;max-height:70vh;
+}
+.ask-panel.hidden{display:none;}
+.ask-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.8rem 1rem;border-bottom:1px solid var(--c-border);font-weight:700;color:var(--c-berry);
+}
+.ask-log{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.7rem;}
+.ask-msg{padding:.6rem .8rem;border-radius:10px;font-size:.86rem;max-width:88%;line-height:1.5;}
+.ask-msg-bot{background:var(--c-surface-alt);border:1px solid var(--c-border);align-self:flex-start;}
+.ask-msg-user{background:var(--c-berry);color:#fff;align-self:flex-end;}
+.ask-msg a{color:var(--c-cherry);font-weight:600;}
+.ask-form{display:flex;gap:.5rem;padding:.8rem;border-top:1px solid var(--c-border);}
+#ask-input{
+  flex:1;padding:.55rem .7rem;border:1.5px solid var(--c-border);border-radius:7px;
+  font-family:var(--font-body);font-size:.86rem;background:var(--c-surface);color:var(--c-text);
+}
+#ask-input:focus{outline:none;border-color:var(--c-berry);}
+
+/* ---------- print ---------- */
+@media print{
+  #site-header,.sidebar,.ask-toggle,.ask-panel,.doc-actions{display:none !important;}
+  body{background:#fff;}
+  .shell{display:block;padding:0;max-width:none;}
+  .content-section{border:none;box-shadow:none;margin:0;padding:0;border-radius:0;}
+  body[data-print-target] .content-section{display:none;}
+  body[data-print-target] .content-section.print-active{display:block !important;}
+  .doc-cover{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .data-table th{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .shell{flex-direction:column;}
+  .sidebar{position:static;max-height:none;flex:none;width:100%;display:flex;flex-wrap:wrap;gap:.3rem;}
+  .nav-group-label{width:100%;}
+  .two-col,.code-compare,.chart-grid{grid-template-columns:1fr;}
+  .kpi-grid{grid-template-columns:1fr 1fr;}
+  .content-section{padding:1.4rem 1.3rem;}
+  .doc-body,.doc-signoff{padding-left:1.3rem;padding-right:1.3rem;}
+  .doc-cover,.doc-actions,.doc-control-strip{padding-left:1.3rem;padding-right:1.3rem;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<header id="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <img id="logo-img" alt="Colaberry" />
+      <div class="brand-text">
+        <span class="brand-title">Software Engineer Field Guide</span>
+        <span class="brand-sub">Enterprise AI Leadership Accelerator &mdash; AI Solution Architect Track</span>
+      </div>
+    </div>
+    <div class="header-tools">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/></svg>
+        <input id="search-box" type="text" placeholder="Search the guide (e.g. &quot;idempotency&quot;, &quot;PR size&quot;, &quot;risk score&quot;)" autocomplete="off" />
+        <div id="search-results" class="search-results hidden"></div>
+      </div>
+      <button id="theme-toggle" class="icon-btn" title="Toggle dark mode" aria-label="Toggle dark mode">
+        <svg id="theme-icon" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 4.5a1 1 0 0 1 1 1V7a1 1 0 1 1-2 0V5.5a1 1 0 0 1 1-1zm0 11.5A4 4 0 1 0 12 8a4 4 0 0 0 0 8zm7.5-5.5H21a1 1 0 1 1 0 2h-1.5a1 1 0 1 1 0-2zM3 10.5h1.5a1 1 0 1 1 0 2H3a1 1 0 1 1 0-2zm14.66-6.16a1 1 0 0 1 1.41 1.41l-1.06 1.06a1 1 0 1 1-1.41-1.41zM6.4 17.19a1 1 0 0 1 1.41 1.41l-1.06 1.06a1 1 0 1 1-1.41-1.41zM12 18.5a1 1 0 0 1 1 1V21a1 1 0 1 1-2 0v-1.5a1 1 0 0 1 1-1zm5.66 1.69a1 1 0 0 1-1.41-1.41l1.06-1.06a1 1 0 1 1 1.41 1.41zM6.4 6.81a1 1 0 0 1-1.41-1.41l1.06-1.06A1 1 0 1 1 7.46 5.75z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <nav id="sidebar" class="sidebar">
+    <div class="nav-group-label">Part A &mdash; The Discipline</div>
+    <a class="nav-link" href="#overview" data-id="overview">Welcome &amp; How to Use This Guide</a>
+    <a class="nav-link" href="#why-swe" data-id="why-swe">Why Software Engineering Exists</a>
+    <a class="nav-link" href="#concept-tdd" data-id="concept-tdd">Technical Design Documents</a>
+    <a class="nav-link" href="#concept-modularity" data-id="concept-modularity">Modularity &amp; Separation of Concerns</a>
+    <a class="nav-link" href="#concept-interfaces" data-id="concept-interfaces">Interfaces &amp; Contracts</a>
+    <a class="nav-link" href="#concept-clean-code" data-id="concept-clean-code">Clean Code &amp; Naming</a>
+    <a class="nav-link" href="#concept-vcs" data-id="concept-vcs">Version Control &amp; Code Review</a>
+    <a class="nav-link" href="#concept-testing" data-id="concept-testing">The Testing Pyramid</a>
+    <a class="nav-link" href="#concept-debt" data-id="concept-debt">Technical Debt</a>
+    <a class="nav-link" href="#concept-solid" data-id="concept-solid">DRY &amp; SOLID</a>
+    <a class="nav-link" href="#concept-errors" data-id="concept-errors">Error Handling</a>
+    <a class="nav-link" href="#good-vs-bad" data-id="good-vs-bad">Good Code vs. Bad Code</a>
+    <a class="nav-link" href="#kpis" data-id="kpis">Engineering KPIs</a>
+    <a class="nav-link" href="#review-lens" data-id="review-lens">The Architect&rsquo;s Review Lens</a>
+    <div class="nav-group-label">Part B &mdash; ClaimSight Deliverables</div>
+    <a class="nav-link" href="#doc-tdd" data-id="doc-tdd">1. Technical Design Document</a>
+    <a class="nav-link" href="#doc-modules" data-id="doc-modules">2. Module &amp; Component Design</a>
+    <a class="nav-link" href="#doc-standards" data-id="doc-standards">3. Coding Standards</a>
+    <a class="nav-link" href="#doc-checklist" data-id="doc-checklist">4. Code Review Checklist</a>
+    <a class="nav-link" href="#doc-testplan" data-id="doc-testplan">5. Test Plan</a>
+    <a class="nav-link" href="#doc-branching" data-id="doc-branching">6. Branching &amp; PR Workflow</a>
+    <a class="nav-link" href="#doc-dod" data-id="doc-dod">7. Definition of Done</a>
+  </nav>
+
+  <main id="main-content">
+
+  <section id="overview" class="content-section">
+    <h1>Software Engineer Field Guide</h1>
+    <p class="lede">For AI Solution Architects who direct, evaluate, and approve AI-generated code &mdash; not for engineers who write every line by hand. This guide teaches the ~20% of software engineering that determines whether an AI-built system is trustworthy, and applies it end-to-end to one worked example.</p>
+    <div class="callout callout-info">
+      <strong>Worked example used throughout this guide:</strong> <span class="badge badge-berry">Insurance</span> &mdash; <strong>ClaimSight</strong>, an AI-assisted claims triage and fraud risk-scoring feature for a mid-size property &amp; casualty insurer. Every diagram, code sample, and deliverable in Part B is written against this one feature so you can see the full arc from design decision to shippable artifact.
+    </div>
+    <h3>How to use this guide</h3>
+    <ul class="check-list">
+      <li><strong>Read Part A once, end to end.</strong> It is short by design &mdash; the 20% an architect needs, not the 100% an engineer needs.</li>
+      <li><strong>Use Part B as a template library.</strong> Every ClaimSight document is a real, complete deliverable you can download, adapt, and re-issue against your own feature.</li>
+      <li><strong>Search anything.</strong> The search box in the header indexes every section on this page, including document bodies and tables.</li>
+      <li><strong>Ask the guide.</strong> The <em>Ask</em> button (bottom-right) answers questions from this guide&rsquo;s own content &mdash; no external service, works fully offline.</li>
+    </ul>
+  </section>
+
+  <section id="why-swe" class="content-section">
+    <h2>Why Software Engineering Exists</h2>
+    <p>Anyone can write code that runs once, on one machine, for one demo. Software <em>engineering</em> is the discipline that makes code survive contact with reality: other engineers who didn&rsquo;t write it, users who misuse it, load it wasn&rsquo;t sized for, and changes made under deadline pressure two years from now.</p>
+    <p>That discipline matters more, not less, when an LLM writes the first draft. An AI code generator is extraordinarily good at producing plausible, locally-correct code quickly. It is not accountable for the system it just changed, has no memory of the trade-off it made six files ago, and cannot be paged at 2 a.m. when a claim silently double-pays a policyholder. That accountability gap is exactly the seat an AI Solution Architect fills.</p>
+    <div class="two-col">
+      <div class="card">
+        <h4>What AI code generation is good at</h4>
+        <ul class="check-list">
+          <li>Producing a correct-looking implementation fast</li>
+          <li>Following an explicit, well-specified contract</li>
+          <li>Writing boilerplate, tests, and repetitive patterns</li>
+          <li>Explaining what code does when asked</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>What still requires a human architect</h4>
+        <ul class="check-list">
+          <li>Deciding the contract in the first place</li>
+          <li>Judging blast radius and reversibility</li>
+          <li>Catching a plausible-but-wrong design before it ships</li>
+          <li>Owning the trade-off when two good options conflict</li>
+        </ul>
+      </div>
+    </div>
+    <p>The remaining sections of Part A cover the specific 20% of engineering knowledge that lets you do that job: read a design before it&rsquo;s built, recognize a contract violation, tell disciplined modularity from over-engineering, and know what &ldquo;done&rdquo; objectively means.</p>
+  </section>
+
+  <section id="concept-tdd" class="content-section">
+    <h2>Technical Design Documents</h2>
+    <p>A Technical Design Document (TDD) is the artifact that turns a feature request into an engineering plan <em>before</em> code is written. Its job is to force the hard decisions &mdash; data model, module boundaries, failure modes, trade-offs &mdash; into writing where they can be reviewed cheaply, instead of discovering them mid-implementation where they are expensive to reverse.</p>
+    <div class="callout callout-berry">
+      <strong>Architect&rsquo;s rule:</strong> if an AI agent proposes an implementation with no design document behind it, the design document is missing, not unnecessary. Ask for it before reviewing the code. A TDD is cheap to reject; a merged PR is not.
+    </div>
+    <p>A complete TDD answers, in order: what problem is this solving and for whom (context), what approach was chosen and what alternatives were rejected and why, how the system decomposes into modules, what the data model looks like, what the sequence of events is for the primary flow, and what could go wrong. See <a href="#doc-tdd" class="doc-link">ClaimSight&rsquo;s TDD</a> in Part B for a complete worked example.</p>
+  </section>
+
+  <section id="concept-modularity" class="content-section">
+    <h2>Modularity &amp; Separation of Concerns</h2>
+    <p>A module should have <strong>one reason to change</strong>. When a &ldquo;claims service&rdquo; both scores fraud risk and formats email templates, a change to the email template risks breaking fraud scoring &mdash; two unrelated concerns now share a blast radius they shouldn&rsquo;t share.</p>
+    <table class="data-table">
+      <thead><tr><th>Smell</th><th>Why it matters</th><th>What good looks like</th></tr></thead>
+      <tbody>
+        <tr><td>A module named for one thing does another (<code>claimValidator.ts</code> that also sends notifications)</td><td>Reviewers can&rsquo;t predict blast radius from the filename</td><td>One responsibility per module; the name is a promise</td></tr>
+        <tr><td>Circular imports (A imports B imports A)</td><td>Signals a missing shared abstraction; makes both modules untestable in isolation</td><td>Extract the shared piece into module C; A and B both depend on C</td></tr>
+        <tr><td>A module imports from 15+ internal modules</td><td>It is almost certainly doing too much</td><td>Split along the seams where responsibilities diverge</td></tr>
+        <tr><td>Business logic embedded inside a route handler</td><td>Logic can&rsquo;t be unit-tested without spinning up HTTP</td><td>Route handlers parse/validate and delegate; services hold logic</td></tr>
+      </tbody>
+    </table>
+    <p>In the ClaimSight example, this is why <em>Feature Extraction</em>, <em>Risk Scoring</em>, and <em>Routing</em> are three separate modules rather than one &ldquo;triage engine&rdquo; &mdash; each has an independent reason to change (a new feature signal, a new scoring model version, a new business rule), and each can be tested and reasoned about alone. See <a href="#doc-modules" class="doc-link">Module &amp; Component Design</a>.</p>
+  </section>
+
+  <section id="concept-interfaces" class="content-section">
+    <h2>Interfaces &amp; Contracts</h2>
+    <p>A contract is the promise a module makes about its inputs, its outputs, and the ways it can fail &mdash; stated explicitly enough that the caller never has to read the implementation to use it safely. This is the single most important lens for reviewing AI-generated code: <strong>an implementation can be internally elegant and still violate its contract</strong>, and elegance is what an AI reviewer (human or model) notices first.</p>
+    <div class="callout callout-warning">
+      <strong>What a real contract specifies:</strong> typed inputs, typed outputs (including the shape of errors), the explicit list of exceptions/error classes it can throw, whether it is idempotent, and its timeout/retry behavior at any external boundary. If any of these five is undocumented, the contract is incomplete &mdash; approve nothing against it.
+    </div>
+    <p>Example from ClaimSight &mdash; the Risk Scoring Client&rsquo;s contract is not just &ldquo;takes features, returns a score.&rdquo; It is: <code>scoreClaim(features: ClaimFeatureVector): Promise&lt;RiskAssessmentResult&gt;</code>, times out at 8 seconds, retries twice with exponential backoff on <code>UpstreamUnavailable</code>, trips a circuit breaker after 5 consecutive failures, and never throws a generic <code>Error</code> &mdash; only <code>ScoringTimeoutError</code> or <code>ScoringServiceUnavailableError</code>. A caller can build correct failure handling from that sentence alone, without reading the client&rsquo;s source. Full signatures in <a href="#doc-modules" class="doc-link">Module &amp; Component Design</a>.</p>
+  </section>
+
+  <section id="concept-clean-code" class="content-section">
+    <h2>Clean Code &amp; Naming</h2>
+    <p>Code is read far more often than it is written, and an AI agent generates a first draft in seconds where a name choice is often arbitrary unless directed. Names are the cheapest, highest-leverage thing an architect can insist on.</p>
+    <table class="data-table">
+      <thead><tr><th>Principle</th><th>Bad</th><th>Good</th></tr></thead>
+      <tbody>
+        <tr><td>Name reveals intent</td><td><code>process(x)</code></td><td><code>scoreClaimFraudRisk(features)</code></td></tr>
+        <tr><td>No abbreviations that need a legend</td><td><code>calcAdjRsk(c, p)</code></td><td><code>calculateAdjustedRiskScore(claim, policy)</code></td></tr>
+        <tr><td>Booleans read as questions</td><td><code>flag</code></td><td><code>isHighRiskClaim</code></td></tr>
+        <tr><td>Constants are named, not magic</td><td><code>if (score &gt; 70)</code></td><td><code>if (score &gt; SIU_ESCALATION_THRESHOLD)</code></td></tr>
+        <tr><td>Function does what its name says, nothing more</td><td><code>validateClaim()</code> that also writes to the audit log</td><td><code>validateClaim()</code> validates; caller decides to audit</td></tr>
+      </tbody>
+    </table>
+    <p>Size discipline is part of clean code, not separate from it: this repository&rsquo;s house limits are a soft target of ~300 lines / hard ceiling of 500 per file, and ~50/100 lines per function. A function that needs three screens to read cannot be reviewed &mdash; only skimmed.</p>
+  </section>
+
+  <section id="concept-vcs" class="content-section">
+    <h2>Version Control: Branching &amp; Code Review</h2>
+    <p>Version control is the system of record for <em>why</em> code changed, not just <em>what</em> changed. Two disciplines make it work: small, reviewable units of change, and a review gate that actually catches problems before merge.</p>
+    <ul class="check-list">
+      <li><strong>Branch per unit of work</strong>, named so its purpose is visible in a list of thirty branches (<code>feature/CS-118-siu-threshold</code>, not <code>fix-stuff</code>).</li>
+      <li><strong>Small pull requests.</strong> A 1,200-line PR is not reviewed, it is rubber-stamped. Target under ~400 lines of diff.</li>
+      <li><strong>Review is a gate, not a formality.</strong> At minimum: does it match its stated contract, does it have tests for failure paths, does it introduce a governance-boundary risk.</li>
+      <li><strong>Squash-merge with a message that explains why</strong>, so <code>git log</code> reads as a decision history, not a diary of typo fixes.</li>
+    </ul>
+    <p>See <a href="#doc-branching" class="doc-link">Branching &amp; Pull-Request Workflow</a> for ClaimSight&rsquo;s concrete rules, including a git-flow diagram.</p>
+  </section>
+
+  <section id="concept-testing" class="content-section">
+    <h2>The Testing Pyramid</h2>
+    <p>Tests are not evidence a feature <em>might</em> work &mdash; they are the mechanism by which correctness claims become checkable instead of trusted. The pyramid shape matters as much as the presence of tests: unit tests are cheap and fast, so most of your coverage should live there; end-to-end tests are slow and flaky, so they should be reserved for the handful of flows where nothing less will do.</p>
+    <div class="two-col">
+      <div class="card">
+        <h4>Unit &mdash; ~70%</h4>
+        <p class="muted-text">Pure logic in isolation. No network, no database. A feature-extraction formula, a routing-rule evaluator, a validator. Runs in milliseconds.</p>
+      </div>
+      <div class="card">
+        <h4>Integration &mdash; ~20%</h4>
+        <p class="muted-text">A module talking to a real (dev/sandbox) dependency &mdash; a test database, a mocked external API, a message queue. Confirms the wiring, not just the logic.</p>
+      </div>
+      <div class="card">
+        <h4>End-to-End &mdash; ~10%</h4>
+        <p class="muted-text">A real browser or client driving the full stack for the flows that matter most &mdash; claim submission through triage assignment, in ClaimSight&rsquo;s case.</p>
+      </div>
+    </div>
+    <p>A shipped feature must clear four kinds of case, not just the demo path: <strong>happy path</strong>, <strong>failure path</strong> (dependency down, malformed input, missing auth), <strong>boundary cases</strong> (empty, max-length, off-by-one), and <strong>idempotency</strong> (same operation run twice yields the same end state). See <a href="#doc-testplan" class="doc-link">ClaimSight&rsquo;s Test Plan</a> for all four applied to every module.</p>
+  </section>
+
+  <section id="concept-debt" class="content-section">
+    <h2>Technical Debt</h2>
+    <p>Technical debt is a deliberate or accidental shortcut that trades long-term maintainability for short-term speed &mdash; a real financial metaphor: it can be taken on knowingly (a fast, ugly fix to hit a deadline) or accrue unknowingly (a pattern that was fine at low volume and breaks at scale). Either way it accrues interest: every future change in that area costs more than it should.</p>
+    <div class="callout callout-warning">
+      <strong>The architect&rsquo;s job is not to eliminate debt &mdash; it is to make it visible and priced.</strong> An AI agent will happily generate a quick, debt-laden fix if asked for one; it will not flag that the fix is debt unless the review process asks the question explicitly. &ldquo;It works in dev, we&rsquo;ll fix it later&rdquo; with no ticket and no owner is how debt becomes invisible.
+    </div>
+    <p>Signals worth escalating: a grandfathered oversize file touched again without being split, a workaround comment with no linked follow-up, a AI-generated PR that duplicates logic that already exists elsewhere in the codebase (see DRY, next section).</p>
+  </section>
+
+  <section id="concept-solid" class="content-section">
+    <h2>DRY &amp; SOLID (Lightly)</h2>
+    <p><strong>DRY &mdash; Don&rsquo;t Repeat Yourself.</strong> When the same non-trivial logic appears in three places, it should live in one. Two is sometimes coincidence; three is a pattern. Applied to ClaimSight: the rule that decides &ldquo;is this claim amount within fast-track eligibility&rdquo; must exist in exactly one function, called from intake preview, routing, and reporting &mdash; not copied three times with three chances to drift apart.</p>
+    <p><strong>SOLID</strong>, in one line each, as an architect needs it &mdash; not as an engineer needs to implement it:</p>
+    <table class="data-table">
+      <thead><tr><th>Principle</th><th>What to look for when reviewing</th></tr></thead>
+      <tbody>
+        <tr><td><strong>S</strong> &mdash; Single Responsibility</td><td>One reason to change per module (see Modularity above)</td></tr>
+        <tr><td><strong>O</strong> &mdash; Open/Closed</td><td>New routing rule added without editing the core routing engine&rsquo;s control flow</td></tr>
+        <tr><td><strong>L</strong> &mdash; Liskov Substitution</td><td>A mock Risk Scoring Client in tests behaves like the real one from the caller&rsquo;s perspective</td></tr>
+        <tr><td><strong>I</strong> &mdash; Interface Segregation</td><td>Notification Service doesn&rsquo;t force callers to depend on SMS-only methods they never use</td></tr>
+        <tr><td><strong>D</strong> &mdash; Dependency Inversion</td><td>Routing Engine depends on a <code>RiskAssessmentResult</code> type, not on the scoring vendor&rsquo;s SDK directly</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="concept-errors" class="content-section">
+    <h2>Error Handling</h2>
+    <p>The single most common defect in AI-generated code that otherwise looks production-ready is a silently swallowed error &mdash; <code>try { ... } catch (e) {}</code>, or a generic <code>catch (Error)</code> that masks which specific thing failed. Both look clean in a diff and both turn a debuggable failure into a mystery at 2 a.m.</p>
+    <table class="data-table">
+      <thead><tr><th>Forbidden pattern</th><th>Why it&rsquo;s a defect</th><th>Required instead</th></tr></thead>
+      <tbody>
+        <tr><td>Silent catch</td><td>Failure vanishes; nothing alerts, nothing logs</td><td>Log with a stable <code>error_class</code>, re-throw or handle explicitly</td></tr>
+        <tr><td>Generic <code>catch (Error)</code></td><td>Masks whether it was a timeout, a validation failure, or a bug</td><td>Specific error classes: <code>ScoringTimeoutError</code>, <code>ValidationError</code>, etc.</td></tr>
+        <tr><td>Unbounded retry</td><td>Can hang a request or hammer a failing dependency forever</td><td>Capped attempts with backoff, then circuit-break</td></tr>
+        <tr><td>No timeout on an external call</td><td>One slow dependency can hang the whole request chain</td><td>Explicit timeout on every HTTP/DB/queue call</td></tr>
+      </tbody>
+    </table>
+    <p>Every external boundary must answer four questions, in writing: what happens if this fails, will it retry and how, what is the recovery path once retries are exhausted, and what failure modes are explicitly out of scope. See <a href="#doc-tdd" class="doc-link">ClaimSight&rsquo;s TDD &sect; Risks &amp; Trade-offs</a> for these answered against the Risk Scoring Service dependency specifically.</p>
+  </section>
+
+  <section id="good-vs-bad" class="content-section">
+    <h2>Good Code vs. Bad Code</h2>
+    <p>The same function, two ways &mdash; the AI-generated first draft you should reject, and the version an architect should require before approving the PR. Both &ldquo;work&rdquo; on the happy path. Only one is safe to ship.</p>
+    <div class="two-col code-compare">
+      <div class="card code-card bad">
+        <h4><span class="dot dot-cherry"></span>Reject &mdash; looks done, isn&rsquo;t</h4>
+<pre><code>async function scoreClaim(f) {
+  try {
+    const r = await fetch(SCORING_URL, {
+      method: 'POST',
+      body: JSON.stringify(f)
+    });
+    const data = await r.json();
+    if (data.score &gt; 70) {
+      data.queue = 'siu';
+    } else {
+      data.queue = 'standard';
+    }
+    return data;
+  } catch (e) {
+    return { score: 0, queue: 'standard' };
+  }
+}</code></pre>
+        <ul class="check-list bad-list">
+          <li>No timeout &mdash; one slow call hangs the request</li>
+          <li>No retry / no circuit breaker</li>
+          <li><code>any</code>-shaped input and output, no contract</li>
+          <li>Magic number <code>70</code> instead of a named threshold</li>
+          <li>Silent catch masks failure as a fake &ldquo;standard&rdquo; score &mdash; a real fraud case could be waved through as low-risk</li>
+        </ul>
+      </div>
+      <div class="card code-card good">
+        <h4><span class="dot dot-leaf"></span>Approve &mdash; contract-safe</h4>
+<pre><code>const SIU_ESCALATION_THRESHOLD = 70;
+const SCORING_TIMEOUT_MS = 8000;
+
+async function scoreClaim(
+  features: ClaimFeatureVector
+): Promise&lt;RiskAssessmentResult&gt; {
+  const res = await callWithTimeout(
+    () =&gt; scoringClient.score(features),
+    SCORING_TIMEOUT_MS
+  ).catch((e) =&gt; {
+    throw classifyScoringError(e);
+    // ScoringTimeoutError | ScoringServiceUnavailableError
+  });
+
+  const triage = res.riskScore &gt;= SIU_ESCALATION_THRESHOLD
+    ? 'SIU_QUEUE'
+    : 'STANDARD_ADJUSTER_QUEUE';
+
+  logScoringEvent({ correlationId, res, triage });
+  return { ...res, triageRecommendation: triage };
+}</code></pre>
+        <ul class="check-list">
+          <li>Explicit timeout, explicit typed contract in/out</li>
+          <li>Named threshold, no magic numbers</li>
+          <li>Specific, classified error types &mdash; failure surfaces, doesn&rsquo;t hide</li>
+          <li>Structured, correlation-traceable logging</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="kpis" class="content-section">
+    <h2>Engineering KPIs</h2>
+    <p>What an architect measures to know whether a codebase is getting healthier or accumulating risk &mdash; illustrated with ClaimSight&rsquo;s own trailing metrics.</p>
+    <div class="kpi-grid">
+      <div class="kpi-tile">
+        <span class="kpi-label">Overall Test Coverage</span>
+        <span class="kpi-value">86%</span>
+        <span class="kpi-delta up">&#9650; 9 pts vs. last quarter</span>
+      </div>
+      <div class="kpi-tile">
+        <span class="kpi-label">Median PR Cycle Time</span>
+        <span class="kpi-value">6.2 hrs</span>
+        <span class="kpi-delta up">&#9650; down from 14.2 hrs</span>
+      </div>
+      <div class="kpi-tile">
+        <span class="kpi-label">Defect Escape Rate</span>
+        <span class="kpi-value">2.1%</span>
+        <span class="kpi-delta up">&#9650; down from 5.4%</span>
+      </div>
+      <div class="kpi-tile">
+        <span class="kpi-label">Deployment Frequency</span>
+        <span class="kpi-value">3.4 / wk</span>
+        <span class="kpi-delta neutral">&#9679; steady</span>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <h4>Test Pyramid Mix &mdash; ClaimSight suite</h4>
+        <svg viewBox="0 0 340 260" class="chart-svg" role="img" aria-label="Bar chart of test pyramid mix: unit 68 percent, integration 22 percent, end to end 10 percent">
+          <line x1="40" y1="220" x2="320" y2="220" stroke="var(--c-border)" stroke-width="1.5"/>
+          <rect x="60" y="83.2" width="70" height="136.8" fill="var(--c-berry)" rx="3"/>
+          <text x="95" y="75" text-anchor="middle" class="chart-num" fill="var(--c-berry)">68%</text>
+          <text x="95" y="238" text-anchor="middle" class="chart-lbl">Unit</text>
+          <rect x="170" y="175.6" width="70" height="44.4" fill="var(--c-leaf)" rx="3"/>
+          <text x="205" y="168" text-anchor="middle" class="chart-num" fill="var(--c-leaf)">22%</text>
+          <text x="205" y="238" text-anchor="middle" class="chart-lbl">Integration</text>
+          <rect x="280" y="200" width="30" height="20" fill="var(--c-amber)" rx="3"/>
+          <text x="295" y="192" text-anchor="middle" class="chart-num" fill="var(--c-amber)">10%</text>
+          <text x="295" y="238" text-anchor="middle" class="chart-lbl">E2E</text>
+        </svg>
+        <p class="chart-caption">Target 70/20/10 &mdash; ClaimSight is on-pyramid at 68/22/10.</p>
+      </div>
+
+      <div class="chart-card">
+        <h4>Overall Coverage</h4>
+        <svg viewBox="0 0 220 220" class="chart-svg" role="img" aria-label="Donut chart showing 86 percent test coverage">
+          <circle cx="110" cy="110" r="80" fill="none" stroke="var(--c-border)" stroke-width="24"/>
+          <circle cx="110" cy="110" r="80" fill="none" stroke="var(--c-berry)" stroke-width="24"
+            stroke-dasharray="432.7 502.7" stroke-linecap="round"
+            transform="rotate(-90 110 110)"/>
+          <text x="110" y="103" text-anchor="middle" class="chart-num-lg" fill="var(--c-text)">86%</text>
+          <text x="110" y="126" text-anchor="middle" class="chart-lbl">covered</text>
+        </svg>
+        <p class="chart-caption">86% statements covered across all ClaimSight modules; 14% gap tracked as debt items.</p>
+      </div>
+
+      <div class="chart-card">
+        <h4>PR Cycle Time &mdash; last 6 weeks</h4>
+        <svg viewBox="0 0 340 260" class="chart-svg" role="img" aria-label="Bar chart of PR cycle time declining from 14.2 to 6.2 hours over six weeks">
+          <line x1="30" y1="220" x2="320" y2="220" stroke="var(--c-border)" stroke-width="1.5"/>
+          <g fill="var(--c-berry)">
+            <rect x="40"  y="60"  width="32" height="160" rx="3"/>
+            <rect x="90"  y="93"  width="32" height="127" rx="3"/>
+            <rect x="140" y="113" width="32" height="107" rx="3"/>
+            <rect x="190" y="129" width="32" height="91"  rx="3"/>
+            <rect x="240" y="141" width="32" height="79"  rx="3"/>
+            <rect x="290" y="149" width="32" height="71"  rx="3"/>
+          </g>
+          <g class="chart-lbl" text-anchor="middle">
+            <text x="56" y="238">W1</text><text x="106" y="238">W2</text><text x="156" y="238">W3</text>
+            <text x="206" y="238">W4</text><text x="256" y="238">W5</text><text x="306" y="238">W6</text>
+          </g>
+          <g class="chart-num" text-anchor="middle" fill="var(--c-berry)">
+            <text x="56" y="52">14.2h</text><text x="106" y="85">11.8h</text><text x="156" y="105">9.5h</text>
+            <text x="206" y="121">8.1h</text><text x="256" y="133">7.0h</text><text x="306" y="141">6.2h</text>
+          </g>
+        </svg>
+        <p class="chart-caption">Trending down since PR-size and reviewer-SLA rules landed in Week 2 (see Branching &amp; PR Workflow).</p>
+      </div>
+
+      <div class="chart-card">
+        <h4>Defect Trend &mdash; last 6 sprints</h4>
+        <svg viewBox="0 0 340 260" class="chart-svg" role="img" aria-label="Line chart of open defects declining from 14 to 4 over six sprints">
+          <line x1="30" y1="220" x2="320" y2="220" stroke="var(--c-border)" stroke-width="1.5"/>
+          <polyline fill="none" stroke="var(--c-cherry)" stroke-width="3"
+            points="56,60 106,93 156,120 206,148 256,175 306,184"/>
+          <g fill="var(--c-cherry)">
+            <circle cx="56" cy="60" r="5"/><circle cx="106" cy="93" r="5"/><circle cx="156" cy="120" r="5"/>
+            <circle cx="206" cy="148" r="5"/><circle cx="256" cy="175" r="5"/><circle cx="306" cy="184" r="5"/>
+          </g>
+          <g class="chart-num" text-anchor="middle" fill="var(--c-cherry)">
+            <text x="56" y="50">14</text><text x="106" y="83">11</text><text x="156" y="110">9</text>
+            <text x="206" y="138">7</text><text x="256" y="165">5</text><text x="306" y="174">4</text>
+          </g>
+          <g class="chart-lbl" text-anchor="middle">
+            <text x="56" y="238">S1</text><text x="106" y="238">S2</text><text x="156" y="238">S3</text>
+            <text x="206" y="238">S4</text><text x="256" y="238">S5</text><text x="306" y="238">S6</text>
+          </g>
+        </svg>
+        <p class="chart-caption">Open defect count falling steadily since the Code Review Checklist gate was enforced at Sprint 2.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="review-lens" class="content-section">
+    <h2>The Architect&rsquo;s Review Lens</h2>
+    <p>A structured order in which to evaluate any AI-generated pull request, before approving it. Work top to bottom &mdash; each layer catches a class of defect the next layer can&rsquo;t.</p>
+    <ol class="lens-list">
+      <li><strong>Contract match.</strong> Does the implementation match the module&rsquo;s declared inputs, outputs, and error types &mdash; not just &ldquo;does it run&rdquo;?</li>
+      <li><strong>Failure paths present.</strong> Timeout, retry, and a named failure mode for every external call. No silent catches.</li>
+      <li><strong>Idempotency.</strong> If this can be retried or resubmitted, does the second run produce the same end state as the first?</li>
+      <li><strong>Blast radius.</strong> If this is wrong, what breaks, how far does it spread, and is it reversible?</li>
+      <li><strong>Test coverage of the four required cases.</strong> Happy path, failure path, boundary, idempotency &mdash; not just the demo.</li>
+      <li><strong>Naming &amp; size.</strong> Can a junior developer understand this in one read? Does it respect file/function size ceilings?</li>
+      <li><strong>Duplication.</strong> Does this reinvent logic that already exists elsewhere in the codebase?</li>
+      <li><strong>Governance boundary check.</strong> Does this touch schema, compliance, external paid dependencies, or production infrastructure &mdash; and if so, has it been escalated?</li>
+    </ol>
+    <div class="callout callout-success">
+      <strong>If all eight pass:</strong> approve. If any fail: it is not &ldquo;approve with comments&rdquo; &mdash; a broken contract or a missing failure path is a blocking finding, not a nitpick.
+    </div>
+  </section>
+
+  <!-- ======================= PART B: DOCUMENTS ======================= -->
+
+  <section id="part-b-intro" class="content-section part-b-intro">
+    <h2>Part B &mdash; ClaimSight Deliverables</h2>
+    <p>Seven complete, production-format documents for <strong>ClaimSight</strong>: an AI-assisted claims triage and fraud risk-scoring feature for Meridian Assurance, a fictional mid-size property &amp; casualty insurer used as this guide&rsquo;s running example. Each document below is a genuine deliverable &mdash; download it as a standalone branded HTML file, print it to PDF, or (for the three tabular documents) export it as CSV for Excel.</p>
+  </section>
+
+  <!-- DOC 1: TDD -->
+  <section id="doc-tdd" class="content-section document" data-doc-id="doc-tdd" data-doc-title="ClaimSight Technical Design Document" data-doc-code="CS-TDD-001">
+    <div class="doc-card">
+      <div class="doc-cover">
+        <img class="doc-cover-logo" alt="Colaberry" />
+        <div class="doc-cover-title">
+          <span class="doc-kicker">Technical Design Document</span>
+          <h2>ClaimSight &mdash; AI-Assisted Claims Triage &amp; Fraud Risk Scoring</h2>
+        </div>
+      </div>
+      <div class="doc-control-strip">
+        <div><span class="dc-label">Document ID</span><span class="dc-value">CS-TDD-001</span></div>
+        <div><span class="dc-label">Version</span><span class="dc-value">1.0</span></div>
+        <div><span class="dc-label">Owner</span><span class="dc-value">AI Solution Architecture Guild</span></div>
+        <div><span class="dc-label">Status</span><span class="dc-value status-draft">Draft &mdash; Ready for Review</span></div>
+        <div><span class="dc-label">Date</span><span class="dc-value">2026-08-24</span></div>
+        <div><span class="dc-label">Classification</span><span class="dc-value">Internal</span></div>
+      </div>
+      <div class="doc-actions">
+        <button class="btn btn-primary" data-action="download-html" data-target="doc-tdd">Download HTML</button>
+        <button class="btn btn-secondary" data-action="print-doc" data-target="doc-tdd">Save as PDF</button>
+      </div>
+
+      <div class="doc-body">
+        <h3>1. Context</h3>
+        <p>Meridian Assurance receives approximately 4,200 property &amp; casualty claims per week across web, mobile, and call-center intake. Today, every claim is routed to a first-available adjuster regardless of size or risk profile, which means a $400 windshield claim and a $38,000 suspected-arson claim enter the same queue. Investigation capacity in the Special Investigations Unit (SIU) is scarce and is currently allocated by adjuster judgment after initial review &mdash; a step that adds 2&ndash;5 days to claims that should be fast-tracked, and misses early fraud signals on claims that should be flagged immediately.</p>
+        <p><strong>Goal:</strong> automatically triage every incoming claim within seconds of submission into one of three lanes &mdash; <em>auto-fast-track</em>, <em>standard adjuster queue</em>, or <em>SIU investigation queue</em> &mdash; using a fraud-risk score computed from claim, policy, and document features.</p>
+
+        <h3>2. Chosen Approach</h3>
+        <p>An event-driven pipeline: claim submission triggers document ingestion, which triggers feature extraction, which triggers a call to an external AI risk-scoring service, which triggers rules-based routing. Each stage is a separately deployable service communicating over an internal event bus, persisting its own state, and independently testable.</p>
+        <table class="data-table">
+          <thead><tr><th>Alternative considered</th><th>Rejected because</th></tr></thead>
+          <tbody>
+            <tr><td>Synchronous monolith call chain (intake API calls scoring directly, in-request)</td><td>Ties claim-submission latency to a third-party scoring SLA; one slow vendor call blocks the whole intake API</td></tr>
+            <tr><td>Build fraud scoring in-house from scratch</td><td>Outside the 20-week delivery window and duplicates a capability Meridian&rsquo;s existing AI vendor already provides under contract</td></tr>
+            <tr><td>Batch nightly scoring instead of real-time</td><td>Defeats the purpose &mdash; SIU needs same-day signal on high-risk claims, not next-day</td></tr>
+          </tbody>
+        </table>
+
+        <h3>3. Module Breakdown</h3>
+        <p>See the companion <a href="#doc-modules" class="doc-link">Module &amp; Component Design</a> document for full API contracts. At a glance:</p>
+        <svg viewBox="0 0 920 460" class="diagram-svg" role="img" aria-label="Component diagram of ClaimSight showing Claim Intake API, Document Ingestion Worker, Feature Extraction Service, Risk Scoring Client calling an external AI Risk Scoring Service, Routing Engine, Notification Service, and a Claims Database, connected via an internal event bus">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="var(--c-muted)"/>
+            </marker>
+          </defs>
+          <rect x="20" y="20" width="200" height="60" rx="8" class="box-berry"/>
+          <text x="120" y="45" text-anchor="middle" class="diagram-title">Claim Intake API</text>
+          <text x="120" y="62" text-anchor="middle" class="diagram-sub">Web / Mobile / Call Center</text>
+
+          <rect x="360" y="20" width="200" height="42" rx="8" class="box-neutral"/>
+          <text x="460" y="46" text-anchor="middle" class="diagram-title">Event Bus</text>
+
+          <rect x="20" y="150" width="200" height="60" rx="8" class="box-berry"/>
+          <text x="120" y="175" text-anchor="middle" class="diagram-title">Document Ingestion</text>
+          <text x="120" y="192" text-anchor="middle" class="diagram-sub">virus scan + OCR</text>
+
+          <rect x="260" y="150" width="200" height="60" rx="8" class="box-berry"/>
+          <text x="360" y="175" text-anchor="middle" class="diagram-title">Feature Extraction</text>
+          <text x="360" y="192" text-anchor="middle" class="diagram-sub">builds feature vector</text>
+
+          <rect x="500" y="150" width="200" height="60" rx="8" class="box-berry"/>
+          <text x="600" y="175" text-anchor="middle" class="diagram-title">Risk Scoring Client</text>
+          <text x="600" y="192" text-anchor="middle" class="diagram-sub">timeout + retry + breaker</text>
+
+          <rect x="740" y="150" width="160" height="60" rx="8" class="box-cherry"/>
+          <text x="820" y="175" text-anchor="middle" class="diagram-title">External AI</text>
+          <text x="820" y="192" text-anchor="middle" class="diagram-sub">Risk Scoring Service</text>
+
+          <rect x="260" y="280" width="200" height="60" rx="8" class="box-berry"/>
+          <text x="360" y="305" text-anchor="middle" class="diagram-title">Routing Engine</text>
+          <text x="360" y="322" text-anchor="middle" class="diagram-sub">business rules</text>
+
+          <rect x="500" y="280" width="200" height="60" rx="8" class="box-berry"/>
+          <text x="600" y="305" text-anchor="middle" class="diagram-title">Notification Service</text>
+          <text x="600" y="322" text-anchor="middle" class="diagram-sub">policyholder + team alerts</text>
+
+          <rect x="20" y="390" width="880" height="50" rx="8" class="box-leaf"/>
+          <text x="460" y="420" text-anchor="middle" class="diagram-title">Claims Database (PostgreSQL) &mdash; Policy / Claim / ClaimDocument / RiskAssessment / Adjuster / ClaimAssignment / AuditLog</text>
+
+          <line x1="220" y1="50" x2="355" y2="42" class="diagram-line" marker-end="url(#arrow)"/>
+          <line x1="460" y1="62" x2="120" y2="148" class="diagram-line" marker-end="url(#arrow)"/>
+          <line x1="220" y1="180" x2="255" y2="180" class="diagram-line" marker-end="url(#arrow)"/>
+          <line x1="460" y1="180" x2="495" y2="180" class="diagram-line" marker-end="url(#arrow)"/>
+          <line x1="700" y1="180" x2="735" y2="180" class="diagram-line" marker-end="url(#arrow)"/>
+          <line x1="600" y1="210" x2="380" y2="278" class="diagram-line" marker-end="url(#arrow)"/>
+          <line x1="460" y1="310" x2="495" y2="310" class="diagram-line" marker-end="url(#arrow)"/>
+          <line x1="120" y1="210" x2="120" y2="388" class="diagram-line" marker-end="url(#arrow)"/>
+          <line x1="360" y1="340" x2="360" y2="388" class="diagram-line" marker-end="url(#arrow)"/>
+          <line x1="600" y1="340" x2="600" y2="388" class="diagram-line" marker-end="url(#arrow)"/>
+        </svg>
+
+        <h3>4. Data Model</h3>
+        <svg viewBox="0 0 960 480" class="diagram-svg" role="img" aria-label="Entity relationship diagram showing Policy, Claim, ClaimDocument, RiskAssessment, Adjuster, ClaimAssignment, and AuditLog entities and their relationships">
+          <g class="erd-entity">
+            <rect x="20" y="20" width="210" height="118" rx="6" class="box-neutral"/>
+            <text x="125" y="40" text-anchor="middle" class="diagram-title">Policy</text>
+            <line x1="20" y1="50" x2="230" y2="50" class="diagram-line-thin"/>
+            <text x="32" y="68" class="erd-field">PK policy_id</text>
+            <text x="32" y="84" class="erd-field">policyholder_id</text>
+            <text x="32" y="100" class="erd-field">product_type</text>
+            <text x="32" y="116" class="erd-field">coverage_limit</text>
+            <text x="32" y="132" class="erd-field">status</text>
+          </g>
+          <g class="erd-entity">
+            <rect x="370" y="20" width="210" height="150" rx="6" class="box-neutral"/>
+            <text x="475" y="40" text-anchor="middle" class="diagram-title">Claim</text>
+            <line x1="370" y1="50" x2="580" y2="50" class="diagram-line-thin"/>
+            <text x="382" y="68" class="erd-field">PK claim_id</text>
+            <text x="382" y="84" class="erd-field">FK policy_id</text>
+            <text x="382" y="100" class="erd-field">claim_type</text>
+            <text x="382" y="116" class="erd-field">estimated_amount</text>
+            <text x="382" y="132" class="erd-field">status</text>
+            <text x="382" y="148" class="erd-field">channel</text>
+            <text x="382" y="164" class="erd-field">reported_date</text>
+          </g>
+          <g class="erd-entity">
+            <rect x="730" y="20" width="210" height="102" rx="6" class="box-neutral"/>
+            <text x="835" y="40" text-anchor="middle" class="diagram-title">ClaimDocument</text>
+            <line x1="730" y1="50" x2="940" y2="50" class="diagram-line-thin"/>
+            <text x="742" y="68" class="erd-field">PK document_id</text>
+            <text x="742" y="84" class="erd-field">FK claim_id</text>
+            <text x="742" y="100" class="erd-field">doc_type</text>
+            <text x="742" y="116" class="erd-field">ocr_status</text>
+          </g>
+          <g class="erd-entity">
+            <rect x="370" y="230" width="210" height="134" rx="6" class="box-neutral"/>
+            <text x="475" y="250" text-anchor="middle" class="diagram-title">RiskAssessment</text>
+            <line x1="370" y1="260" x2="580" y2="260" class="diagram-line-thin"/>
+            <text x="382" y="278" class="erd-field">PK assessment_id</text>
+            <text x="382" y="294" class="erd-field">FK claim_id</text>
+            <text x="382" y="310" class="erd-field">risk_score</text>
+            <text x="382" y="326" class="erd-field">triage_recommendation</text>
+            <text x="382" y="342" class="erd-field">model_version</text>
+            <text x="382" y="358" class="erd-field">scored_at</text>
+          </g>
+          <g class="erd-entity">
+            <rect x="20" y="230" width="210" height="102" rx="6" class="box-neutral"/>
+            <text x="125" y="250" text-anchor="middle" class="diagram-title">Adjuster</text>
+            <line x1="20" y1="260" x2="230" y2="260" class="diagram-line-thin"/>
+            <text x="32" y="278" class="erd-field">PK adjuster_id</text>
+            <text x="32" y="294" class="erd-field">team</text>
+            <text x="32" y="310" class="erd-field">active_case_count</text>
+          </g>
+          <g class="erd-entity">
+            <rect x="20" y="380" width="230" height="86" rx="6" class="box-neutral"/>
+            <text x="135" y="400" text-anchor="middle" class="diagram-title">ClaimAssignment</text>
+            <line x1="20" y1="410" x2="250" y2="410" class="diagram-line-thin"/>
+            <text x="32" y="428" class="erd-field">PK assignment_id</text>
+            <text x="32" y="444" class="erd-field">FK claim_id / FK adjuster_id</text>
+          </g>
+          <g class="erd-entity">
+            <rect x="730" y="230" width="210" height="86" rx="6" class="box-neutral"/>
+            <text x="835" y="250" text-anchor="middle" class="diagram-title">AuditLog</text>
+            <line x1="730" y1="260" x2="940" y2="260" class="diagram-line-thin"/>
+            <text x="742" y="278" class="erd-field">PK audit_id</text>
+            <text x="742" y="294" class="erd-field">entity_type / correlation_id</text>
+          </g>
+          <line x1="230" y1="79" x2="370" y2="79" class="diagram-line" marker-end="url(#arrow)"/>
+          <text x="300" y="72" text-anchor="middle" class="erd-card">1&mdash;*</text>
+          <line x1="580" y1="79" x2="730" y2="79" class="diagram-line" marker-end="url(#arrow)"/>
+          <text x="655" y="72" text-anchor="middle" class="erd-card">1&mdash;*</text>
+          <line x1="475" y1="170" x2="475" y2="228" class="diagram-line" marker-end="url(#arrow)"/>
+          <text x="490" y="202" text-anchor="middle" class="erd-card">1&mdash;1</text>
+          <line x1="230" y1="290" x2="370" y2="297" class="diagram-line" marker-end="url(#arrow)"/>
+          <text x="300" y="283" text-anchor="middle" class="erd-card">1&mdash;*</text>
+          <line x1="835" y1="122" x2="835" y2="228" class="diagram-line" marker-end="url(#arrow)"/>
+          <text x="855" y="178" text-anchor="middle" class="erd-card">1&mdash;*</text>
+          <line x1="135" y1="332" x2="135" y2="378" class="diagram-line" marker-end="url(#arrow)"/>
+        </svg>
+
+        <h3>5. Sequence &mdash; Claim Submission to Triage Assignment</h3>
+        <svg viewBox="0 0 980 560" class="diagram-svg" role="img" aria-label="Sequence diagram showing the flow from policyholder claim submission through intake, document ingestion, feature extraction, risk scoring, routing, and notification">
+          <g class="seq-actor">
+            <text x="60" y="24" text-anchor="middle" class="diagram-title">Policyholder</text>
+            <text x="200" y="24" text-anchor="middle" class="diagram-title">Intake API</text>
+            <text x="360" y="24" text-anchor="middle" class="diagram-title">Ingestion</text>
+            <text x="520" y="24" text-anchor="middle" class="diagram-title">Feature Extr.</text>
+            <text x="670" y="24" text-anchor="middle" class="diagram-title">Risk Scoring</text>
+            <text x="820" y="24" text-anchor="middle" class="diagram-title">Routing</text>
+            <text x="930" y="24" text-anchor="middle" class="diagram-title">Notify</text>
+          </g>
+          <g class="diagram-line-thin">
+            <line x1="60" y1="34" x2="60" y2="530"/><line x1="200" y1="34" x2="200" y2="530"/>
+            <line x1="360" y1="34" x2="360" y2="530"/><line x1="520" y1="34" x2="520" y2="530"/>
+            <line x1="670" y1="34" x2="670" y2="530"/><line x1="820" y1="34" x2="820" y2="530"/>
+            <line x1="930" y1="34" x2="930" y2="530"/>
+          </g>
+          <g class="seq-step">
+            <line x1="60" y1="60" x2="196" y2="60" class="diagram-line" marker-end="url(#arrow)"/>
+            <text x="128" y="52" text-anchor="middle" class="diagram-sub">1. submit claim + docs</text>
+
+            <line x1="200" y1="100" x2="64" y2="100" class="diagram-line" marker-end="url(#arrow)"/>
+            <text x="128" y="92" text-anchor="middle" class="diagram-sub">2. 202 Accepted + claim_id</text>
+
+            <line x1="200" y1="140" x2="356" y2="140" class="diagram-line" marker-end="url(#arrow)"/>
+            <text x="280" y="132" text-anchor="middle" class="diagram-sub">3. ClaimSubmitted event</text>
+
+            <line x1="360" y1="180" x2="360" y2="180" class="diagram-line"/>
+            <text x="360" y="172" text-anchor="middle" class="diagram-sub">4. virus scan + OCR</text>
+
+            <line x1="360" y1="220" x2="516" y2="220" class="diagram-line" marker-end="url(#arrow)"/>
+            <text x="440" y="212" text-anchor="middle" class="diagram-sub">5. DocumentsReady event</text>
+
+            <line x1="520" y1="260" x2="520" y2="260" class="diagram-line"/>
+            <text x="520" y="252" text-anchor="middle" class="diagram-sub">6. build feature vector</text>
+
+            <line x1="520" y1="300" x2="666" y2="300" class="diagram-line" marker-end="url(#arrow)"/>
+            <text x="595" y="292" text-anchor="middle" class="diagram-sub">7. FeaturesReady event</text>
+
+            <line x1="670" y1="340" x2="670" y2="340" class="diagram-line"/>
+            <text x="670" y="332" text-anchor="middle" class="diagram-sub">8. call external AI (timeout 8s, retry x2)</text>
+
+            <line x1="670" y1="380" x2="816" y2="380" class="diagram-line" marker-end="url(#arrow)"/>
+            <text x="745" y="372" text-anchor="middle" class="diagram-sub">9. ClaimScored event</text>
+
+            <line x1="820" y1="420" x2="820" y2="420" class="diagram-line"/>
+            <text x="820" y="412" text-anchor="middle" class="diagram-sub">10. evaluate routing rules</text>
+
+            <line x1="820" y1="460" x2="926" y2="460" class="diagram-line" marker-end="url(#arrow)"/>
+            <text x="875" y="452" text-anchor="middle" class="diagram-sub">11. ClaimRouted event</text>
+
+            <line x1="930" y1="500" x2="64" y2="500" class="diagram-line" marker-end="url(#arrow)"/>
+            <text x="495" y="492" text-anchor="middle" class="diagram-sub">12. status email / SMS (idempotent per claim_id + type)</text>
+          </g>
+        </svg>
+
+        <h3>6. Risks &amp; Trade-offs</h3>
+        <table class="data-table">
+          <thead><tr><th>Risk</th><th>Failure-first answer</th></tr></thead>
+          <tbody>
+            <tr><td>External Risk Scoring Service is down or slow</td><td>8s timeout, 2 retries with exponential backoff, circuit breaker after 5 consecutive failures, degrade to <em>STANDARD_ADJUSTER_QUEUE</em> (never auto-fast-track and never silently drop) with an <code>UpstreamUnavailable</code> flag for later re-scoring</td></tr>
+            <tr><td>Duplicate claim submission (double form submit, retried request)</td><td>Dedup by <code>(policy_id, incident_date, channel)</code> fingerprint before insert; idempotency key on the intake endpoint</td></tr>
+            <tr><td>Vision-model damage assessment misreads a photo</td><td>Feature Extraction treats vision output as one signal among several, never sole determinant; SIU review remains a human gate above the escalation threshold</td></tr>
+            <tr><td>Model drift changes score distribution over time</td><td><code>model_version</code> stored on every <code>RiskAssessment</code> row; threshold recalibration is a tracked, reviewed change, not silent</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="doc-signoff">
+        <h4>Sign-off</h4>
+        <table class="signoff-table">
+          <thead><tr><th>Role</th><th>Name</th><th>Date</th><th>Signature</th></tr></thead>
+          <tbody>
+            <tr><td>Prepared by</td><td>Claude Code &mdash; AI Engineering Agent</td><td>2026-08-24</td><td class="sig-blank"></td></tr>
+            <tr><td>Reviewed by</td><td class="sig-blank"></td><td class="sig-blank"></td><td class="sig-blank"></td></tr>
+            <tr><td>Approved by</td><td class="sig-blank"></td><td class="sig-blank"></td><td class="sig-blank"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="doc-footer">
+        <span>Colaberry &mdash; Enterprise AI Leadership Accelerator</span>
+        <span>CS-TDD-001 v1.0 &mdash; Confidential, Internal Use</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOC 2: Module Design -->
+  <section id="doc-modules" class="content-section document" data-doc-id="doc-modules" data-doc-title="ClaimSight Module and Component Design" data-doc-code="CS-MOD-001">
+    <div class="doc-card">
+      <div class="doc-cover">
+        <img class="doc-cover-logo" alt="Colaberry" />
+        <div class="doc-cover-title">
+          <span class="doc-kicker">Module &amp; Component Design</span>
+          <h2>ClaimSight &mdash; API Signatures &amp; Contracts</h2>
+        </div>
+      </div>
+      <div class="doc-control-strip">
+        <div><span class="dc-label">Document ID</span><span class="dc-value">CS-MOD-001</span></div>
+        <div><span class="dc-label">Version</span><span class="dc-value">1.0</span></div>
+        <div><span class="dc-label">Owner</span><span class="dc-value">AI Solution Architecture Guild</span></div>
+        <div><span class="dc-label">Status</span><span class="dc-value status-draft">Draft &mdash; Ready for Review</span></div>
+        <div><span class="dc-label">Date</span><span class="dc-value">2026-08-24</span></div>
+        <div><span class="dc-label">Classification</span><span class="dc-value">Internal</span></div>
+      </div>
+      <div class="doc-actions">
+        <button class="btn btn-primary" data-action="download-html" data-target="doc-modules">Download HTML</button>
+        <button class="btn btn-secondary" data-action="print-doc" data-target="doc-modules">Save as PDF</button>
+      </div>
+
+      <div class="doc-body">
+        <p>Six modules, each with one responsibility and an explicit input/output/error contract. Types are TypeScript; every module is independently unit-testable behind its contract.</p>
+
+        <h3>2.1 ClaimIntakeService</h3>
+        <p class="module-resp"><strong>Responsibility:</strong> validate and persist a claim submission; nothing else &mdash; no scoring, no routing.</p>
+<pre><code>function submitClaim(
+  input: ClaimSubmissionInput
+): Promise&lt;ClaimSubmissionResult&gt;
+
+type ClaimSubmissionInput = {
+  policyId: string;
+  claimType: 'AUTO' | 'PROPERTY' | 'LIABILITY';
+  incidentDate: string;   // ISO-8601
+  estimatedAmount: number;
+  channel: 'WEB' | 'MOBILE' | 'CALL_CENTER';
+  documents: UploadedDocumentRef[];
+};
+type ClaimSubmissionResult = {
+  claimId: string;
+  correlationId: string;
+  status: 'RECEIVED';
+};
+// Errors: ValidationError, DuplicateClaimError</code></pre>
+
+        <h3>2.2 DocumentIngestionWorker</h3>
+        <p class="module-resp"><strong>Responsibility:</strong> pull uploaded documents, virus-scan and OCR them, persist <code>ClaimDocument</code> rows.</p>
+<pre><code>function ingestDocuments(
+  claimId: string,
+  documents: UploadedDocumentRef[]
+): Promise&lt;IngestionResult&gt;
+
+type IngestionResult = {
+  claimId: string;
+  documentsProcessed: number;
+  ocrConfidenceAvg: number;
+};
+// Errors: VirusScanFailedError, UnsupportedFileTypeError</code></pre>
+
+        <h3>2.3 FeatureExtractionService</h3>
+        <p class="module-resp"><strong>Responsibility:</strong> convert a claim + its documents into a typed feature vector. No scoring logic lives here.</p>
+<pre><code>function extractFeatures(
+  claim: Claim,
+  documents: ClaimDocument[]
+): Promise&lt;ClaimFeatureVector&gt;
+
+type ClaimFeatureVector = {
+  claimAmount: number;
+  policyTenureMonths: number;
+  priorClaimsCount: number;
+  photoDamageConsistencyScore: number; // 0-1
+  geoRiskIndex: number;                // 0-1
+};
+// Errors: InsufficientDataError</code></pre>
+
+        <h3>2.4 RiskScoringClient</h3>
+        <p class="module-resp"><strong>Responsibility:</strong> call the external AI Risk Scoring Service and translate its response into a typed result. Owns timeout, retry, and circuit-breaker behavior for that one dependency.</p>
+<pre><code>function scoreClaim(
+  features: ClaimFeatureVector
+): Promise&lt;RiskAssessmentResult&gt;
+
+type RiskAssessmentResult = {
+  riskScore: number;          // 0-100
+  triageRecommendation: 'FASTTRACK' | 'STANDARD' | 'SIU';
+  modelVersion: string;
+  scoredAt: string;
+};
+// Errors: ScoringTimeoutError, ScoringServiceUnavailableError
+// Contract: 8s timeout, 2 retries (exp. backoff), circuit-breaks
+// after 5 consecutive failures across a rolling 60s window.</code></pre>
+
+        <h3>2.5 RoutingEngine</h3>
+        <p class="module-resp"><strong>Responsibility:</strong> apply business rules to a scored claim and produce an assignment. Pure rules evaluation &mdash; no I/O beyond persisting the result.</p>
+<pre><code>function routeClaim(
+  claim: Claim,
+  assessment: RiskAssessmentResult
+): Promise&lt;ClaimAssignment&gt;
+
+type ClaimAssignment = {
+  claimId: string;
+  queue: 'AUTO_FASTTRACK' | 'STANDARD_ADJUSTER_QUEUE' | 'SIU_QUEUE';
+  adjusterId: string | null;
+  assignedAt: string;
+};
+// Errors: NoAvailableAdjusterError</code></pre>
+
+        <h3>2.6 NotificationService</h3>
+        <p class="module-resp"><strong>Responsibility:</strong> notify the policyholder and internal teams of a claim status change. Idempotent by design.</p>
+<pre><code>function notifyClaimStatus(
+  claimId: string,
+  notificationType: NotificationType
+): Promise&lt;NotificationResult&gt;
+
+// Idempotency key: (claimId, notificationType)
+// Re-invoking with the same key is a guaranteed no-op after
+// the first successful send &mdash; checked via a dedup table
+// before any Mandrill/SMS call fires.
+// Errors: NotificationDeliveryError (logged, never thrown to caller)</code></pre>
+      </div>
+
+      <div class="doc-signoff">
+        <h4>Sign-off</h4>
+        <table class="signoff-table">
+          <thead><tr><th>Role</th><th>Name</th><th>Date</th><th>Signature</th></tr></thead>
+          <tbody>
+            <tr><td>Prepared by</td><td>Claude Code &mdash; AI Engineering Agent</td><td>2026-08-24</td><td class="sig-blank"></td></tr>
+            <tr><td>Reviewed by</td><td class="sig-blank"></td><td class="sig-blank"></td><td class="sig-blank"></td></tr>
+            <tr><td>Approved by</td><td class="sig-blank"></td><td class="sig-blank"></td><td class="sig-blank"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="doc-footer">
+        <span>Colaberry &mdash; Enterprise AI Leadership Accelerator</span>
+        <span>CS-MOD-001 v1.0 &mdash; Confidential, Internal Use</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOC 3: Coding Standards -->
+  <section id="doc-standards" class="content-section document" data-doc-id="doc-standards" data-doc-title="ClaimSight Coding Standards and Naming Conventions" data-doc-code="CS-STD-001">
+    <div class="doc-card">
+      <div class="doc-cover">
+        <img class="doc-cover-logo" alt="Colaberry" />
+        <div class="doc-cover-title">
+          <span class="doc-kicker">Coding Standards &amp; Naming Conventions</span>
+          <h2>ClaimSight &mdash; House Style</h2>
+        </div>
+      </div>
+      <div class="doc-control-strip">
+        <div><span class="dc-label">Document ID</span><span class="dc-value">CS-STD-001</span></div>
+        <div><span class="dc-label">Version</span><span class="dc-value">1.0</span></div>
+        <div><span class="dc-label">Owner</span><span class="dc-value">AI Solution Architecture Guild</span></div>
+        <div><span class="dc-label">Status</span><span class="dc-value status-draft">Draft &mdash; Ready for Review</span></div>
+        <div><span class="dc-label">Date</span><span class="dc-value">2026-08-24</span></div>
+        <div><span class="dc-label">Classification</span><span class="dc-value">Internal</span></div>
+      </div>
+      <div class="doc-actions">
+        <button class="btn btn-primary" data-action="download-html" data-target="doc-standards">Download HTML</button>
+        <button class="btn btn-secondary" data-action="print-doc" data-target="doc-standards">Save as PDF</button>
+      </div>
+
+      <div class="doc-body">
+        <p>This standard applies equally to human-authored and AI-generated code entering the ClaimSight codebase. AI agents are directed to this document before generating any module.</p>
+
+        <h3>3.1 Naming</h3>
+        <table class="data-table">
+          <thead><tr><th>Element</th><th>Convention</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Functions / variables</td><td>camelCase, verb-first for functions</td><td><code>scoreClaim</code>, <code>riskScore</code></td></tr>
+            <tr><td>Classes / Types / Interfaces</td><td>PascalCase</td><td><code>RiskAssessmentResult</code></td></tr>
+            <tr><td>Constants</td><td>UPPER_SNAKE_CASE, never a bare literal in logic</td><td><code>SIU_ESCALATION_THRESHOLD</code></td></tr>
+            <tr><td>Files (service modules)</td><td>camelCase matching primary export</td><td><code>riskScoringClient.ts</code></td></tr>
+            <tr><td>Files (one-off scripts)</td><td>verb-first camelCase describing the single action</td><td><code>backfillClaimAuditLogs.ts</code></td></tr>
+            <tr><td>Booleans</td><td>read as a yes/no question</td><td><code>isHighRiskClaim</code>, not <code>flag</code></td></tr>
+            <tr><td>Error classes</td><td>PascalCase ending in <code>Error</code>, one per distinct failure mode</td><td><code>ScoringTimeoutError</code></td></tr>
+          </tbody>
+        </table>
+
+        <h3>3.2 Size Discipline</h3>
+        <table class="data-table">
+          <thead><tr><th>Unit</th><th>Soft target</th><th>Hard ceiling</th></tr></thead>
+          <tbody>
+            <tr><td>File</td><td>~300 lines</td><td>500 lines</td></tr>
+            <tr><td>Function</td><td>~50 lines</td><td>100 lines</td></tr>
+            <tr><td>Module export surface</td><td>5&ndash;7 public symbols</td><td>12</td></tr>
+          </tbody>
+        </table>
+        <p>Touching an oversize file is the trigger to split it &mdash; not a reason to avoid touching it.</p>
+
+        <h3>3.3 Types &amp; Contracts</h3>
+        <ul class="check-list">
+          <li>No <code>any</code> without a one-line comment explaining why it&rsquo;s unavoidable.</li>
+          <li>Every exported function has an explicit return type &mdash; never inferred silently across a module boundary.</li>
+          <li>Inbound HTTP payloads validated with Zod before reaching business logic; malformed input returns 400, never reaches a service function.</li>
+        </ul>
+
+        <h3>3.4 Comments</h3>
+        <p>Default to no comments. Add one only when it explains a non-obvious <em>why</em> &mdash; a workaround, a hidden constraint, a regulatory reason a threshold is set where it is. Never restate what the code already says.</p>
+        <div class="two-col code-compare">
+          <div class="card code-card bad">
+            <h4><span class="dot dot-cherry"></span>Unnecessary</h4>
+<pre><code>// increment the retry counter
+retryCount++;</code></pre>
+          </div>
+          <div class="card code-card good">
+            <h4><span class="dot dot-leaf"></span>Earns its place</h4>
+<pre><code>// Vendor SLA guarantees recovery within 3 attempts;
+// a 4th retry only masks a real outage (see CS-TDD-001 &sect;6)
+if (retryCount &gt;= 3) throw new ScoringServiceUnavailableError();</code></pre>
+          </div>
+        </div>
+
+        <h3>3.5 Logging</h3>
+        <p>Structured JSON only. Every log line includes <code>timestamp</code>, <code>level</code>, <code>service</code>, <code>event</code>, <code>correlation_id</code>, and <code>outcome</code>. Never log a raw error object without a classified <code>error_class</code>. Never log a secret &mdash; API keys are redacted at the log-formatter level, not by convention.</p>
+      </div>
+
+      <div class="doc-signoff">
+        <h4>Sign-off</h4>
+        <table class="signoff-table">
+          <thead><tr><th>Role</th><th>Name</th><th>Date</th><th>Signature</th></tr></thead>
+          <tbody>
+            <tr><td>Prepared by</td><td>Claude Code &mdash; AI Engineering Agent</td><td>2026-08-24</td><td class="sig-blank"></td></tr>
+            <tr><td>Reviewed by</td><td class="sig-blank"></td><td class="sig-blank"></td><td class="sig-blank"></td></tr>
+            <tr><td>Approved by</td><td class="sig-blank"></td><td class="sig-blank"></td><td class="sig-blank"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="doc-footer">
+        <span>Colaberry &mdash; Enterprise AI Leadership Accelerator</span>
+        <span>CS-STD-001 v1.0 &mdash; Confidential, Internal Use</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOC 4: Code Review Checklist (tabular, CSV) -->
+  <section id="doc-checklist" class="content-section document" data-doc-id="doc-checklist" data-doc-title="ClaimSight Code Review Checklist" data-doc-code="CS-CHK-001">
+    <div class="doc-card">
+      <div class="doc-cover">
+        <img class="doc-cover-logo" alt="Colaberry" />
+        <div class="doc-cover-title">
+          <span class="doc-kicker">Code Review Checklist</span>
+          <h2>ClaimSight &mdash; Pull Request Gate</h2>
+        </div>
+      </div>
+      <div class="doc-control-strip">
+        <div><span class="dc-label">Document ID</span><span class="dc-value">CS-CHK-001</span></div>
+        <div><span class="dc-label">Version</span><span class="dc-value">1.0</span></div>
+        <div><span class="dc-label">Owner</span><span class="dc-value">AI Solution Architecture Guild</span></div>
+        <div><span class="dc-label">Status</span><span class="dc-value status-draft">Draft &mdash; Ready for Review</span></div>
+        <div><span class="dc-label">Date</span><span class="dc-value">2026-08-24</span></div>
+        <div><span class="dc-label">Classification</span><span class="dc-value">Internal</span></div>
+      </div>
+      <div class="doc-actions">
+        <button class="btn btn-primary" data-action="download-html" data-target="doc-checklist">Download HTML</button>
+        <button class="btn btn-secondary" data-action="print-doc" data-target="doc-checklist">Save as PDF</button>
+        <button class="btn btn-outline" data-action="download-csv" data-target="checklistRows" data-filename="ClaimSight_Code_Review_Checklist">Download CSV</button>
+      </div>
+      <div class="doc-body">
+        <p>Every ClaimSight pull request is checked against every row below before merge. A single <strong>Fail</strong> in Correctness, Contracts, Error Handling, Security, or Idempotency blocks merge outright.</p>
+        <div class="table-scroll">
+          <table class="data-table" id="tbl-checklist"></table>
+        </div>
+      </div>
+      <div class="doc-signoff">
+        <h4>Sign-off</h4>
+        <table class="signoff-table">
+          <thead><tr><th>Role</th><th>Name</th><th>Date</th><th>Signature</th></tr></thead>
+          <tbody>
+            <tr><td>Prepared by</td><td>Claude Code &mdash; AI Engineering Agent</td><td>2026-08-24</td><td class="sig-blank"></td></tr>
+            <tr><td>Reviewed by</td><td class="sig-blank"></td><td class="sig-blank"></td><td class="sig-blank"></td></tr>
+            <tr><td>Approved by</td><td class="sig-blank"></td><td class="sig-blank"></td><td class="sig-blank"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="doc-footer">
+        <span>Colaberry &mdash; Enterprise AI Leadership Accelerator</span>
+        <span>CS-CHK-001 v1.0 &mdash; Confidential, Internal Use</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOC 5: Test Plan (tabular, CSV) -->
+  <section id="doc-testplan" class="content-section document" data-doc-id="doc-testplan" data-doc-title="ClaimSight Unit and Integration Test Plan" data-doc-code="CS-TST-001">
+    <div class="doc-card">
+      <div class="doc-cover">
+        <img class="doc-cover-logo" alt="Colaberry" />
+        <div class="doc-cover-title">
+          <span class="doc-kicker">Unit &amp; Integration Test Plan</span>
+          <h2>ClaimSight &mdash; Test Cases by Pyramid Tier</h2>
+        </div>
+      </div>
+      <div class="doc-control-strip">
+        <div><span class="dc-label">Document ID</span><span class="dc-value">CS-TST-001</span></div>
+        <div><span class="dc-label">Version</span><span class="dc-value">1.0</span></div>
+        <div><span class="dc-label">Owner</span><span class="dc-value">AI Solution Architecture Guild</span></div>
+        <div><span class="dc-label">Status</span><span class="dc-value status-draft">Draft &mdash; Ready for Review</span></div>
+        <div><span class="dc-label">Date</span><span class="dc-value">2026-08-24</span></div>
+        <div><span class="dc-label">Classification</span><span class="dc-value">Internal</span></div>
+      </div>
+      <div class="doc-actions">
+        <button class="btn btn-primary" data-action="download-html" data-target="doc-testplan">Download HTML</button>
+        <button class="btn btn-secondary" data-action="print-doc" data-target="doc-testplan">Save as PDF</button>
+        <button class="btn btn-outline" data-action="download-csv" data-target="testPlanRows" data-filename="ClaimSight_Test_Plan">Download CSV</button>
+      </div>
+      <div class="doc-body">
+        <p>Every module carries all four mandatory case types &mdash; happy path, failure path, boundary, and idempotency &mdash; distributed across the testing pyramid per <a href="#concept-testing" class="doc-link">the pyramid target</a> of roughly 70% unit / 20% integration / 10% end-to-end.</p>
+        <div class="table-scroll">
+          <table class="data-table" id="tbl-testplan"></table>
+        </div>
+      </div>
+      <div class="doc-signoff">
+        <h4>Sign-off</h4>
+        <table class="signoff-table">
+          <thead><tr><th>Role</th><th>Name</th><th>Date</th><th>Signature</th></tr></thead>
+          <tbody>
+            <tr><td>Prepared by</td><td>Claude Code &mdash; AI Engineering Agent</td><td>2026-08-24</td><td class="sig-blank"></td></tr>
+            <tr><td>Reviewed by</td><td class="sig-blank"></td><td class="sig-blank"></td><td class="sig-blank"></td></tr>
+            <tr><td>Approved by</td><td class="sig-blank"></td><td class="sig-blank"></td><td class="sig-blank"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="doc-footer">
+        <span>Colaberry &mdash; Enterprise AI Leadership Accelerator</span>
+        <span>CS-TST-001 v1.0 &mdash; Confidential, Internal Use</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOC 6: Branching & PR Workflow -->
+  <section id="doc-branching" class="content-section document" data-doc-id="doc-branching" data-doc-title="ClaimSight Branching and Pull Request Workflow" data-doc-code="CS-BR-001">
+    <div class="doc-card">
+      <div class="doc-cover">
+        <img class="doc-cover-logo" alt="Colaberry" />
+        <div class="doc-cover-title">
+          <span class="doc-kicker">Branching &amp; Pull-Request Workflow</span>
+          <h2>ClaimSight &mdash; Git Discipline</h2>
+        </div>
+      </div>
+      <div class="doc-control-strip">
+        <div><span class="dc-label">Document ID</span><span class="dc-value">CS-BR-001</span></div>
+        <div><span class="dc-label">Version</span><span class="dc-value">1.0</span></div>
+        <div><span class="dc-label">Owner</span><span class="dc-value">AI Solution Architecture Guild</span></div>
+        <div><span class="dc-label">Status</span><span class="dc-value status-draft">Draft &mdash; Ready for Review</span></div>
+        <div><span class="dc-label">Date</span><span class="dc-value">2026-08-24</span></div>
+        <div><span class="dc-label">Classification</span><span class="dc-value">Internal</span></div>
+      </div>
+      <div class="doc-actions">
+        <button class="btn btn-primary" data-action="download-html" data-target="doc-branching">Download HTML</button>
+        <button class="btn btn-secondary" data-action="print-doc" data-target="doc-branching">Save as PDF</button>
+      </div>
+
+      <div class="doc-body">
+        <h3>6.1 Branching Model</h3>
+        <p>Trunk-based development with short-lived feature branches. <code>main</code> is always deployable. No long-running <code>develop</code> branch &mdash; branches live hours to a few days, not weeks.</p>
+        <table class="data-table">
+          <thead><tr><th>Branch prefix</th><th>Use</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>feature/</code></td><td>New capability, ticket-linked</td><td><code>feature/CS-118-siu-threshold</code></td></tr>
+            <tr><td><code>fix/</code></td><td>Bug fix</td><td><code>fix/CS-142-duplicate-notification</code></td></tr>
+            <tr><td><code>chore/</code></td><td>Non-behavioral (deps, config, refactor)</td><td><code>chore/CS-155-split-routing-engine</code></td></tr>
+          </tbody>
+        </table>
+
+        <svg viewBox="0 0 900 300" class="diagram-svg" role="img" aria-label="Git branching diagram showing trunk-based development with short-lived feature branches merging back to main via pull request">
+          <line x1="40" y1="150" x2="860" y2="150" class="diagram-line-thick" stroke="var(--c-berry)"/>
+          <g fill="var(--c-berry)">
+            <circle cx="80" cy="150" r="7"/><circle cx="260" cy="150" r="7"/>
+            <circle cx="460" cy="150" r="7"/><circle cx="680" cy="150" r="7"/><circle cx="840" cy="150" r="7"/>
+          </g>
+          <text x="80" y="130" text-anchor="middle" class="diagram-sub">main</text>
+
+          <path d="M80,150 C130,80 200,80 240,90" fill="none" class="diagram-line" stroke="var(--c-leaf)"/>
+          <path d="M240,90 C270,95 250,145 260,150" fill="none" class="diagram-line" marker-end="url(#arrow)" stroke="var(--c-leaf)"/>
+          <circle cx="180" cy="82" r="6" fill="var(--c-leaf)"/>
+          <text x="180" y="66" text-anchor="middle" class="diagram-sub">feature/CS-118</text>
+
+          <path d="M260,150 C310,220 380,220 430,205" fill="none" class="diagram-line" stroke="var(--c-cherry)"/>
+          <path d="M430,205 C460,198 440,155 460,150" fill="none" class="diagram-line" marker-end="url(#arrow)" stroke="var(--c-cherry)"/>
+          <circle cx="360" cy="216" r="6" fill="var(--c-cherry)"/>
+          <text x="360" y="238" text-anchor="middle" class="diagram-sub">fix/CS-142</text>
+
+          <path d="M460,150 C510,80 580,80 620,90" fill="none" class="diagram-line" stroke="var(--c-amber)"/>
+          <path d="M620,90 C650,95 660,145 680,150" fill="none" class="diagram-line" marker-end="url(#arrow)" stroke="var(--c-amber)"/>
+          <circle cx="560" cy="82" r="6" fill="var(--c-amber)"/>
+          <text x="560" y="66" text-anchor="middle" class="diagram-sub">chore/CS-155</text>
+
+          <text x="840" y="130" text-anchor="middle" class="diagram-sub">deployable</text>
+          <text x="450" y="280" text-anchor="middle" class="chart-caption">Each branch: 1 PR &middot; &le;400 line diff &middot; CI gate &middot; squash-merge</text>
+        </svg>
+
+        <h3>6.2 Pull Request Rules</h3>
+        <ul class="check-list">
+          <li><strong>Size:</strong> soft target under 400 lines of diff. Larger PRs are split by the author before review, not reviewed as-is.</li>
+          <li><strong>Reviewers:</strong> minimum 1; 2 required for changes touching <code>riskScoringClient.ts</code> or <code>routingEngine.ts</code> (CODEOWNERS-enforced).</li>
+          <li><strong>CI gate before review starts:</strong> <code>tsc --noEmit</code>, lint, unit tests, coverage threshold (&ge;80% on touched files).</li>
+          <li><strong>Merge strategy:</strong> squash-merge; commit message states the why, references the ticket.</li>
+          <li><strong>SLA:</strong> first review response within 4 business hours.</li>
+        </ul>
+
+        <h3>6.3 Commit Message Convention</h3>
+<pre><code>&lt;type&gt;(&lt;scope&gt;): &lt;why, not what&gt;
+
+feat(routing): auto-fasttrack claims under $2,500 with risk &lt; 20
+fix(notification): dedupe by (claimId, type) to stop double-sends
+chore(scoring): split riskScoringClient.ts at 520 lines</code></pre>
+      </div>
+
+      <div class="doc-signoff">
+        <h4>Sign-off</h4>
+        <table class="signoff-table">
+          <thead><tr><th>Role</th><th>Name</th><th>Date</th><th>Signature</th></tr></thead>
+          <tbody>
+            <tr><td>Prepared by</td><td>Claude Code &mdash; AI Engineering Agent</td><td>2026-08-24</td><td class="sig-blank"></td></tr>
+            <tr><td>Reviewed by</td><td class="sig-blank"></td><td class="sig-blank"></td><td class="sig-blank"></td></tr>
+            <tr><td>Approved by</td><td class="sig-blank"></td><td class="sig-blank"></td><td class="sig-blank"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="doc-footer">
+        <span>Colaberry &mdash; Enterprise AI Leadership Accelerator</span>
+        <span>CS-BR-001 v1.0 &mdash; Confidential, Internal Use</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOC 7: Definition of Done (tabular, CSV) -->
+  <section id="doc-dod" class="content-section document" data-doc-id="doc-dod" data-doc-title="ClaimSight Definition of Done" data-doc-code="CS-DOD-001">
+    <div class="doc-card">
+      <div class="doc-cover">
+        <img class="doc-cover-logo" alt="Colaberry" />
+        <div class="doc-cover-title">
+          <span class="doc-kicker">Definition of Done</span>
+          <h2>ClaimSight &mdash; The Objective Shippability Bar</h2>
+        </div>
+      </div>
+      <div class="doc-control-strip">
+        <div><span class="dc-label">Document ID</span><span class="dc-value">CS-DOD-001</span></div>
+        <div><span class="dc-label">Version</span><span class="dc-value">1.0</span></div>
+        <div><span class="dc-label">Owner</span><span class="dc-value">AI Solution Architecture Guild</span></div>
+        <div><span class="dc-label">Status</span><span class="dc-value status-draft">Draft &mdash; Ready for Review</span></div>
+        <div><span class="dc-label">Date</span><span class="dc-value">2026-08-24</span></div>
+        <div><span class="dc-label">Classification</span><span class="dc-value">Internal</span></div>
+      </div>
+      <div class="doc-actions">
+        <button class="btn btn-primary" data-action="download-html" data-target="doc-dod">Download HTML</button>
+        <button class="btn btn-secondary" data-action="print-doc" data-target="doc-dod">Save as PDF</button>
+        <button class="btn btn-outline" data-action="download-csv" data-target="dodRows" data-filename="ClaimSight_Definition_of_Done">Download CSV</button>
+      </div>
+      <div class="doc-body">
+        <p>A ClaimSight change is <strong>Done</strong> only when every row below is true with concrete evidence attached &mdash; not intent, not &ldquo;should be fine.&rdquo;</p>
+        <div class="table-scroll">
+          <table class="data-table" id="tbl-dod"></table>
+        </div>
+      </div>
+      <div class="doc-signoff">
+        <h4>Sign-off</h4>
+        <table class="signoff-table">
+          <thead><tr><th>Role</th><th>Name</th><th>Date</th><th>Signature</th></tr></thead>
+          <tbody>
+            <tr><td>Prepared by</td><td>Claude Code &mdash; AI Engineering Agent</td><td>2026-08-24</td><td class="sig-blank"></td></tr>
+            <tr><td>Reviewed by</td><td class="sig-blank"></td><td class="sig-blank"></td><td class="sig-blank"></td></tr>
+            <tr><td>Approved by</td><td class="sig-blank"></td><td class="sig-blank"></td><td class="sig-blank"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="doc-footer">
+        <span>Colaberry &mdash; Enterprise AI Leadership Accelerator</span>
+        <span>CS-DOD-001 v1.0 &mdash; Confidential, Internal Use</span>
+      </div>
+    </div>
+  </section>
+
+  </main>
+</div>
+
+<button id="ask-toggle" class="ask-toggle">
+  <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 2a10 10 0 1 0 3.85 19.24L21 22l-1.03-4.12A10 10 0 0 0 12 2zm-1 5h2v6h-2zm0 8h2v2h-2z"/></svg>
+  Ask the Guide
+</button>
+<div id="ask-panel" class="ask-panel hidden">
+  <div class="ask-header">
+    <span>Ask the Guide</span>
+    <button id="ask-close" class="icon-btn" aria-label="Close">&times;</button>
+  </div>
+  <div id="ask-log" class="ask-log">
+    <div class="ask-msg ask-msg-bot">Ask me anything about this guide &mdash; e.g. &ldquo;what is technical debt?&rdquo;, &ldquo;how big should a PR be?&rdquo;, or &ldquo;what happens if the risk scoring service times out?&rdquo; I answer only from this guide&rsquo;s own content, offline.</div>
+  </div>
+  <form id="ask-form" class="ask-form">
+    <input id="ask-input" type="text" placeholder="Type a question&hellip;" autocomplete="off" />
+    <button type="submit" class="btn btn-primary btn-sm">Ask</button>
+  </form>
+</div>
+
+</div>
+
+<script>
+/* ======================= Branding constants ======================= */
+const LOGO_DATA_URI = "data:image/png;base64,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";
+</script>
+<script>
+(function(){
+"use strict";
+
+/* ======================= 1. Logo injection ======================= */
+document.querySelectorAll('#logo-img, .doc-cover-logo').forEach(function(img){
+  img.src = LOGO_DATA_URI;
+});
+
+/* ======================= 2. Theme toggle ======================= */
+var root = document.documentElement;
+var themeToggle = document.getElementById('theme-toggle');
+function applyStoredTheme(){
+  var stored = null;
+  try { stored = localStorage.getItem('cs-fieldguide-theme'); } catch(e){}
+  if (stored === 'dark' || stored === 'light') root.setAttribute('data-theme', stored);
+}
+applyStoredTheme();
+themeToggle.addEventListener('click', function(){
+  var current = root.getAttribute('data-theme');
+  var isDark = current === 'dark' || (!current && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  var next = isDark ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  try { localStorage.setItem('cs-fieldguide-theme', next); } catch(e){}
+});
+
+/* ======================= 3. Tabular document data ======================= */
+var checklistRows = [
+  ["Correctness","Implementation matches the module's declared contract, not just \"runs without error\"","Yes","Manual trace against Module Design doc"],
+  ["Correctness","Edge cases in the TDD's Risks & Trade-offs section are handled, not just the happy path","Yes","Test plan cross-reference"],
+  ["Contracts & Types","No `any` type without a written justification comment","Yes","tsc --noEmit + manual scan"],
+  ["Contracts & Types","Every exported function has an explicit, non-inferred return type","Yes","Code inspection"],
+  ["Contracts & Types","Inbound HTTP payloads validated with Zod before reaching business logic","Yes","Code inspection"],
+  ["Error Handling","No silent `catch(e){}` blocks anywhere in the diff","Yes","Code inspection / lint rule"],
+  ["Error Handling","No generic `catch (Error)` where a specific error class is expected","Yes","Code inspection"],
+  ["Error Handling","Every external call (HTTP, DB, queue) has an explicit timeout","Yes","Code inspection"],
+  ["Error Handling","Retry logic is capped, not unbounded","Yes","Code inspection"],
+  ["Idempotency","Re-running the operation with the same input produces the same end state","Yes","Idempotency test case in Test Plan"],
+  ["Idempotency","Side effects (email, DB writes) are gated by an idempotency key where replayable","Yes","Code inspection"],
+  ["Security","Untrusted input never interpolated into SQL, shell commands, or regex","Yes","Code inspection"],
+  ["Security","No secrets in source, logs, or error messages","Yes","Secret scan"],
+  ["Security","Auth checks session + role + resource ownership on every protected route","Yes","Manual auth-path test"],
+  ["Tests","Happy path covered","Yes","Test run"],
+  ["Tests","Failure path covered (dependency down, malformed input)","Yes","Test run"],
+  ["Tests","Boundary cases covered (empty, max-length, off-by-one)","Yes","Test run"],
+  ["Tests","Idempotency case covered","Yes","Test run"],
+  ["Tests","Coverage on touched files meets 80% threshold","Yes","Coverage report"],
+  ["Observability","Structured JSON logs with timestamp, level, service, event, correlation_id, outcome","No","Code inspection"],
+  ["Observability","Caught exceptions tagged with a stable error_class before logging","No","Code inspection"],
+  ["Style & Naming","Names reveal intent; no unexplained abbreviations","No","Code inspection"],
+  ["Style & Naming","No magic numbers; thresholds are named constants","No","Code inspection"],
+  ["Style & Naming","File and function sizes within soft targets, or a split plan noted","No","Code inspection"],
+  ["Performance","No obvious N+1 query pattern introduced","No","Code inspection"],
+  ["Performance","No unbounded in-memory collection built from request input","No","Code inspection"],
+  ["Documentation","PROGRESS.md entry present with verification evidence","Yes","PROGRESS.md diff"],
+  ["Documentation","Directive or design doc updated if the contract changed","No","Manual check"]
+];
+
+var testPlanRows = [
+  ["Unit","UT-01","ClaimIntakeService","Valid claim submitted with all required fields","Happy Path","Returns claimId, correlationId, status RECEIVED"],
+  ["Unit","UT-02","ClaimIntakeService","Missing policyId in payload","Failure","Throws ValidationError; claim not persisted"],
+  ["Unit","UT-03","ClaimIntakeService","Same claim fingerprint submitted twice within 60s","Idempotency","Second call throws DuplicateClaimError; only one row persisted"],
+  ["Unit","UT-04","ClaimIntakeService","estimatedAmount = 0","Boundary","Accepted; routed by amount-tier rules with amount=0"],
+  ["Unit","UT-05","DocumentIngestionWorker","Document passes virus scan and OCR cleanly","Happy Path","ClaimDocument row persisted, ocrConfidenceAvg > 0"],
+  ["Unit","UT-06","DocumentIngestionWorker","Document fails virus scan","Failure","Throws VirusScanFailedError; claim flagged, not silently dropped"],
+  ["Unit","UT-07","DocumentIngestionWorker","Unsupported file type (.exe) uploaded","Boundary","Throws UnsupportedFileTypeError before storage"],
+  ["Unit","UT-08","FeatureExtractionService","Complete claim + documents available","Happy Path","Returns fully populated ClaimFeatureVector"],
+  ["Unit","UT-09","FeatureExtractionService","Zero documents attached to a claim that requires photos","Failure","Throws InsufficientDataError"],
+  ["Unit","UT-10","FeatureExtractionService","policyTenureMonths = 0 (new policy)","Boundary","Vector built successfully; geoRiskIndex weighted accordingly"],
+  ["Unit","UT-11","RoutingEngine","riskScore = 15, amount = $1,800","Happy Path","Routed to AUTO_FASTTRACK"],
+  ["Unit","UT-12","RoutingEngine","riskScore = 70 exactly (threshold boundary)","Boundary","Routed to SIU_QUEUE (>= threshold is inclusive)"],
+  ["Unit","UT-13","RoutingEngine","riskScore = 69 (just under threshold)","Boundary","Routed to STANDARD_ADJUSTER_QUEUE"],
+  ["Unit","UT-14","RoutingEngine","No adjuster with capacity in STANDARD queue","Failure","Throws NoAvailableAdjusterError; claim held in queue, not lost"],
+  ["Unit","UT-15","NotificationService","First notification of a given type for a claim","Happy Path","Notification sent; dedup row inserted"],
+  ["Unit","UT-16","NotificationService","Same (claimId, notificationType) invoked twice","Idempotency","Second call is a no-op; no duplicate email/SMS sent"],
+  ["Integration","IT-01","RiskScoringClient + sandbox scoring API","Feature vector sent to sandbox scoring endpoint","Happy Path","RiskAssessmentResult persisted with correct model_version"],
+  ["Integration","IT-02","RiskScoringClient + sandbox scoring API","Sandbox endpoint returns HTTP 500","Failure","ScoringServiceUnavailableError thrown after 2 retries"],
+  ["Integration","IT-03","RiskScoringClient + sandbox scoring API","Sandbox endpoint hangs beyond 8s","Failure","ScoringTimeoutError thrown at 8000ms, not before, not after"],
+  ["Integration","IT-04","RiskScoringClient + sandbox scoring API","5 consecutive failures within 60s window","Failure","Circuit breaker opens; 6th call fails fast without a network call"],
+  ["Integration","IT-05","DocumentIngestionWorker + dev DB","Ingested documents persisted and queried back","Happy Path","Row count and OCR fields match input"],
+  ["Integration","IT-06","Full pipeline + dev DB + mock scoring","End-to-end claim submission through routing, mocked scoring API","Happy Path","ClaimAssignment row created with correct queue"],
+  ["Integration","IT-07","NotificationService + Mandrill test mode","Notification triggered in test-mode flag","Happy Path","Test-mode send recorded; no real email dispatched"],
+  ["Integration","IT-08","Event Bus","ClaimSubmitted event published and consumed exactly once","Idempotency","Consumer processes duplicate delivery without double-ingesting"],
+  ["E2E","E2E-01","Full stack, staging","Policyholder submits a small low-risk claim via web form","Happy Path","Claim reaches AUTO_FASTTRACK status within 30s, confirmation email received"],
+  ["E2E","E2E-02","Full stack, staging","Policyholder submits a large high-risk claim with suspicious photos","Happy Path","Claim reaches SIU_QUEUE, SIU team alert fires"],
+  ["E2E","E2E-03","Full stack, staging","Scoring vendor sandbox intentionally disabled","Failure","Claim degrades to STANDARD_ADJUSTER_QUEUE, UpstreamUnavailable flag visible in adjuster portal"],
+  ["E2E","E2E-04","Full stack, staging","Same claim form double-submitted by rapid double-click","Idempotency","Only one Claim row created; policyholder sees one confirmation"]
+];
+
+var dodRows = [
+  ["Tests exist and pass at the minimum standard for the layer","Test run output / CI green check","Yes"],
+  ["Happy path, failure path, boundary, and idempotency cases all covered","Test Plan doc cross-reference (CS-TST-001)","Yes"],
+  ["tsc --noEmit passes with zero errors","CI log","Yes"],
+  ["No secrets introduced","Secret scan result","Yes"],
+  ["Directive or design doc updated if the contract changed","Diff includes doc update, or note stating none needed","Yes"],
+  ["Code Review Checklist (CS-CHK-001) fully passed, zero blocking failures","Completed checklist attached to PR","Yes"],
+  ["A junior developer can understand the change from the diff and its description","Reviewer sign-off comment","No"],
+  ["Assumptions logged, if any were made","PR description or commit body","No"],
+  ["No unresolved governance boundary crossed (schema, compliance, prod infra, paid vendor)","Escalation record if one was triggered, or explicit \"none\" note","Yes"],
+  ["PROGRESS.md updated with verification evidence","PROGRESS.md diff in the same PR","Yes"],
+  ["Structured logging present at every new external boundary","Code inspection","No"],
+  ["Idempotency key defined for any new side-effecting operation","Code inspection","Yes"],
+  ["Rollback path is known and stated (revert PR, feature flag, or safe redeploy)","PR description","No"],
+  ["Reviewed by required reviewer(s) per CODEOWNERS","GitHub/PR approval record","Yes"],
+  ["Merged via squash with a commit message stating why, not just what","git log entry","No"]
+];
+
+var faq = [
+  {q:"What is a technical design document?", kw:["technical","design","document","tdd"], a:"A Technical Design Document (TDD) turns a feature request into an engineering plan before code is written &mdash; context, chosen approach and rejected alternatives, module breakdown, data model, a sequence for the main flow, and risks. See", link:"#concept-tdd", linkText:"Technical Design Documents"},
+  {q:"What is the ClaimSight TDD?", kw:["claimsight","tdd","design","document"], a:"CS-TDD-001 is the full worked Technical Design Document for ClaimSight, including its component diagram, ERD, sequence diagram, and risk table.", link:"#doc-tdd", linkText:"ClaimSight Technical Design Document"},
+  {q:"What is modularity and separation of concerns?", kw:["modularity","separation","concerns","module","responsibility"], a:"A module should have one reason to change. Mixing unrelated concerns in one module means an unrelated change can break something it shouldn't touch.", link:"#concept-modularity", linkText:"Modularity & Separation of Concerns"},
+  {q:"What is an interface contract?", kw:["interface","contract","api","signature"], a:"A contract states a module's typed inputs, typed outputs, the explicit list of errors it can throw, whether it's idempotent, and its timeout/retry behavior &mdash; explicit enough that a caller never has to read the implementation.", link:"#concept-interfaces", linkText:"Interfaces & Contracts"},
+  {q:"What are the ClaimSight module API signatures?", kw:["module","api","signature","claimsight","scoreClaim","routeClaim"], a:"All six ClaimSight modules and their typed signatures &mdash; ClaimIntakeService, DocumentIngestionWorker, FeatureExtractionService, RiskScoringClient, RoutingEngine, NotificationService &mdash; are in", link:"#doc-modules", linkText:"Module & Component Design"},
+  {q:"How should I name variables and functions?", kw:["naming","name","variable","function","clean code"], a:"Names should reveal intent, avoid unexplained abbreviations, read booleans as questions (isHighRiskClaim), and use named constants instead of magic numbers.", link:"#concept-clean-code", linkText:"Clean Code & Naming"},
+  {q:"What is the branching strategy?", kw:["branch","branching","git","trunk"], a:"Trunk-based development with short-lived feature branches (feature/, fix/, chore/ prefixes). main is always deployable; no long-running develop branch.", link:"#doc-branching", linkText:"Branching & Pull-Request Workflow"},
+  {q:"How big should a pull request be?", kw:["pr","pull request","size","big","large"], a:"Soft target under 400 lines of diff. Larger PRs should be split by the author before review, not reviewed as-is &mdash; a 1,200-line PR gets rubber-stamped, not reviewed.", link:"#concept-vcs", linkText:"Version Control & Code Review"},
+  {q:"What is the testing pyramid?", kw:["testing","pyramid","unit","integration","e2e","end to end"], a:"Roughly 70% unit tests (fast, pure logic), 20% integration tests (real dev dependencies), 10% end-to-end tests (full browser flows). ClaimSight's suite runs 68/22/10.", link:"#concept-testing", linkText:"The Testing Pyramid"},
+  {q:"What is the difference between unit and integration tests?", kw:["unit test","integration test","difference"], a:"Unit tests exercise pure logic in isolation with no network or database. Integration tests exercise a module against a real dev/sandbox dependency to confirm the wiring, not just the logic.", link:"#concept-testing", linkText:"The Testing Pyramid"},
+  {q:"What is technical debt?", kw:["technical debt","debt"], a:"A deliberate or accidental shortcut that trades long-term maintainability for short-term speed. It accrues interest: every future change in that area costs more. The architect's job is to make it visible and priced, not to eliminate it entirely.", link:"#concept-debt", linkText:"Technical Debt"},
+  {q:"What is DRY?", kw:["dry","dont repeat yourself","duplicate"], a:"Don't Repeat Yourself: when the same non-trivial logic appears in three places, lift it into one. Two occurrences is sometimes coincidence; three is a pattern worth extracting.", link:"#concept-solid", linkText:"DRY & SOLID"},
+  {q:"What are the SOLID principles?", kw:["solid","single responsibility","open closed","liskov","interface segregation","dependency inversion"], a:"Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, Dependency Inversion &mdash; each explained with a ClaimSight review example.", link:"#concept-solid", linkText:"DRY & SOLID"},
+  {q:"What is error handling and why does a silent catch matter?", kw:["error handling","silent catch","try catch","swallow"], a:"A silent catch(e){} or a generic catch(Error) turns a debuggable failure into a mystery. Every external boundary needs an explicit timeout, capped retries, and specific error classes.", link:"#concept-errors", linkText:"Error Handling"},
+  {q:"What happens if the risk scoring service times out?", kw:["risk scoring","timeout","scoring service","down","unavailable"], a:"The Risk Scoring Client times out at 8 seconds, retries twice with exponential backoff, and opens a circuit breaker after 5 consecutive failures. The claim degrades to STANDARD_ADJUSTER_QUEUE (never auto-fast-tracked, never silently dropped) with an UpstreamUnavailable flag.", link:"#doc-tdd", linkText:"ClaimSight TDD â€” Risks & Trade-offs"},
+  {q:"What is idempotency and why does it matter for claim submission?", kw:["idempotency","idempotent","duplicate","retry safe"], a:"Running the same operation twice must produce the same end state. ClaimSight dedupes claim submissions by a (policy_id, incident_date, channel) fingerprint and gates notifications by a (claimId, notificationType) key so retries never double-submit or double-notify.", link:"#doc-tdd", linkText:"ClaimSight Technical Design Document"},
+  {q:"What is the data model for ClaimSight?", kw:["data model","erd","entities","database","schema"], a:"Seven entities: Policy, Claim, ClaimDocument, RiskAssessment, Adjuster, ClaimAssignment, AuditLog. Full ERD in", link:"#doc-tdd", linkText:"ClaimSight Technical Design Document"},
+  {q:"How do I approve AI-generated code?", kw:["approve","review","ai generated","architect review"], a:"Work the eight-step Review Lens in order: contract match, failure paths, idempotency, blast radius, the four required test cases, naming/size, duplication, governance boundary check. All eight must pass.", link:"#review-lens", linkText:"The Architect's Review Lens"},
+  {q:"What is the code review checklist?", kw:["code review checklist","checklist","pr gate"], a:"CS-CHK-001 is the concrete gate every ClaimSight pull request passes before merge, spanning Correctness, Contracts, Error Handling, Security, Idempotency, Tests, Observability, Style, Performance, and Documentation.", link:"#doc-checklist", linkText:"Code Review Checklist"},
+  {q:"What is the Definition of Done?", kw:["definition of done","dod","done","shippable"], a:"The objective bar for shippability &mdash; tests passing, tsc clean, no secrets, checklist passed, PROGRESS.md updated, and no unresolved governance boundary. Intent doesn't count; concrete evidence does.", link:"#doc-dod", linkText:"Definition of Done"},
+  {q:"What is good code versus bad code?", kw:["good code","bad code","example","compare"], a:"A side-by-side scoreClaim() example: the AI first draft with no timeout, a silent catch, and a magic number, versus the contract-safe version with typed errors, a named threshold, and structured logging.", link:"#good-vs-bad", linkText:"Good Code vs. Bad Code"},
+  {q:"What are the engineering KPIs?", kw:["kpi","metrics","coverage","cycle time","defect"], a:"Test coverage (86%), median PR cycle time (6.2 hrs), defect escape rate (2.1%), and deployment frequency (3.4/wk), each with a trend chart.", link:"#kpis", linkText:"Engineering KPIs"},
+  {q:"What is the SIU escalation threshold?", kw:["siu","threshold","escalation","70"], a:"A claim is routed to the SIU_QUEUE when its risk score is 70 or above (inclusive). Below that, claims under $2,500 with a risk score under 20 auto-fast-track; everything else goes to the standard adjuster queue.", link:"#doc-modules", linkText:"Module & Component Design â€” RoutingEngine"},
+  {q:"Why does software engineering exist?", kw:["why","software engineering","exists","purpose"], a:"Because code that works once in a demo is not the same as code that survives contact with reality &mdash; other engineers, misuse, unplanned load, and changes made under deadline pressure years later.", link:"#why-swe", linkText:"Why Software Engineering Exists"},
+  {q:"What should I check before approving a PR that touches an external API call?", kw:["external call","timeout","retry","circuit breaker","boundary"], a:"Every external boundary needs an explicit timeout, a documented retry strategy with capped attempts, a circuit breaker, a deterministic fallback or fail-fast, and dead-letter handling for anything that can't be retried.", link:"#concept-errors", linkText:"Error Handling"}
+];
+
+/* ======================= 4. Render tabular documents ======================= */
+function renderTable(elId, headers, rows){
+  var el = document.getElementById(elId);
+  if(!el) return;
+  var thead = '<thead><tr>' + headers.map(function(h){return '<th>'+h+'</th>';}).join('') + '</tr></thead>';
+  var tbody = '<tbody>' + rows.map(function(r){
+    return '<tr>' + r.map(function(c){return '<td>'+c+'</td>';}).join('') + '</tr>';
+  }).join('') + '</tbody>';
+  el.innerHTML = thead + tbody;
+}
+renderTable('tbl-checklist', ['Category','Check Item','Blocking on Fail?','Verification Method'], checklistRows);
+renderTable('tbl-testplan', ['Tier','Test ID','Module','Scenario','Case Type','Expected Result'], testPlanRows);
+renderTable('tbl-dod', ['Item','Required Evidence','Blocking?'], dodRows);
+
+/* ======================= 5. Search ======================= */
+var searchBox = document.getElementById('search-box');
+var searchResults = document.getElementById('search-results');
+var searchIndex = [];
+
+function buildSearchIndex(){
+  document.querySelectorAll('.content-section').forEach(function(sec){
+    var titleEl = sec.querySelector('h1,h2');
+    var title = titleEl ? titleEl.textContent.trim() : sec.id;
+    var text = sec.textContent.replace(/\s+/g,' ').trim();
+    searchIndex.push({id: sec.id, title: title, text: text, textLower: text.toLowerCase()});
+  });
+}
+buildSearchIndex();
+
+function snippetAround(text, idx, query){
+  var start = Math.max(0, idx - 50);
+  var end = Math.min(text.length, idx + query.length + 60);
+  var snip = (start > 0 ? 'â€¦' : '') + text.slice(start, end) + (end < text.length ? 'â€¦' : '');
+  var re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'ig');
+  return snip.replace(re, '<mark>$1</mark>');
+}
+
+function runSearch(query){
+  query = query.trim();
+  if(query.length < 2){ searchResults.classList.add('hidden'); searchResults.innerHTML=''; return; }
+  var qLower = query.toLowerCase();
+  var matches = searchIndex.filter(function(s){ return s.textLower.indexOf(qLower) !== -1; }).slice(0, 12);
+  if(matches.length === 0){
+    searchResults.innerHTML = '<div class="sr-empty">No matches. Try a shorter term, or ask the guide directly using the Ask button.</div>';
+  } else {
+    searchResults.innerHTML = matches.map(function(m){
+      var idx = m.textLower.indexOf(qLower);
+      var snippet = snippetAround(m.text, idx, query);
+      return '<div class="sr-item" data-target="'+m.id+'"><div class="sr-title">'+m.title+'</div><div class="sr-snippet">'+snippet+'</div></div>';
+    }).join('');
+  }
+  searchResults.classList.remove('hidden');
+}
+searchBox.addEventListener('input', function(){ runSearch(searchBox.value); });
+searchBox.addEventListener('focus', function(){ if(searchBox.value.trim().length >= 2) runSearch(searchBox.value); });
+document.addEventListener('click', function(e){
+  if(!searchResults.contains(e.target) && e.target !== searchBox){
+    searchResults.classList.add('hidden');
+  }
+});
+searchResults.addEventListener('click', function(e){
+  var item = e.target.closest('.sr-item');
+  if(!item) return;
+  jumpToSection(item.getAttribute('data-target'));
+  searchResults.classList.add('hidden');
+  searchBox.value = '';
+});
+
+function jumpToSection(id){
+  var el = document.getElementById(id);
+  if(!el) return;
+  el.scrollIntoView({behavior:'smooth', block:'start'});
+  el.classList.remove('flash');
+  void el.offsetWidth;
+  el.classList.add('flash');
+}
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click', function(e){
+    var id = a.getAttribute('href').slice(1);
+    if(document.getElementById(id)){
+      e.preventDefault();
+      jumpToSection(id);
+    }
+  });
+});
+
+/* ======================= 6. Active nav highlighting ======================= */
+var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav-link'));
+var sections = navLinks.map(function(l){ return document.getElementById(l.getAttribute('data-id')); }).filter(Boolean);
+function updateActiveNav(){
+  var scrollPos = window.scrollY + 140;
+  var current = sections[0];
+  sections.forEach(function(sec){ if(sec.offsetTop <= scrollPos) current = sec; });
+  navLinks.forEach(function(l){
+    l.classList.toggle('active', current && l.getAttribute('data-id') === current.id);
+  });
+}
+window.addEventListener('scroll', updateActiveNav, {passive:true});
+updateActiveNav();
+
+/* ======================= 7. Ask assistant ======================= */
+var askToggle = document.getElementById('ask-toggle');
+var askPanel = document.getElementById('ask-panel');
+var askClose = document.getElementById('ask-close');
+var askForm = document.getElementById('ask-form');
+var askInput = document.getElementById('ask-input');
+var askLog = document.getElementById('ask-log');
+
+askToggle.addEventListener('click', function(){
+  askPanel.classList.toggle('hidden');
+  if(!askPanel.classList.contains('hidden')) askInput.focus();
+});
+askClose.addEventListener('click', function(){ askPanel.classList.add('hidden'); });
+
+var STOPWORDS = ["what","is","the","a","an","of","for","to","and","or","how","do","i","does","are","in","on","should","be","this","that","it","with","my","can","when","why"];
+function tokenize(s){
+  return s.toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(function(t){
+    return t.length > 1 && STOPWORDS.indexOf(t) === -1;
+  });
+}
+
+function answerQuestion(userQ){
+  var qTokens = tokenize(userQ);
+  if(qTokens.length === 0){
+    return { html: "Try asking a fuller question &mdash; e.g. \"what is technical debt?\"" };
+  }
+  // Score against FAQ entries
+  var best = null, bestScore = 0;
+  faq.forEach(function(entry){
+    var hay = entry.kw.concat(tokenize(entry.q));
+    var score = 0;
+    qTokens.forEach(function(t){
+      hay.forEach(function(h){ if(h.indexOf(t) !== -1 || t.indexOf(h) !== -1) score++; });
+    });
+    if(score > bestScore){ bestScore = score; best = entry; }
+  });
+  if(best && bestScore >= 2){
+    var linkHtml = best.link ? ' <a href="'+best.link+'" data-jump="'+best.link.slice(1)+'">'+ (best.linkText || 'Open section') +' &rarr;</a>' : '';
+    return { html: best.a + linkHtml };
+  }
+  // Fallback: search section index for token overlap
+  var bestSec = null, bestSecScore = 0;
+  searchIndex.forEach(function(sec){
+    var score = 0;
+    qTokens.forEach(function(t){ if(sec.textLower.indexOf(t) !== -1) score++; });
+    if(score > bestSecScore){ bestSecScore = score; bestSec = sec; }
+  });
+  if(bestSec && bestSecScore >= 1){
+    var idx = bestSec.textLower.indexOf(qTokens[0]);
+    var snippet = idx !== -1 ? snippetAround(bestSec.text, idx, qTokens[0]) : bestSec.text.slice(0,160)+'â€¦';
+    return { html: 'The closest match in the guide is <strong>'+bestSec.title+'</strong>: "'+snippet+'" <a href="#'+bestSec.id+'" data-jump="'+bestSec.id+'">Open section &rarr;</a>' };
+  }
+  return { html: "I couldn't find a close match in this guide. Try rephrasing, or browse the left-hand nav &mdash; Part A covers the discipline, Part B covers ClaimSight's seven deliverables." };
+}
+
+function addAskMessage(text, who){
+  var div = document.createElement('div');
+  div.className = 'ask-msg ' + (who === 'user' ? 'ask-msg-user' : 'ask-msg-bot');
+  div.innerHTML = text;
+  askLog.appendChild(div);
+  askLog.scrollTop = askLog.scrollHeight;
+  div.querySelectorAll('a[data-jump]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      jumpToSection(a.getAttribute('data-jump'));
+    });
+  });
+}
+
+askForm.addEventListener('submit', function(e){
+  e.preventDefault();
+  var val = askInput.value.trim();
+  if(!val) return;
+  addAskMessage(val.replace(/</g,'&lt;'), 'user');
+  askInput.value = '';
+  setTimeout(function(){
+    var res = answerQuestion(val);
+    addAskMessage(res.html, 'bot');
+  }, 220);
+});
+
+/* ======================= 8. Print a single document ======================= */
+document.querySelectorAll('[data-action="print-doc"]').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var targetId = btn.getAttribute('data-target');
+    document.body.setAttribute('data-print-target', targetId);
+    document.getElementById(targetId).classList.add('print-active');
+    window.print();
+  });
+});
+window.addEventListener('afterprint', function(){
+  document.querySelectorAll('.print-active').forEach(function(el){ el.classList.remove('print-active'); });
+  document.body.removeAttribute('data-print-target');
+});
+
+/* ======================= 9. Download a document as standalone HTML ======================= */
+var PAGE_CSS = document.querySelector('style').textContent;
+
+function buildStandaloneDoc(docSection, title){
+  var clone = docSection.cloneNode(true);
+  clone.querySelectorAll('.doc-actions').forEach(function(el){ el.remove(); });
+  return '<!doctype html><html lang="en" data-theme="light"><head><meta charset="UTF-8">' +
+    '<title>'+title+'</title>' +
+    '<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">' +
+    '<style>' + PAGE_CSS + ' body{padding:2rem;background:#F8F8F7;} .content-section{max-width:1000px;margin:0 auto;}</style>' +
+    '</head><body>' + clone.outerHTML + '</body></html>';
+}
+
+document.querySelectorAll('[data-action="download-html"]').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var targetId = btn.getAttribute('data-target');
+    var docSection = document.getElementById(targetId);
+    var title = docSection.getAttribute('data-doc-title') || 'ClaimSight Document';
+    var code = docSection.getAttribute('data-doc-code') || targetId;
+    var html = buildStandaloneDoc(docSection, title);
+    var blob = new Blob([html], {type:'text/html'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = code + '_' + title.replace(/[^a-z0-9]+/gi,'_') + '.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  });
+});
+
+/* ======================= 10. Download tabular data as CSV ======================= */
+var CSV_SOURCES = {
+  checklistRows: { headers: ['Category','Check Item','Blocking on Fail?','Verification Method'], rows: checklistRows },
+  testPlanRows: { headers: ['Tier','Test ID','Module','Scenario','Case Type','Expected Result'], rows: testPlanRows },
+  dodRows: { headers: ['Item','Required Evidence','Blocking?'], rows: dodRows }
+};
+function csvEscape(v){
+  var s = String(v).replace(/<[^>]*>/g, '');
+  if(/[",\n]/.test(s)) s = '"' + s.replace(/"/g,'""') + '"';
+  return s;
+}
+document.querySelectorAll('[data-action="download-csv"]').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var key = btn.getAttribute('data-target');
+    var filename = btn.getAttribute('data-filename') || 'export';
+    var src = CSV_SOURCES[key];
+    if(!src) return;
+    var lines = [src.headers.map(csvEscape).join(',')];
+    src.rows.forEach(function(r){ lines.push(r.map(csvEscape).join(',')); });
+    var csv = lines.join('\r\n');
+    var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  });
+});
+
+})();
+</script>
+
+</body>
+</html>
