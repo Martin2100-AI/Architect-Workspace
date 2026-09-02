@@ -1,8 +1,21 @@
 {
   "schema_version": 2,
+  "project": "Keysy – Home Buying App",
+  "totals": {
+    "stories_total": 15,
+    "stories_verified": 2,
+    "stories_submitted": 1,
+    "stories_in_progress": 12,
+    "stories_not_started": 0,
+    "criteria_total": 47,
+    "criteria_passed": 10,
+    "points_awarded": 106
+  },
   "stories": [
     {
       "id": "STORY-000",
+      "release": null,
+      "acceptance_total": 5,
       "criteria": [
         {
           "text": "Given the Command Center, when it is opened, then every tab is reachable and every card drills down one level.",
@@ -24,10 +37,27 @@
           "text": "Trust — no tab shows a number, a connection or a result the project has not actually produced.",
           "passed": true
         }
-      ]
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "verified",
+        "criteria_passed": 5,
+        "criteria_total": 5,
+        "verified_at": "2026-08-18T01:12:00.866Z",
+        "commit_sha": "b23a901b4b07578b17c80ea56597495853dc57ba",
+        "commit_url": "https://github.com/Martin2100-AI/Architect-Workspace/commit/b23a901b4b07578b17c80ea56597495853dc57ba",
+        "commit_at": "2026-08-18T01:11:24Z",
+        "points_awarded": 53,
+        "outstanding": []
+      }
     },
     {
       "id": "STORY-001",
+      "release": "r0",
+      "acceptance_total": 3,
       "criteria": [
         {
           "text": "Given a new user, when they sign up using email, then they should be able to log in successfully.",
@@ -41,10 +71,27 @@
           "text": "Trust: User credentials are securely stored and transmitted.",
           "passed": true
         }
-      ]
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "verified",
+        "criteria_passed": 3,
+        "criteria_total": 3,
+        "verified_at": "2026-08-19T13:31:36.179Z",
+        "commit_sha": "6cb78020f7404862477f5fe37b607715a7682e94",
+        "commit_url": "https://github.com/Martin2100-AI/Architect-Workspace/commit/6cb78020f7404862477f5fe37b607715a7682e94",
+        "commit_at": "2026-08-18T17:49:05Z",
+        "points_awarded": 53,
+        "outstanding": []
+      }
     },
     {
       "id": "STORY-002",
+      "release": "r0",
+      "acceptance_total": 3,
       "criteria": [
         {
           "text": "Given a user, when they open the app, then they should see a feed of properties with key details.",
@@ -58,10 +105,29 @@
           "text": "Trust: Property data is fetched from the MLS and displayed accurately.",
           "passed": false
         }
-      ]
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "submitted",
+        "criteria_passed": 2,
+        "criteria_total": 3,
+        "verified_at": null,
+        "commit_sha": "ef6bb4bec47411dcd1e72f351a01362a3fd3d9cc",
+        "commit_url": "https://github.com/Martin2100-AI/Architect-Workspace/commit/ef6bb4bec47411dcd1e72f351a01362a3fd3d9cc",
+        "commit_at": "2026-08-21T15:32:30Z",
+        "points_awarded": null,
+        "outstanding": [
+          "Trust: Property data is fetched from the MLS and displayed accurately."
+        ]
+      }
     },
     {
       "id": "STORY-003",
+      "release": "r0",
+      "acceptance_total": 3,
       "criteria": [
         {
           "text": "Given a user, when they search by city, then they should see relevant properties.",
@@ -75,10 +141,31 @@
           "text": "Trust: Search results are consistent with the MLS data.",
           "passed": false
         }
-      ]
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "in_progress",
+        "criteria_passed": 0,
+        "criteria_total": 3,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": [
+          "Given a user, when they search by city, then they should see relevant properties.",
+          "Given a user, when they apply a price filter, then only properties within that range should appear.",
+          "Trust: Search results are consistent with the MLS data."
+        ]
+      }
     },
     {
       "id": "STORY-004",
+      "release": "r0",
+      "acceptance_total": 3,
       "criteria": [
         {
           "text": "Given a property, when viewed, then all details including match score should be visible.",
@@ -92,10 +179,31 @@
           "text": "Trust: Match score is calculated based on user preferences and MLS data.",
           "passed": false
         }
-      ]
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "in_progress",
+        "criteria_passed": 0,
+        "criteria_total": 3,
+        "verified_at": null,
+        "commit_sha": "dd2743ca5d5a098f00163c5e0ae5e933f4c7b5a0",
+        "commit_url": "https://github.com/Martin2100-AI/Architect-Workspace/commit/dd2743ca5d5a098f00163c5e0ae5e933f4c7b5a0",
+        "commit_at": "2026-08-21T15:05:34Z",
+        "points_awarded": null,
+        "outstanding": [
+          "Given a property, when viewed, then all details including match score should be visible.",
+          "Given a property, when it is not a match, then the user should understand why.",
+          "Trust: Match score is calculated based on user preferences and MLS data."
+        ]
+      }
     },
     {
       "id": "STORY-005",
+      "release": "r1",
+      "acceptance_total": 3,
       "criteria": [
         {
           "text": "Given a property, when saved, then it should appear in the selected category.",
@@ -109,10 +217,31 @@
           "text": "Trust: Saved properties are stored and retrieved accurately.",
           "passed": false
         }
-      ]
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "in_progress",
+        "criteria_passed": 0,
+        "criteria_total": 3,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": [
+          "Given a property, when saved, then it should appear in the selected category.",
+          "Given a saved property, when removed, then it should no longer appear in favorites.",
+          "Trust: Saved properties are stored and retrieved accurately."
+        ]
+      }
     },
     {
       "id": "STORY-006",
+      "release": "r1",
+      "acceptance_total": 3,
       "criteria": [
         {
           "text": "Given multiple properties, when compared, then differences should be highlighted.",
@@ -126,10 +255,31 @@
           "text": "Trust: Comparison data is accurate and up-to-date.",
           "passed": false
         }
-      ]
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "in_progress",
+        "criteria_passed": 0,
+        "criteria_total": 3,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": [
+          "Given multiple properties, when compared, then differences should be highlighted.",
+          "Given a comparison, when a property is removed, then the comparison updates.",
+          "Trust: Comparison data is accurate and up-to-date."
+        ]
+      }
     },
     {
       "id": "STORY-007",
+      "release": "r1",
+      "acceptance_total": 3,
       "criteria": [
         {
           "text": "Given a map view, when a user zooms, then properties in the visible area should update.",
@@ -143,10 +293,31 @@
           "text": "Trust: Map data is synchronized with MLS listings.",
           "passed": false
         }
-      ]
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "in_progress",
+        "criteria_passed": 0,
+        "criteria_total": 3,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": [
+          "Given a map view, when a user zooms, then properties in the visible area should update.",
+          "Given a property marker, when clicked, then a preview should appear.",
+          "Trust: Map data is synchronized with MLS listings."
+        ]
+      }
     },
     {
       "id": "STORY-008",
+      "release": "r2",
+      "acceptance_total": 3,
       "criteria": [
         {
           "text": "Given a property, when a tour is requested, then the user should receive a confirmation.",
@@ -160,10 +331,31 @@
           "text": "Trust: Tour requests are logged and confirmed accurately.",
           "passed": false
         }
-      ]
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "in_progress",
+        "criteria_passed": 0,
+        "criteria_total": 3,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": [
+          "Given a property, when a tour is requested, then the user should receive a confirmation.",
+          "Given a tour request, when details are incomplete, then the user should be prompted to complete them.",
+          "Trust: Tour requests are logged and confirmed accurately."
+        ]
+      }
     },
     {
       "id": "STORY-009",
+      "release": "r2",
+      "acceptance_total": 3,
       "criteria": [
         {
           "text": "Given a user, when they update preferences, then notifications should reflect changes.",
@@ -177,10 +369,31 @@
           "text": "Trust: Notification settings are stored and applied correctly.",
           "passed": false
         }
-      ]
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "in_progress",
+        "criteria_passed": 0,
+        "criteria_total": 3,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": [
+          "Given a user, when they update preferences, then notifications should reflect changes.",
+          "Given a notification, when disabled, then it should not be sent.",
+          "Trust: Notification settings are stored and applied correctly."
+        ]
+      }
     },
     {
       "id": "STORY-010",
+      "release": "r3",
+      "acceptance_total": 3,
       "criteria": [
         {
           "text": "Given a property, when affordability is calculated, then all cost components should be displayed.",
@@ -194,10 +407,31 @@
           "text": "Trust: Calculations are accurate and disclaimers are visible.",
           "passed": false
         }
-      ]
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "in_progress",
+        "criteria_passed": 0,
+        "criteria_total": 3,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": [
+          "Given a property, when affordability is calculated, then all cost components should be displayed.",
+          "Given a calculation, when inputs are changed, then results should update.",
+          "Trust: Calculations are accurate and disclaimers are visible."
+        ]
+      }
     },
     {
       "id": "STORY-011",
+      "release": "r3",
+      "acceptance_total": 3,
       "criteria": [
         {
           "text": "Given a property, when shared via email, then the recipient should receive the details.",
@@ -211,10 +445,31 @@
           "text": "Trust: Shared links are valid and lead to the correct property details.",
           "passed": false
         }
-      ]
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "in_progress",
+        "criteria_passed": 0,
+        "criteria_total": 3,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": [
+          "Given a property, when shared via email, then the recipient should receive the details.",
+          "Given a property, when shared via text, then a link should be sent.",
+          "Trust: Shared links are valid and lead to the correct property details."
+        ]
+      }
     },
     {
       "id": "STORY-012",
+      "release": "r4",
+      "acceptance_total": 3,
       "criteria": [
         {
           "text": "Given sensitive data, when transmitted, then it should be encrypted.",
@@ -228,10 +483,31 @@
           "text": "Trust: Data security measures are in place and integrations are functional.",
           "passed": false
         }
-      ]
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "in_progress",
+        "criteria_passed": 0,
+        "criteria_total": 3,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": [
+          "Given sensitive data, when transmitted, then it should be encrypted.",
+          "Given an integration, when configured, then it should connect to the correct service.",
+          "Trust: Data security measures are in place and integrations are functional."
+        ]
+      }
     },
     {
       "id": "STORY-014",
+      "release": "r1",
+      "acceptance_total": 3,
       "criteria": [
         {
           "text": "Given a buyer accesses the profile creation page, When they submit valid information, Then a profile is created successfully",
@@ -245,10 +521,31 @@
           "text": "Trust: Profile creation actions are logged with a timestamp",
           "passed": false
         }
-      ]
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "in_progress",
+        "criteria_passed": 0,
+        "criteria_total": 3,
+        "verified_at": null,
+        "commit_sha": null,
+        "commit_url": null,
+        "commit_at": null,
+        "points_awarded": null,
+        "outstanding": [
+          "Given a buyer accesses the profile creation page, When they submit valid information, Then a profile is created successfully",
+          "Given a buyer submits incomplete information, When they attempt to create a profile, Then an error message is displayed",
+          "Trust: Profile creation actions are logged with a timestamp"
+        ]
+      }
     },
     {
       "id": "STORY-015",
+      "release": "r0",
+      "acceptance_total": 3,
       "criteria": [
         {
           "text": "Given a user registers, When the registration is successful, Then the action is logged in the audit trail",
@@ -262,7 +559,26 @@
           "text": "Trust: All user actions must be recorded in the audit trail with a timestamp",
           "passed": false
         }
-      ]
+      ],
+      "files_touched": [],
+      "tests_added": [],
+      "notes": null,
+      "updated_at": null,
+      "verification": {
+        "state": "in_progress",
+        "criteria_passed": 0,
+        "criteria_total": 3,
+        "verified_at": null,
+        "commit_sha": "dd2743ca5d5a098f00163c5e0ae5e933f4c7b5a0",
+        "commit_url": "https://github.com/Martin2100-AI/Architect-Workspace/commit/dd2743ca5d5a098f00163c5e0ae5e933f4c7b5a0",
+        "commit_at": "2026-08-21T15:05:34Z",
+        "points_awarded": null,
+        "outstanding": [
+          "Given a user registers, When the registration is successful, Then the action is logged in the audit trail",
+          "Given a user requests a password reset, When the reset is initiated, Then the action is logged in the audit trail",
+          "Trust: All user actions must be recorded in the audit trail with a timestamp"
+        ]
+      }
     }
   ]
 }
