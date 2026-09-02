@@ -55,4 +55,19 @@ describe('PropertyCard', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent(/couldn't save/i);
     await waitFor(() => expect(screen.getByRole('button', { name: /save to favorites/i })).not.toBeDisabled());
   });
+
+  it('does not render a "View details" button when onViewDetails is not provided', () => {
+    render(<PropertyCard property={sampleProperty} initiallyFavorited={false} />);
+
+    expect(screen.queryByRole('button', { name: /view details/i })).not.toBeInTheDocument();
+  });
+
+  it('calls onViewDetails with the property id when "View details" is clicked', () => {
+    const onViewDetails = jest.fn();
+
+    render(<PropertyCard property={sampleProperty} initiallyFavorited={false} onViewDetails={onViewDetails} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /view details/i }));
+    expect(onViewDetails).toHaveBeenCalledWith('p1', undefined);
+  });
 });

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NotAuthenticatedError, saveFavorite } from '../services/favoritesService';
-import { Property } from '../types/property';
+import { MatchInfo, Property } from '../types/property';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -8,17 +8,13 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 });
 
-interface MatchInfo {
-  matchedCriteria: string[];
-  unmatchedCriteria: string[];
-  overallFit: 'full-match' | 'partial-match' | 'poor-match';
-}
-
 interface PropertyCardProps {
   property: Property;
   initiallyFavorited: boolean;
   /** Only present when this card is rendered from an AI search result. */
   matchInfo?: MatchInfo;
+  /** Only present when the card is rendered somewhere that has a detail view to link to. */
+  onViewDetails?: (propertyId: string, matchInfo?: MatchInfo) => void;
 }
 
 const overallFitLabel: Record<MatchInfo['overallFit'], string> = {
@@ -27,7 +23,12 @@ const overallFitLabel: Record<MatchInfo['overallFit'], string> = {
   'poor-match': 'Poor match',
 };
 
-export function PropertyCard({ property, initiallyFavorited, matchInfo }: PropertyCardProps): JSX.Element {
+export function PropertyCard({
+  property,
+  initiallyFavorited,
+  matchInfo,
+  onViewDetails,
+}: PropertyCardProps): JSX.Element {
   const [isFavorited, setIsFavorited] = useState(initiallyFavorited);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -72,6 +73,15 @@ export function PropertyCard({ property, initiallyFavorited, matchInfo }: Proper
         <p className="property-card__payment">
           Est. {currencyFormatter.format(property.estimatedMonthlyPayment)}/mo
         </p>
+        {onViewDetails && (
+          <button
+            type="button"
+            className="property-card__details"
+            onClick={() => onViewDetails(property.id, matchInfo)}
+          >
+            View details
+          </button>
+        )}
         {matchInfo && (
           <div className={`property-card__match property-card__match--${matchInfo.overallFit}`}>
             <span className="property-card__match-badge">{overallFitLabel[matchInfo.overallFit]}</span>

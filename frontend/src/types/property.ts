@@ -18,3 +18,15 @@ export interface Property {
   /** Optional — only set on properties the backend's stub MLS client seeded with feature data. */
   features?: string[];
 }
+
+/**
+ * A property's AI-computed match against a buyer's stated search preferences —
+ * produced by STORY-003's search (backend match-explanation prompt), reused
+ * as-is here rather than a separate scoring system. Only exists in the context
+ * of an active search; a property viewed outside of one has no MatchInfo.
+ */
+export interface MatchInfo {
+  matchedCriteria: string[];
+  unmatchedCriteria: string[];
+  overallFit: 'full-match' | 'partial-match' | 'poor-match';
+}

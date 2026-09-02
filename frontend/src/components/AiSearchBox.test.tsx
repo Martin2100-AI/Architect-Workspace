@@ -58,7 +58,7 @@ describe('AiSearchBox', () => {
       ],
     });
 
-    render(<AiSearchBox favoritedIds={new Set()} />);
+    render(<AiSearchBox favoritedIds={new Set()} onViewDetails={jest.fn()} />);
     await submitSearch('3 bedroom homes in Springfield with a pool');
 
     expect(await screen.findByText('123 Maple St, Springfield, IL')).toBeInTheDocument();
@@ -72,7 +72,7 @@ describe('AiSearchBox', () => {
       results: [],
     });
 
-    render(<AiSearchBox favoritedIds={new Set()} />);
+    render(<AiSearchBox favoritedIds={new Set()} onViewDetails={jest.fn()} />);
     await submitSearch('3 bedroom homes');
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/which city, zip code/i);
@@ -81,16 +81,41 @@ describe('AiSearchBox', () => {
   it('shows a not-configured message when the server has no AI key set up', async () => {
     mockedSearchProperties.mockRejectedValueOnce(new AiSearchNotConfiguredError());
 
-    render(<AiSearchBox favoritedIds={new Set()} />);
+    render(<AiSearchBox favoritedIds={new Set()} onViewDetails={jest.fn()} />);
     await submitSearch('homes in Springfield');
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/isn't set up/i);
   });
 
+  it('calls onViewDetails with the property id and its match info when "View details" is clicked', async () => {
+    mockedSearchProperties.mockResolvedValueOnce({
+      filters: emptyFilters({ city: 'Springfield', features: ['pool'] }),
+      results: [
+        {
+          property: sampleProperty,
+          matchedCriteria: ['city', 'pool'],
+          unmatchedCriteria: ['bedrooms'],
+          overallFit: 'partial-match',
+        },
+      ],
+    });
+    const onViewDetails = jest.fn();
+
+    render(<AiSearchBox favoritedIds={new Set()} onViewDetails={onViewDetails} />);
+    await submitSearch('3 bedroom homes in Springfield with a pool');
+    fireEvent.click(await screen.findByRole('button', { name: /view details/i }));
+
+    expect(onViewDetails).toHaveBeenCalledWith('p1', {
+      matchedCriteria: ['city', 'pool'],
+      unmatchedCriteria: ['bedrooms'],
+      overallFit: 'partial-match',
+    });
+  });
+
   it('shows an empty-results message when nothing matches', async () => {
     mockedSearchProperties.mockResolvedValueOnce({ filters: emptyFilters({ city: 'Nowhere' }), results: [] });
 
-    render(<AiSearchBox favoritedIds={new Set()} />);
+    render(<AiSearchBox favoritedIds={new Set()} onViewDetails={jest.fn()} />);
     await submitSearch('homes in Nowhere');
 
     expect(await screen.findByText(/no homes matched/i)).toBeInTheDocument();

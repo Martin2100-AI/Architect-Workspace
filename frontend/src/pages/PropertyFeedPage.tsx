@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { AiSearchBox } from '../components/AiSearchBox';
 import { PropertyCard } from '../components/PropertyCard';
+import { PropertyDetailPage } from './PropertyDetailPage';
 import { fetchFavoritePropertyIds } from '../services/favoritesService';
 import { fetchPropertyFeed, MlsUnavailableError } from '../services/propertyService';
-import { Property } from '../types/property';
+import { MatchInfo, Property } from '../types/property';
 
 type FeedState =
   | { status: 'loading' }
@@ -11,8 +12,14 @@ type FeedState =
   | { status: 'mls-unavailable' }
   | { status: 'error' };
 
+interface SelectedProperty {
+  id: string;
+  matchInfo?: MatchInfo;
+}
+
 export function PropertyFeedPage(): JSX.Element {
   const [feed, setFeed] = useState<FeedState>({ status: 'loading' });
+  const [selected, setSelected] = useState<SelectedProperty | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -30,6 +37,20 @@ export function PropertyFeedPage(): JSX.Element {
       cancelled = true;
     };
   }, []);
+
+  if (selected) {
+    return (
+      <PropertyDetailPage
+        propertyId={selected.id}
+        matchInfo={selected.matchInfo}
+        onBack={() => setSelected(null)}
+      />
+    );
+  }
+
+  function handleViewDetails(propertyId: string, matchInfo?: MatchInfo): void {
+    setSelected({ id: propertyId, matchInfo });
+  }
 
   return (
     <main className="property-feed">
@@ -50,7 +71,7 @@ export function PropertyFeedPage(): JSX.Element {
 
       {feed.status === 'loaded' && (
         <>
-          <AiSearchBox favoritedIds={feed.favoritedIds} />
+          <AiSearchBox favoritedIds={feed.favoritedIds} onViewDetails={handleViewDetails} />
           <h2 className="property-feed__all-heading">Browse all homes</h2>
           <div className="property-feed__grid">
             {feed.properties.map((property) => (
@@ -58,6 +79,7 @@ export function PropertyFeedPage(): JSX.Element {
                 key={property.id}
                 property={property}
                 initiallyFavorited={feed.favoritedIds.has(property.id)}
+                onViewDetails={handleViewDetails}
               />
             ))}
           </div>

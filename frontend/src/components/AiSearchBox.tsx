@@ -6,6 +6,7 @@ import {
   searchProperties,
   SearchResultItem,
 } from '../services/searchService';
+import { MatchInfo } from '../types/property';
 
 type SearchState =
   | { status: 'idle' }
@@ -17,9 +18,10 @@ type SearchState =
 
 interface AiSearchBoxProps {
   favoritedIds: Set<string>;
+  onViewDetails: (propertyId: string, matchInfo?: MatchInfo) => void;
 }
 
-export function AiSearchBox({ favoritedIds }: AiSearchBoxProps): JSX.Element {
+export function AiSearchBox({ favoritedIds, onViewDetails }: AiSearchBoxProps): JSX.Element {
   const [query, setQuery] = useState('');
   const [state, setState] = useState<SearchState>({ status: 'idle' });
 
@@ -107,6 +109,7 @@ export function AiSearchBox({ favoritedIds }: AiSearchBoxProps): JSX.Element {
                   unmatchedCriteria: result.unmatchedCriteria,
                   overallFit: result.overallFit,
                 }}
+                onViewDetails={onViewDetails}
               />
             ))}
           </div>

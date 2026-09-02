@@ -10,7 +10,9 @@ function jsonResponse(body: unknown, ok = true, status = 200): Response {
 
 const singleFamilyListing = {
   mlsId: 1005192,
-  address: { full: '74434 East Sweet Bottom Br #18393, Houston, Texas' },
+  // Real shape: `full` is street-only, city/state are separate fields — see the
+  // 'folds city into the address' regression test below for why this matters.
+  address: { full: '74434 East Sweet Bottom Br #18393', city: 'Houston', state: 'Texas', postalCode: '77096' },
   listPrice: 420000,
   photos: ['https://example.com/photo1.jpg', 'https://example.com/photo2.jpg'],
   property: {
@@ -61,7 +63,7 @@ describe('SimplyRetsMlsClient', () => {
         id: '1005192',
         imageUrl: 'https://example.com/photo1.jpg',
         listingPrice: 420000,
-        address: '74434 East Sweet Bottom Br #18393, Houston, Texas',
+        address: '74434 East Sweet Bottom Br #18393, Houston, Texas 77096',
         bedrooms: 3,
         bathrooms: 2.5,
         squareFootage: 1850,
@@ -70,6 +72,19 @@ describe('SimplyRetsMlsClient', () => {
         features: expect.arrayContaining(['pool', 'garage', 'fireplace']),
       },
     ]);
+  });
+
+  it('folds the city into the address string, since address.full alone is street-only', async () => {
+    // Regression: a live end-to-end run found city search returning zero results,
+    // because SimplyRETS's address.full never includes the city — only city search
+    // (aiSearchService's filterProperties, a substring match against this string)
+    // was affected; this proves the mapped address actually contains it now.
+    global.fetch = jest.fn().mockResolvedValueOnce(jsonResponse([singleFamilyListing]));
+    const client = new SimplyRetsMlsClient('https://api.simplyrets.com', 'simplyrets', 'simplyrets');
+
+    const properties = await client.getPropertyFeed();
+
+    expect(properties[0].address.toLowerCase()).toContain('houston');
   });
 
   it('excludes rental listings from the feed', async () => {

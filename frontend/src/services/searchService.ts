@@ -1,4 +1,4 @@
-import { Property } from '../types/property';
+import { MatchInfo, Property } from '../types/property';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:4000';
 // AI search does two round-trip calls to Claude server-side (filter extraction,
@@ -33,11 +33,8 @@ export interface SearchFilters {
   clarificationNeeded: string | null;
 }
 
-export interface SearchResultItem {
+export interface SearchResultItem extends MatchInfo {
   property: Property;
-  matchedCriteria: string[];
-  unmatchedCriteria: string[];
-  overallFit: 'full-match' | 'partial-match' | 'poor-match';
 }
 
 export interface SearchResponse {

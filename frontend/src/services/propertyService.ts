@@ -10,6 +10,13 @@ export class MlsUnavailableError extends Error {
   }
 }
 
+export class PropertyNotFoundError extends Error {
+  constructor() {
+    super('This property could not be found.');
+    this.name = 'PropertyNotFoundError';
+  }
+}
+
 export async function fetchPropertyFeed(): Promise<Property[]> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
@@ -26,6 +33,32 @@ export async function fetchPropertyFeed(): Promise<Property[]> {
 
     const body = await res.json();
     return body.properties as Property[];
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+export async function fetchPropertyById(propertyId: string): Promise<Property> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/properties/${encodeURIComponent(propertyId)}`, {
+      signal: controller.signal,
+    });
+
+    if (res.status === 404) {
+      throw new PropertyNotFoundError();
+    }
+    if (res.status === 503) {
+      throw new MlsUnavailableError();
+    }
+    if (!res.ok) {
+      throw new Error(`Failed to load property details (status ${res.status})`);
+    }
+
+    const body = await res.json();
+    return body.property as Property;
   } finally {
     clearTimeout(timeout);
   }
