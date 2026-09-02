@@ -11,11 +11,17 @@ describe('LoginPage', () => {
     mockedLogin.mockResolvedValueOnce('a-real-token');
     const onLoginSuccess = jest.fn();
 
-    render(<LoginPage onLoginSuccess={onLoginSuccess} />);
+    render(
+      <LoginPage
+        onLoginSuccess={onLoginSuccess}
+        onSignupClick={jest.fn()}
+        onForgotPasswordClick={jest.fn()}
+      />
+    );
 
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'buyer@example.com' } });
     fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'super-secret-1' } });
-    fireEvent.click(screen.getByRole('button', { name: /log in/i }));
+    fireEvent.click(screen.getByRole('button', { name: /^log in$/i }));
 
     await screen.findByRole('button', { name: /^log in$/i });
     expect(mockedLogin).toHaveBeenCalledWith('buyer@example.com', 'super-secret-1');
@@ -26,13 +32,45 @@ describe('LoginPage', () => {
     mockedLogin.mockRejectedValueOnce(new InvalidCredentialsError());
     const onLoginSuccess = jest.fn();
 
-    render(<LoginPage onLoginSuccess={onLoginSuccess} />);
+    render(
+      <LoginPage
+        onLoginSuccess={onLoginSuccess}
+        onSignupClick={jest.fn()}
+        onForgotPasswordClick={jest.fn()}
+      />
+    );
 
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'buyer@example.com' } });
     fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'wrong-password' } });
-    fireEvent.click(screen.getByRole('button', { name: /log in/i }));
+    fireEvent.click(screen.getByRole('button', { name: /^log in$/i }));
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/incorrect email or password/i);
     expect(onLoginSuccess).not.toHaveBeenCalled();
+  });
+
+  it('calls onSignupClick when "Sign up" is clicked', () => {
+    const onSignupClick = jest.fn();
+
+    render(
+      <LoginPage onLoginSuccess={jest.fn()} onSignupClick={onSignupClick} onForgotPasswordClick={jest.fn()} />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /sign up/i }));
+    expect(onSignupClick).toHaveBeenCalled();
+  });
+
+  it('calls onForgotPasswordClick when "Forgot password?" is clicked', () => {
+    const onForgotPasswordClick = jest.fn();
+
+    render(
+      <LoginPage
+        onLoginSuccess={jest.fn()}
+        onSignupClick={jest.fn()}
+        onForgotPasswordClick={onForgotPasswordClick}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /forgot password/i }));
+    expect(onForgotPasswordClick).toHaveBeenCalled();
   });
 });

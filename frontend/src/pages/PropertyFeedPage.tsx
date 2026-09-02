@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { AiSearchBox } from '../components/AiSearchBox';
 import { PropertyCard } from '../components/PropertyCard';
 import { fetchFavoritePropertyIds } from '../services/favoritesService';
 import { fetchPropertyFeed, MlsUnavailableError } from '../services/propertyService';
@@ -48,15 +49,19 @@ export function PropertyFeedPage(): JSX.Element {
       {feed.status === 'error' && <p role="alert">Something went wrong loading the property feed.</p>}
 
       {feed.status === 'loaded' && (
-        <div className="property-feed__grid">
-          {feed.properties.map((property) => (
-            <PropertyCard
-              key={property.id}
-              property={property}
-              initiallyFavorited={feed.favoritedIds.has(property.id)}
-            />
-          ))}
-        </div>
+        <>
+          <AiSearchBox favoritedIds={feed.favoritedIds} />
+          <h2 className="property-feed__all-heading">Browse all homes</h2>
+          <div className="property-feed__grid">
+            {feed.properties.map((property) => (
+              <PropertyCard
+                key={property.id}
+                property={property}
+                initiallyFavorited={feed.favoritedIds.has(property.id)}
+              />
+            ))}
+          </div>
+        </>
       )}
     </main>
   );

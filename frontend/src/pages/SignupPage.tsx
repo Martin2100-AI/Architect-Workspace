@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { login } from '../services/authService';
+import { EmailAlreadyExistsError, login, signup } from '../services/authService';
 import { setAuthToken } from '../services/authTokenStore';
 
-interface LoginPageProps {
-  onLoginSuccess: () => void;
-  onSignupClick: () => void;
-  onForgotPasswordClick: () => void;
+interface SignupPageProps {
+  onSignupSuccess: () => void;
+  onBackToLogin: () => void;
 }
 
-export function LoginPage({ onLoginSuccess, onSignupClick, onForgotPasswordClick }: LoginPageProps): JSX.Element {
+export function SignupPage({ onSignupSuccess, onBackToLogin }: SignupPageProps): JSX.Element {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -18,20 +17,34 @@ export function LoginPage({ onLoginSuccess, onSignupClick, onForgotPasswordClick
     event.preventDefault();
     setIsSubmitting(true);
     setError(null);
+
+    try {
+      await signup(email, password);
+    } catch (err) {
+      setError(
+        err instanceof EmailAlreadyExistsError ? err.message : 'Something went wrong creating your account.'
+      );
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const token = await login(email, password);
       setAuthToken(token);
-      onLoginSuccess();
+      onSignupSuccess();
     } catch {
-      setError('Incorrect email or password.');
+      // Account was created but the follow-up login call failed (e.g. a dropped
+      // connection) — send the user to the login form instead of leaving them stuck
+      // on a signup form for an account that already exists.
+      onBackToLogin();
     } finally {
       setIsSubmitting(false);
     }
   }
 
   return (
-    <main className="login-page">
-      <h1>Log in to Keysy</h1>
+    <main className="signup-page">
+      <h1>Create your Keysy account</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="email">Email</label>
         <input
@@ -45,24 +58,22 @@ export function LoginPage({ onLoginSuccess, onSignupClick, onForgotPasswordClick
         <input
           id="password"
           type="password"
+          minLength={8}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
         <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Logging in…' : 'Log in'}
+          {isSubmitting ? 'Creating account…' : 'Sign up'}
         </button>
         {error && (
-          <p role="alert" className="login-page__error">
+          <p role="alert" className="signup-page__error">
             {error}
           </p>
         )}
       </form>
-      <button type="button" onClick={onForgotPasswordClick}>
-        Forgot password?
-      </button>
-      <button type="button" onClick={onSignupClick}>
-        Sign up
+      <button type="button" onClick={onBackToLogin}>
+        Already have an account? Log in
       </button>
     </main>
   );

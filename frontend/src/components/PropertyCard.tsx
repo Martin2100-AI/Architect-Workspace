@@ -8,12 +8,26 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 });
 
+interface MatchInfo {
+  matchedCriteria: string[];
+  unmatchedCriteria: string[];
+  overallFit: 'full-match' | 'partial-match' | 'poor-match';
+}
+
 interface PropertyCardProps {
   property: Property;
   initiallyFavorited: boolean;
+  /** Only present when this card is rendered from an AI search result. */
+  matchInfo?: MatchInfo;
 }
 
-export function PropertyCard({ property, initiallyFavorited }: PropertyCardProps): JSX.Element {
+const overallFitLabel: Record<MatchInfo['overallFit'], string> = {
+  'full-match': 'Full match',
+  'partial-match': 'Partial match',
+  'poor-match': 'Poor match',
+};
+
+export function PropertyCard({ property, initiallyFavorited, matchInfo }: PropertyCardProps): JSX.Element {
   const [isFavorited, setIsFavorited] = useState(initiallyFavorited);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -58,6 +72,17 @@ export function PropertyCard({ property, initiallyFavorited }: PropertyCardProps
         <p className="property-card__payment">
           Est. {currencyFormatter.format(property.estimatedMonthlyPayment)}/mo
         </p>
+        {matchInfo && (
+          <div className={`property-card__match property-card__match--${matchInfo.overallFit}`}>
+            <span className="property-card__match-badge">{overallFitLabel[matchInfo.overallFit]}</span>
+            {matchInfo.matchedCriteria.length > 0 && (
+              <p className="property-card__match-detail">Matches: {matchInfo.matchedCriteria.join(', ')}</p>
+            )}
+            {matchInfo.unmatchedCriteria.length > 0 && (
+              <p className="property-card__match-detail">Doesn&apos;t match: {matchInfo.unmatchedCriteria.join(', ')}</p>
+            )}
+          </div>
+        )}
         {error && (
           <p className="property-card__error" role="alert">
             {error}

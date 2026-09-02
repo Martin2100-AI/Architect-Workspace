@@ -15,4 +15,6 @@ export interface Property {
   squareFootage: number;
   propertyType: PropertyType;
   estimatedMonthlyPayment: number;
+  /** Optional — only set on properties the backend's stub MLS client seeded with feature data. */
+  features?: string[];
 }
