@@ -103,7 +103,7 @@
         },
         {
           "text": "Trust: Property data is fetched from the MLS and displayed accurately.",
-          "passed": false
+          "passed": true
         }
       ],
       "files_touched": [],
@@ -131,15 +131,15 @@
       "criteria": [
         {
           "text": "Given a user, when they search by city, then they should see relevant properties.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given a user, when they apply a price filter, then only properties within that range should appear.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: Search results are consistent with the MLS data.",
-          "passed": false
+          "passed": true
         }
       ],
       "files_touched": [],
@@ -169,15 +169,15 @@
       "criteria": [
         {
           "text": "Given a property, when viewed, then all details including match score should be visible.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given a property, when it is not a match, then the user should understand why.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: Match score is calculated based on user preferences and MLS data.",
-          "passed": false
+          "passed": true
         }
       ],
       "files_touched": [],
