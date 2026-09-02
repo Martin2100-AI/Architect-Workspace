@@ -5,6 +5,7 @@ import { Favorite, initFavoriteModel } from '../models/Favorite';
 import { initPasswordResetTokenModel, PasswordResetToken } from '../models/PasswordResetToken';
 import { initTokenBlocklistModel, TokenBlocklist } from '../models/TokenBlocklist';
 import { initUserModel, User } from '../models/User';
+import { AiClient, StubAiClient } from '../services/anthropicClient';
 import { MlsClient, StubMlsClient } from '../services/mlsClient';
 import { CapturingEmailSender } from './capturingEmailSender';
 
@@ -18,7 +19,11 @@ export interface TestApp {
   app: Express;
 }
 
-export async function createTestApp(jwtSecret = 'test-secret', mlsClient: MlsClient = new StubMlsClient()): Promise<TestApp> {
+export async function createTestApp(
+  jwtSecret = 'test-secret',
+  mlsClient: MlsClient = new StubMlsClient(),
+  aiClient: AiClient = new StubAiClient(),
+): Promise<TestApp> {
   const sequelize = new Sequelize({ dialect: 'sqlite', storage: ':memory:', logging: false });
   const UserModel = initUserModel(sequelize);
   const ResetTokenModel = initPasswordResetTokenModel(sequelize);
@@ -35,6 +40,7 @@ export async function createTestApp(jwtSecret = 'test-secret', mlsClient: MlsCli
     favoriteModel: FavoriteModel,
     emailSender,
     mlsClient,
+    aiClient,
     jwtSecret,
     nodeEnv: 'test',
   });

@@ -8,6 +8,8 @@ import { User } from './models/User';
 import { createAuthRouter } from './routes/authRoutes';
 import { createFavoritesRouter } from './routes/favoritesRoutes';
 import { createPropertyRouter } from './routes/propertyRoutes';
+import { createSearchRouter } from './routes/searchRoutes';
+import { AiClient } from './services/anthropicClient';
 import { MlsClient } from './services/mlsClient';
 import { EmailSender } from './services/notificationService';
 
@@ -18,6 +20,7 @@ export interface AppDependencies {
   favoriteModel: typeof Favorite;
   emailSender: EmailSender;
   mlsClient: MlsClient;
+  aiClient: AiClient;
   jwtSecret: string;
   nodeEnv: string;
   corsOrigin?: string;
@@ -42,6 +45,7 @@ export function createApp(deps: AppDependencies): Express {
 
   app.use('/auth', createAuthRouter(deps));
   app.use('/properties', createPropertyRouter({ mlsClient: deps.mlsClient }));
+  app.use('/search', createSearchRouter({ aiClient: deps.aiClient, mlsClient: deps.mlsClient }));
   app.use(
     '/favorites',
     createFavoritesRouter({

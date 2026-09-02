@@ -33,7 +33,21 @@ export async function requestPasswordReset(
     expiresAt: new Date(Date.now() + RESET_TOKEN_TTL_MS),
   });
 
-  await emailSender.sendPasswordResetEmail(user.email, token);
+  try {
+    await emailSender.sendPasswordResetEmail(user.email, token);
+  } catch (err) {
+    // Never let an email-provider failure propagate out of this function: the route
+    // above returns the same generic response regardless of whether the account
+    // exists, and letting a delivery error surface as a 500 here would leak that
+    // distinction (registered emails would 500 on a provider outage, unregistered
+    // ones would still 200). The token row still exists and is still usable if the
+    // send actually went through despite the error; if it didn't, the user's only
+    // path is to request again once the provider recovers, same as any other outage.
+    const errorClass = err instanceof Error ? err.constructor.name : 'UnknownError';
+    console.error(
+      JSON.stringify({ level: 'error', event: 'password_reset_email_send_failed', error_class: errorClass }),
+    );
+  }
 }
 
 export async function resetPassword(

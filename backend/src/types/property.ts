@@ -15,4 +15,12 @@ export interface Property {
   squareFootage: number;
   propertyType: PropertyType;
   estimatedMonthlyPayment: number;
+  /**
+   * Optional, and absent from most of the MLS feed today — StubMlsClient sets it
+   * on a few sample properties so the AI search feature (prompts/match-explanation)
+   * has something to check feature-based criteria against. A real MLS integration
+   * would need to populate this from real listing data before feature filters mean
+   * anything beyond the stub dataset.
+   */
+  features?: string[];
 }
