@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "mcp-server": {
+      "command": "node",
+      "args": ["-r", "ts-node/register/transpile-only", "src/server.ts"]
+    }
+  }
+}
