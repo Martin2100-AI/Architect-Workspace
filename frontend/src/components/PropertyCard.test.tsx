@@ -70,4 +70,50 @@ describe('PropertyCard', () => {
     fireEvent.click(screen.getByRole('button', { name: /view details/i }));
     expect(onViewDetails).toHaveBeenCalledWith('p1', undefined);
   });
+
+  it('saves the property to the selected category and shows a confirmation for that category', async () => {
+    mockedSaveFavorite.mockResolvedValueOnce(undefined);
+
+    render(<PropertyCard property={sampleProperty} initiallyFavorited={false} />);
+
+    fireEvent.change(screen.getByLabelText(/save to category/i), { target: { value: 'want-to-tour' } });
+    fireEvent.click(screen.getByRole('button', { name: /^Save$/ }));
+
+    const savedButton = await screen.findByRole('button', { name: /^Saved to Want to Tour$/ });
+    expect(savedButton).toBeDisabled();
+    expect(mockedSaveFavorite).toHaveBeenCalledWith('p1', 'want-to-tour');
+  });
+
+  it('shows a login prompt when saving to a category while not authenticated', async () => {
+    mockedSaveFavorite.mockRejectedValueOnce(new NotAuthenticatedError());
+
+    render(<PropertyCard property={sampleProperty} initiallyFavorited={false} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /^Save$/ }));
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(/log in to save/i);
+  });
+
+  it('shows a generic error and leaves the category save button enabled when saving to a category fails', async () => {
+    mockedSaveFavorite.mockRejectedValueOnce(new Error('network down'));
+
+    render(<PropertyCard property={sampleProperty} initiallyFavorited={false} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /^Save$/ }));
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(/couldn't save/i);
+    await waitFor(() => expect(screen.getByRole('button', { name: /^Save$/ })).not.toBeDisabled());
+  });
+
+  it('saving to one category leaves a different category still available to save', async () => {
+    mockedSaveFavorite.mockResolvedValueOnce(undefined);
+
+    render(<PropertyCard property={sampleProperty} initiallyFavorited={false} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /^Save$/ }));
+    await screen.findByRole('button', { name: /^Saved to Favorites$/ });
+
+    fireEvent.change(screen.getByLabelText(/save to category/i), { target: { value: 'maybe' } });
+    expect(screen.getByRole('button', { name: /^Save$/ })).not.toBeDisabled();
+  });
 });

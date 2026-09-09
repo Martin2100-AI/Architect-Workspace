@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
-import { NotAuthenticatedError, saveFavorite } from '../services/favoritesService';
+import { FAVORITE_CATEGORIES, FavoriteCategory, NotAuthenticatedError, saveFavorite } from '../services/favoritesService';
 import { MatchInfo, Property } from '../types/property';
+
+const CATEGORY_LABELS: Record<FavoriteCategory, string> = {
+  favorites: 'Favorites',
+  maybe: 'Maybe',
+  'want-to-tour': 'Want to Tour',
+  'offer-candidates': 'Offer Candidates',
+};
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -33,8 +40,9 @@ export function PropertyCard({
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // There is no "unfavorite" endpoint yet, so once a property is saved the button
-  // becomes a disabled confirmation rather than pretending it can be un-saved.
+  // The one-click heart is a shortcut for the default "Favorites" category; the
+  // category picker below is the general path (see STORY-005) for saving to any of
+  // the 4 categories, including "Favorites" again if the user picks it there too.
   async function handleSave(): Promise<void> {
     setIsSaving(true);
     setError(null);
@@ -45,6 +53,25 @@ export function PropertyCard({
       setError(err instanceof NotAuthenticatedError ? 'Log in to save homes.' : "Couldn't save this property.");
     } finally {
       setIsSaving(false);
+    }
+  }
+
+  const [selectedCategory, setSelectedCategory] = useState<FavoriteCategory>('favorites');
+  const [savedCategories, setSavedCategories] = useState<Set<FavoriteCategory>>(new Set());
+  const [isSavingCategory, setIsSavingCategory] = useState(false);
+  const [categoryError, setCategoryError] = useState<string | null>(null);
+  const alreadySavedToSelectedCategory = savedCategories.has(selectedCategory);
+
+  async function handleSaveToCategory(): Promise<void> {
+    setIsSavingCategory(true);
+    setCategoryError(null);
+    try {
+      await saveFavorite(property.id, selectedCategory);
+      setSavedCategories((prev) => new Set(prev).add(selectedCategory));
+    } catch (err) {
+      setCategoryError(err instanceof NotAuthenticatedError ? 'Log in to save homes.' : "Couldn't save this property.");
+    } finally {
+      setIsSavingCategory(false);
     }
   }
 
@@ -96,6 +123,34 @@ export function PropertyCard({
         {error && (
           <p className="property-card__error" role="alert">
             {error}
+          </p>
+        )}
+        <div className="property-card__category-save">
+          <label htmlFor={`category-select-${property.id}`} className="property-card__category-label">
+            Save to category
+          </label>
+          <select
+            id={`category-select-${property.id}`}
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value as FavoriteCategory)}
+          >
+            {FAVORITE_CATEGORIES.map((category) => (
+              <option key={category} value={category}>
+                {CATEGORY_LABELS[category]}
+              </option>
+            ))}
+          </select>
+          <button
+            type="button"
+            onClick={handleSaveToCategory}
+            disabled={isSavingCategory || alreadySavedToSelectedCategory}
+          >
+            {alreadySavedToSelectedCategory ? `Saved to ${CATEGORY_LABELS[selectedCategory]}` : 'Save'}
+          </button>
+        </div>
+        {categoryError && (
+          <p className="property-card__error" role="alert">
+            {categoryError}
           </p>
         )}
       </div>

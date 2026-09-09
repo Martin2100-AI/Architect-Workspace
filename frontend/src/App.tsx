@@ -4,11 +4,13 @@ import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { LoginPage } from './pages/LoginPage';
 import { PropertyFeedPage } from './pages/PropertyFeedPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
+import { SavedHomesPage } from './pages/SavedHomesPage';
 import { SignupPage } from './pages/SignupPage';
 import { logout } from './services/authService';
 import { getAuthToken, setAuthToken } from './services/authTokenStore';
 
 type AuthView = 'login' | 'signup' | 'forgot-password';
+type LoggedInView = 'feed' | 'saved-homes';
 
 function getResetTokenFromUrl(): string | null {
   return new URLSearchParams(window.location.search).get('token');
@@ -17,6 +19,7 @@ function getResetTokenFromUrl(): string | null {
 function App(): JSX.Element {
   const [isLoggedIn, setIsLoggedIn] = useState(() => getAuthToken() !== null);
   const [authView, setAuthView] = useState<AuthView>('login');
+  const [loggedInView, setLoggedInView] = useState<LoggedInView>('feed');
   const [resetToken, setResetToken] = useState<string | null>(getResetTokenFromUrl);
 
   async function handleLogout(): Promise<void> {
@@ -74,8 +77,15 @@ function App(): JSX.Element {
 
   return (
     <>
-      <AppHeader onLogout={handleLogout} />
-      <PropertyFeedPage />
+      <AppHeader
+        onLogout={handleLogout}
+        onNavigateSavedHomes={loggedInView === 'feed' ? () => setLoggedInView('saved-homes') : undefined}
+      />
+      {loggedInView === 'saved-homes' ? (
+        <SavedHomesPage onBack={() => setLoggedInView('feed')} />
+      ) : (
+        <PropertyFeedPage />
+      )}
     </>
   );
 }
