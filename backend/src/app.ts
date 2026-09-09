@@ -1,6 +1,7 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import { createCorsMiddleware } from './middleware/cors';
 import { requireHttps } from './middleware/requireHttps';
+import { AuditLog } from './models/AuditLog';
 import { Favorite } from './models/Favorite';
 import { PasswordResetToken } from './models/PasswordResetToken';
 import { TokenBlocklist } from './models/TokenBlocklist';
@@ -18,6 +19,7 @@ export interface AppDependencies {
   resetTokenModel: typeof PasswordResetToken;
   blocklistModel: typeof TokenBlocklist;
   favoriteModel: typeof Favorite;
+  auditLogModel: typeof AuditLog;
   emailSender: EmailSender;
   mlsClient: MlsClient;
   aiClient: AiClient;

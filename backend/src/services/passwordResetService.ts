@@ -1,5 +1,7 @@
+import { AuditLog } from '../models/AuditLog';
 import { PasswordResetToken } from '../models/PasswordResetToken';
 import { User } from '../models/User';
+import { recordAuditEvent } from './auditLogService';
 import { EmailSender } from './notificationService';
 import { hashPassword } from './passwordService';
 import { generateResetToken, hashResetToken } from './resetTokenService';
@@ -16,13 +18,15 @@ export class InvalidOrExpiredResetTokenError extends Error {
 export async function requestPasswordReset(
   userModel: typeof User,
   resetTokenModel: typeof PasswordResetToken,
+  auditLogModel: typeof AuditLog,
   emailSender: EmailSender,
   email: string,
 ): Promise<void> {
   const user = await userModel.findOne({ where: { email } });
   if (!user) {
     // The route answers with the same generic message either way, so a client can't
-    // use this to discover which emails are registered.
+    // use this to discover which emails are registered. Nothing was actually
+    // initiated for an unknown email, so there is nothing to audit-log here either.
     return;
   }
 
@@ -32,6 +36,10 @@ export async function requestPasswordReset(
     tokenHash,
     expiresAt: new Date(Date.now() + RESET_TOKEN_TTL_MS),
   });
+  // The reset is "initiated" the moment a real, usable token exists -- not when the
+  // email happens to be delivered -- so the audit entry is recorded here regardless
+  // of whether the send below succeeds.
+  await recordAuditEvent(auditLogModel, user.id, 'password_reset_requested');
 
   try {
     await emailSender.sendPasswordResetEmail(user.email, token);

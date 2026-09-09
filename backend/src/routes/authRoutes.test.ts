@@ -50,6 +50,17 @@ describe('POST /auth/signup', () => {
     const count = await ctx.UserModel.count({ where: { email: 'buyer@example.com' } });
     expect(count).toBe(1);
   });
+
+  it('logs a successful registration in the audit trail with the new user\'s id and a timestamp', async () => {
+    const res = await request(ctx.app)
+      .post('/auth/signup')
+      .send({ email: 'buyer@example.com', password: 'super-secret-1' });
+
+    const entries = await ctx.AuditLogModel.findAll({ where: { userId: res.body.id } });
+    expect(entries).toHaveLength(1);
+    expect(entries[0].action).toBe('user_registered');
+    expect(entries[0].createdAt).toBeInstanceOf(Date);
+  });
 });
 
 describe('POST /auth/login', () => {
@@ -135,6 +146,24 @@ describe('POST /auth/password-reset/request and /confirm', () => {
     await request(ctx.app).post('/auth/password-reset/request').send({ email: 'nobody@example.com' });
 
     expect(ctx.emailSender.sentTo).toBeUndefined();
+  });
+
+  it('logs the password reset request in the audit trail for a registered email, with a timestamp', async () => {
+    await request(ctx.app).post('/auth/password-reset/request').send({ email: 'buyer@example.com' });
+
+    const user = await ctx.UserModel.findOne({ where: { email: 'buyer@example.com' } });
+    const entries = await ctx.AuditLogModel.findAll({
+      where: { userId: user?.id, action: 'password_reset_requested' },
+    });
+    expect(entries).toHaveLength(1);
+    expect(entries[0].createdAt).toBeInstanceOf(Date);
+  });
+
+  it('does not log a password-reset-requested entry for an unregistered email, since nothing was actually initiated', async () => {
+    await request(ctx.app).post('/auth/password-reset/request').send({ email: 'nobody@example.com' });
+
+    const count = await ctx.AuditLogModel.count({ where: { action: 'password_reset_requested' } });
+    expect(count).toBe(0);
   });
 
   it('resets the password given a valid token, and the new password can then log in', async () => {

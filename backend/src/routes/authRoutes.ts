@@ -1,9 +1,11 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import { AuthenticatedRequest, requireAuth } from '../middleware/requireAuth';
+import { AuditLog } from '../models/AuditLog';
 import { PasswordResetToken } from '../models/PasswordResetToken';
 import { TokenBlocklist } from '../models/TokenBlocklist';
 import { User } from '../models/User';
+import { recordAuditEvent } from '../services/auditLogService';
 import { EmailAlreadyExistsError, InvalidCredentialsError, login, signup } from '../services/authService';
 import { EmailSender } from '../services/notificationService';
 import {
@@ -36,12 +38,13 @@ export interface AuthRouterDependencies {
   userModel: typeof User;
   resetTokenModel: typeof PasswordResetToken;
   blocklistModel: typeof TokenBlocklist;
+  auditLogModel: typeof AuditLog;
   emailSender: EmailSender;
   jwtSecret: string;
 }
 
 export function createAuthRouter(deps: AuthRouterDependencies): Router {
-  const { userModel, resetTokenModel, blocklistModel, emailSender, jwtSecret } = deps;
+  const { userModel, resetTokenModel, blocklistModel, auditLogModel, emailSender, jwtSecret } = deps;
   const router = Router();
 
   router.post('/signup', async (req, res, next) => {
@@ -53,6 +56,7 @@ export function createAuthRouter(deps: AuthRouterDependencies): Router {
 
     try {
       const user = await signup(userModel, parseResult.data.email, parseResult.data.password);
+      await recordAuditEvent(auditLogModel, user.id, 'user_registered');
       res.status(201).json({ id: user.id, email: user.email });
     } catch (err) {
       if (err instanceof EmailAlreadyExistsError) {
@@ -100,7 +104,7 @@ export function createAuthRouter(deps: AuthRouterDependencies): Router {
     }
 
     try {
-      await requestPasswordReset(userModel, resetTokenModel, emailSender, parseResult.data.email);
+      await requestPasswordReset(userModel, resetTokenModel, auditLogModel, emailSender, parseResult.data.email);
       res.status(200).json({ message: 'If that email is registered, a password reset link has been sent.' });
     } catch (err) {
       next(err);
