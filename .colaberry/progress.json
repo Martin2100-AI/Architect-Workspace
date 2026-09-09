@@ -207,15 +207,15 @@
       "criteria": [
         {
           "text": "Given a property, when saved, then it should appear in the selected category.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given a saved property, when removed, then it should no longer appear in favorites.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: Saved properties are stored and retrieved accurately.",
-          "passed": false
+          "passed": true
         }
       ],
       "files_touched": [],
