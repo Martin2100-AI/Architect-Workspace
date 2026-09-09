@@ -245,15 +245,15 @@
       "criteria": [
         {
           "text": "Given multiple properties, when compared, then differences should be highlighted.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given a comparison, when a property is removed, then the comparison updates.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: Comparison data is accurate and up-to-date.",
-          "passed": false
+          "passed": true
         }
       ],
       "files_touched": [],
