@@ -32,6 +32,10 @@ export class StubMlsClient implements MlsClient {
         propertyType: 'single-family',
         estimatedMonthlyPayment: 2650,
         features: ['pool', 'garage', 'no-hoa'],
+        yearBuilt: 2005,
+        lotSize: '60X120',
+        hoaFeeMonthly: null,
+        propertyTaxesAnnual: 5800,
       },
       {
         id: 'stub-2',
@@ -44,6 +48,10 @@ export class StubMlsClient implements MlsClient {
         propertyType: 'condo',
         estimatedMonthlyPayment: 1980,
         features: ['garage'],
+        yearBuilt: 1998,
+        lotSize: null,
+        hoaFeeMonthly: 250,
+        propertyTaxesAnnual: 3900,
       },
       {
         id: 'stub-3',
@@ -56,6 +64,10 @@ export class StubMlsClient implements MlsClient {
         propertyType: 'townhouse',
         estimatedMonthlyPayment: 3120,
         features: ['fireplace', 'backyard', 'no-hoa'],
+        yearBuilt: 2015,
+        lotSize: '80X140',
+        hoaFeeMonthly: null,
+        propertyTaxesAnnual: 7200,
       },
     ];
   }
@@ -89,8 +101,11 @@ interface SimplyRetsListing {
     pool?: string | null;
     fireplaces?: number | null;
     parking?: { spaces?: number | null } | null;
+    yearBuilt?: number | null;
+    lotSize?: string | null;
   } | null;
   association?: { fee?: number | null } | null;
+  tax?: { taxAnnualAmount?: number | null } | null;
 }
 
 function mapPropertyType(subType: string | null | undefined): PropertyType {
@@ -162,6 +177,10 @@ function mapListingToProperty(listing: SimplyRetsListing): Property | null {
     propertyType: mapPropertyType(listing.property?.subType),
     estimatedMonthlyPayment: estimateMonthlyPayment(listingPrice),
     features: deriveFeatures(listing),
+    yearBuilt: listing.property?.yearBuilt ?? null,
+    lotSize: listing.property?.lotSize ?? null,
+    hoaFeeMonthly: listing.association?.fee ?? null,
+    propertyTaxesAnnual: listing.tax?.taxAnnualAmount ?? null,
   };
 }
 

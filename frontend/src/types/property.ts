@@ -17,6 +17,13 @@ export interface Property {
   estimatedMonthlyPayment: number;
   /** Optional — only set on properties the backend's stub MLS client seeded with feature data. */
   features?: string[];
+  /** Added for STORY-006 (Property Comparison, REQ-011). All optional/nullable — real
+   * MLS listings can genuinely lack any of these; never fabricate a value for one. */
+  yearBuilt?: number | null;
+  /** Raw dimension text from the MLS (e.g. "127X146"), not a computed area. */
+  lotSize?: string | null;
+  hoaFeeMonthly?: number | null;
+  propertyTaxesAnnual?: number | null;
 }
 
 /**

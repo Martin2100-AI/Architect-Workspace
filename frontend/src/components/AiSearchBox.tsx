@@ -19,9 +19,18 @@ type SearchState =
 interface AiSearchBoxProps {
   favoritedIds: Set<string>;
   onViewDetails: (propertyId: string, matchInfo?: MatchInfo) => void;
+  compareIds: Set<string>;
+  onToggleCompare: (propertyId: string) => void;
+  maxCompareSelection: number;
 }
 
-export function AiSearchBox({ favoritedIds, onViewDetails }: AiSearchBoxProps): JSX.Element {
+export function AiSearchBox({
+  favoritedIds,
+  onViewDetails,
+  compareIds,
+  onToggleCompare,
+  maxCompareSelection,
+}: AiSearchBoxProps): JSX.Element {
   const [query, setQuery] = useState('');
   const [state, setState] = useState<SearchState>({ status: 'idle' });
 
@@ -110,6 +119,11 @@ export function AiSearchBox({ favoritedIds, onViewDetails }: AiSearchBoxProps): 
                   overallFit: result.overallFit,
                 }}
                 onViewDetails={onViewDetails}
+                compareSelection={{
+                  selected: compareIds.has(result.property.id),
+                  disabled: compareIds.size >= maxCompareSelection && !compareIds.has(result.property.id),
+                  onToggle: onToggleCompare,
+                }}
               />
             ))}
           </div>

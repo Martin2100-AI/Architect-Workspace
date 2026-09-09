@@ -44,6 +44,19 @@ async function submitSearch(query: string): Promise<void> {
   fireEvent.click(screen.getByRole('button', { name: /search/i }));
 }
 
+function renderAiSearchBox(overrides: Partial<React.ComponentProps<typeof AiSearchBox>> = {}) {
+  return render(
+    <AiSearchBox
+      favoritedIds={new Set()}
+      onViewDetails={jest.fn()}
+      compareIds={new Set()}
+      onToggleCompare={jest.fn()}
+      maxCompareSelection={4}
+      {...overrides}
+    />,
+  );
+}
+
 describe('AiSearchBox', () => {
   it('renders search results with match info once the search resolves', async () => {
     mockedSearchProperties.mockResolvedValueOnce({
@@ -58,7 +71,7 @@ describe('AiSearchBox', () => {
       ],
     });
 
-    render(<AiSearchBox favoritedIds={new Set()} onViewDetails={jest.fn()} />);
+    renderAiSearchBox();
     await submitSearch('3 bedroom homes in Springfield with a pool');
 
     expect(await screen.findByText('123 Maple St, Springfield, IL')).toBeInTheDocument();
@@ -72,7 +85,7 @@ describe('AiSearchBox', () => {
       results: [],
     });
 
-    render(<AiSearchBox favoritedIds={new Set()} onViewDetails={jest.fn()} />);
+    renderAiSearchBox();
     await submitSearch('3 bedroom homes');
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/which city, zip code/i);
@@ -81,7 +94,7 @@ describe('AiSearchBox', () => {
   it('shows a not-configured message when the server has no AI key set up', async () => {
     mockedSearchProperties.mockRejectedValueOnce(new AiSearchNotConfiguredError());
 
-    render(<AiSearchBox favoritedIds={new Set()} onViewDetails={jest.fn()} />);
+    renderAiSearchBox();
     await submitSearch('homes in Springfield');
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/isn't set up/i);
@@ -101,7 +114,7 @@ describe('AiSearchBox', () => {
     });
     const onViewDetails = jest.fn();
 
-    render(<AiSearchBox favoritedIds={new Set()} onViewDetails={onViewDetails} />);
+    renderAiSearchBox({ onViewDetails });
     await submitSearch('3 bedroom homes in Springfield with a pool');
     fireEvent.click(await screen.findByRole('button', { name: /view details/i }));
 
@@ -115,7 +128,7 @@ describe('AiSearchBox', () => {
   it('shows an empty-results message when nothing matches', async () => {
     mockedSearchProperties.mockResolvedValueOnce({ filters: emptyFilters({ city: 'Nowhere' }), results: [] });
 
-    render(<AiSearchBox favoritedIds={new Set()} onViewDetails={jest.fn()} />);
+    renderAiSearchBox();
     await submitSearch('homes in Nowhere');
 
     expect(await screen.findByText(/no homes matched/i)).toBeInTheDocument();

@@ -25,8 +25,11 @@ const singleFamilyListing = {
     pool: 'Association,Private,In Ground',
     fireplaces: 1,
     parking: { spaces: 2 },
+    yearBuilt: 1998,
+    lotSize: '127X146',
   },
   association: { fee: 1000 },
+  tax: { taxAnnualAmount: 3180 },
 };
 
 const rentalListing = {
@@ -70,8 +73,30 @@ describe('SimplyRetsMlsClient', () => {
         propertyType: 'single-family',
         estimatedMonthlyPayment: expect.any(Number),
         features: expect.arrayContaining(['pool', 'garage', 'fireplace']),
+        yearBuilt: 1998,
+        lotSize: '127X146',
+        hoaFeeMonthly: 1000,
+        propertyTaxesAnnual: 3180,
       },
     ]);
+  });
+
+  it('maps a listing missing year built, lot size, HOA fee, and taxes to null rather than fabricating a value', async () => {
+    const sparseListing = {
+      ...singleFamilyListing,
+      property: { ...singleFamilyListing.property, yearBuilt: null, lotSize: null },
+      association: undefined,
+      tax: undefined,
+    };
+    global.fetch = jest.fn().mockResolvedValueOnce(jsonResponse([sparseListing]));
+    const client = new SimplyRetsMlsClient('https://api.simplyrets.com', 'simplyrets', 'simplyrets');
+
+    const properties = await client.getPropertyFeed();
+
+    expect(properties[0].yearBuilt).toBeNull();
+    expect(properties[0].lotSize).toBeNull();
+    expect(properties[0].hoaFeeMonthly).toBeNull();
+    expect(properties[0].propertyTaxesAnnual).toBeNull();
   });
 
   it('folds the city into the address string, since address.full alone is street-only', async () => {

@@ -22,6 +22,13 @@ interface PropertyCardProps {
   matchInfo?: MatchInfo;
   /** Only present when the card is rendered somewhere that has a detail view to link to. */
   onViewDetails?: (propertyId: string, matchInfo?: MatchInfo) => void;
+  /** Only present where a comparison feature exists to select into (STORY-006). */
+  compareSelection?: {
+    selected: boolean;
+    /** True when the 4-item comparison cap is reached and this card isn't already selected. */
+    disabled: boolean;
+    onToggle: (propertyId: string) => void;
+  };
 }
 
 const overallFitLabel: Record<MatchInfo['overallFit'], string> = {
@@ -35,6 +42,7 @@ export function PropertyCard({
   initiallyFavorited,
   matchInfo,
   onViewDetails,
+  compareSelection,
 }: PropertyCardProps): JSX.Element {
   const [isFavorited, setIsFavorited] = useState(initiallyFavorited);
   const [isSaving, setIsSaving] = useState(false);
@@ -108,6 +116,17 @@ export function PropertyCard({
           >
             View details
           </button>
+        )}
+        {compareSelection && (
+          <label className="property-card__compare">
+            <input
+              type="checkbox"
+              checked={compareSelection.selected}
+              disabled={compareSelection.disabled}
+              onChange={() => compareSelection.onToggle(property.id)}
+            />
+            Compare
+          </label>
         )}
         {matchInfo && (
           <div className={`property-card__match property-card__match--${matchInfo.overallFit}`}>

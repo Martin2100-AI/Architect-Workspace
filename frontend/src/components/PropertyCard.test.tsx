@@ -116,4 +116,48 @@ describe('PropertyCard', () => {
     fireEvent.change(screen.getByLabelText(/save to category/i), { target: { value: 'maybe' } });
     expect(screen.getByRole('button', { name: /^Save$/ })).not.toBeDisabled();
   });
+
+  it('does not render a Compare checkbox when compareSelection is not provided', () => {
+    render(<PropertyCard property={sampleProperty} initiallyFavorited={false} />);
+
+    expect(screen.queryByRole('checkbox', { name: /compare/i })).not.toBeInTheDocument();
+  });
+
+  it('renders the Compare checkbox reflecting the given selection state', () => {
+    render(
+      <PropertyCard
+        property={sampleProperty}
+        initiallyFavorited={false}
+        compareSelection={{ selected: true, disabled: false, onToggle: jest.fn() }}
+      />,
+    );
+
+    expect(screen.getByRole('checkbox', { name: /compare/i })).toBeChecked();
+  });
+
+  it('calls compareSelection.onToggle with the property id when the Compare checkbox is clicked', () => {
+    const onToggle = jest.fn();
+    render(
+      <PropertyCard
+        property={sampleProperty}
+        initiallyFavorited={false}
+        compareSelection={{ selected: false, disabled: false, onToggle }}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('checkbox', { name: /compare/i }));
+    expect(onToggle).toHaveBeenCalledWith('p1');
+  });
+
+  it('disables the Compare checkbox when compareSelection.disabled is true', () => {
+    render(
+      <PropertyCard
+        property={sampleProperty}
+        initiallyFavorited={false}
+        compareSelection={{ selected: false, disabled: true, onToggle: jest.fn() }}
+      />,
+    );
+
+    expect(screen.getByRole('checkbox', { name: /compare/i })).toBeDisabled();
+  });
 });
