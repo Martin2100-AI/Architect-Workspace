@@ -30,6 +30,7 @@ const singleFamilyListing = {
   },
   association: { fee: 1000 },
   tax: { taxAnnualAmount: 3180 },
+  geo: { lat: 29.689418, lng: -95.474464 },
 };
 
 const rentalListing = {
@@ -77,6 +78,8 @@ describe('SimplyRetsMlsClient', () => {
         lotSize: '127X146',
         hoaFeeMonthly: 1000,
         propertyTaxesAnnual: 3180,
+        latitude: 29.689418,
+        longitude: -95.474464,
       },
     ]);
   });
@@ -97,6 +100,17 @@ describe('SimplyRetsMlsClient', () => {
     expect(properties[0].lotSize).toBeNull();
     expect(properties[0].hoaFeeMonthly).toBeNull();
     expect(properties[0].propertyTaxesAnnual).toBeNull();
+  });
+
+  it('maps a listing missing geo coordinates to null rather than fabricating a map position', async () => {
+    const noGeoListing = { ...singleFamilyListing, geo: undefined };
+    global.fetch = jest.fn().mockResolvedValueOnce(jsonResponse([noGeoListing]));
+    const client = new SimplyRetsMlsClient('https://api.simplyrets.com', 'simplyrets', 'simplyrets');
+
+    const properties = await client.getPropertyFeed();
+
+    expect(properties[0].latitude).toBeNull();
+    expect(properties[0].longitude).toBeNull();
   });
 
   it('folds the city into the address string, since address.full alone is street-only', async () => {

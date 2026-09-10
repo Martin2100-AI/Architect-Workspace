@@ -33,4 +33,10 @@ export interface Property {
   lotSize?: string | null;
   hoaFeeMonthly?: number | null;
   propertyTaxesAnnual?: number | null;
+  /** Added for STORY-007 (Interactive Map Exploration, REQ-008/REQ-016). Nullable —
+   * SimplyRETS's `geo` block is not guaranteed present on every listing, and a
+   * property missing coordinates is simply not placed on the map rather than
+   * plotted at a fabricated location. */
+  latitude?: number | null;
+  longitude?: number | null;
 }

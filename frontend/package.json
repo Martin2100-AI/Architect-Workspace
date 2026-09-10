@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "maplibre-gl": "5.24.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -28,6 +29,11 @@
     "extends": [
       "react-app"
     ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^maplibre-gl$": "<rootDir>/src/testMocks/maplibreGlStub.ts"
+    }
   },
   "browserslist": {
     "production": [

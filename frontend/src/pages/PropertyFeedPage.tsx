@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { AiSearchBox } from '../components/AiSearchBox';
+import { MapView } from '../components/MapView';
 import { PropertyCard } from '../components/PropertyCard';
 import { ComparisonPage } from './ComparisonPage';
 import { PropertyDetailPage } from './PropertyDetailPage';
@@ -18,6 +19,9 @@ interface SelectedProperty {
   matchInfo?: MatchInfo;
 }
 
+// REQ-008/REQ-016 (STORY-007): explore homes on an interactive map as an alternative to the grid.
+type ViewMode = 'grid' | 'map';
+
 // REQ-011 (STORY-006): compare between two and four homes.
 const MIN_COMPARE_SELECTION = 2;
 const MAX_COMPARE_SELECTION = 4;
@@ -27,6 +31,7 @@ export function PropertyFeedPage(): JSX.Element {
   const [selected, setSelected] = useState<SelectedProperty | null>(null);
   const [compareIds, setCompareIds] = useState<Set<string>>(new Set());
   const [showComparison, setShowComparison] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
   function handleToggleCompare(propertyId: string): void {
     setCompareIds((prev) => {
@@ -119,25 +124,50 @@ export function PropertyFeedPage(): JSX.Element {
 
       {feed.status === 'loaded' && (
         <>
-          <AiSearchBox
-            favoritedIds={feed.favoritedIds}
-            onViewDetails={handleViewDetails}
-            compareIds={compareIds}
-            onToggleCompare={handleToggleCompare}
-            maxCompareSelection={MAX_COMPARE_SELECTION}
-          />
-          <h2 className="property-feed__all-heading">Browse all homes</h2>
-          <div className="property-feed__grid">
-            {feed.properties.map((property) => (
-              <PropertyCard
-                key={property.id}
-                property={property}
-                initiallyFavorited={feed.favoritedIds.has(property.id)}
-                onViewDetails={handleViewDetails}
-                compareSelection={compareSelectionFor(property.id)}
-              />
-            ))}
+          <div className="property-feed__view-toggle" role="group" aria-label="View mode">
+            <button
+              type="button"
+              aria-pressed={viewMode === 'grid'}
+              disabled={viewMode === 'grid'}
+              onClick={() => setViewMode('grid')}
+            >
+              Grid view
+            </button>
+            <button
+              type="button"
+              aria-pressed={viewMode === 'map'}
+              disabled={viewMode === 'map'}
+              onClick={() => setViewMode('map')}
+            >
+              Map view
+            </button>
           </div>
+
+          {viewMode === 'map' ? (
+            <MapView properties={feed.properties} />
+          ) : (
+            <>
+              <AiSearchBox
+                favoritedIds={feed.favoritedIds}
+                onViewDetails={handleViewDetails}
+                compareIds={compareIds}
+                onToggleCompare={handleToggleCompare}
+                maxCompareSelection={MAX_COMPARE_SELECTION}
+              />
+              <h2 className="property-feed__all-heading">Browse all homes</h2>
+              <div className="property-feed__grid">
+                {feed.properties.map((property) => (
+                  <PropertyCard
+                    key={property.id}
+                    property={property}
+                    initiallyFavorited={feed.favoritedIds.has(property.id)}
+                    onViewDetails={handleViewDetails}
+                    compareSelection={compareSelectionFor(property.id)}
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </>
       )}
     </main>

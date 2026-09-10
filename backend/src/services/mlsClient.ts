@@ -36,6 +36,8 @@ export class StubMlsClient implements MlsClient {
         lotSize: '60X120',
         hoaFeeMonthly: null,
         propertyTaxesAnnual: 5800,
+        latitude: 39.799,
+        longitude: -89.6437,
       },
       {
         id: 'stub-2',
@@ -52,6 +54,8 @@ export class StubMlsClient implements MlsClient {
         lotSize: null,
         hoaFeeMonthly: 250,
         propertyTaxesAnnual: 3900,
+        latitude: 39.7817,
+        longitude: -89.6501,
       },
       {
         id: 'stub-3',
@@ -68,6 +72,8 @@ export class StubMlsClient implements MlsClient {
         lotSize: '80X140',
         hoaFeeMonthly: null,
         propertyTaxesAnnual: 7200,
+        latitude: 39.807,
+        longitude: -89.6298,
       },
     ];
   }
@@ -106,6 +112,7 @@ interface SimplyRetsListing {
   } | null;
   association?: { fee?: number | null } | null;
   tax?: { taxAnnualAmount?: number | null } | null;
+  geo?: { lat?: number | null; lng?: number | null } | null;
 }
 
 function mapPropertyType(subType: string | null | undefined): PropertyType {
@@ -181,6 +188,8 @@ function mapListingToProperty(listing: SimplyRetsListing): Property | null {
     lotSize: listing.property?.lotSize ?? null,
     hoaFeeMonthly: listing.association?.fee ?? null,
     propertyTaxesAnnual: listing.tax?.taxAnnualAmount ?? null,
+    latitude: listing.geo?.lat ?? null,
+    longitude: listing.geo?.lng ?? null,
   };
 }
 

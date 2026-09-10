@@ -24,6 +24,10 @@ export interface Property {
   lotSize?: string | null;
   hoaFeeMonthly?: number | null;
   propertyTaxesAnnual?: number | null;
+  /** Added for STORY-007 (Interactive Map Exploration, REQ-008/REQ-016). Nullable —
+   * a property missing coordinates is simply not placed on the map. */
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 /**

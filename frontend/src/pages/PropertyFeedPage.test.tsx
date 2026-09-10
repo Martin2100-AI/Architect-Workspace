@@ -209,4 +209,21 @@ describe('PropertyFeedPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /back to search/i }));
     expect(await screen.findByText('Homes for you')).toBeInTheDocument();
   });
+
+  it('shows the grid by default and switches to the map view and back on toggle', async () => {
+    mockedFetchPropertyFeed.mockResolvedValueOnce([sampleProperty]);
+
+    render(<PropertyFeedPage />);
+    await screen.findByText('1 Test St');
+
+    expect(screen.queryByTestId('map-container')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /map view/i }));
+    expect(await screen.findByTestId('map-container')).toBeInTheDocument();
+    expect(screen.queryByText('1 Test St')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /grid view/i }));
+    expect(await screen.findByText('1 Test St')).toBeInTheDocument();
+    expect(screen.queryByTestId('map-container')).not.toBeInTheDocument();
+  });
 });
