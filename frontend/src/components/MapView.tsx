@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { LngLatBounds, Map as MaplibreMap, Marker, Popup } from 'maplibre-gl';
+import { LngLatBounds, Map as MaplibreMap, Marker, NavigationControl, Popup } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { filterPropertiesInBounds, MapBounds } from '../utils/mapBounds';
 import { Property } from '../types/property';
@@ -60,6 +60,7 @@ export function MapView({ properties }: MapViewProps): JSX.Element {
       zoom: DEFAULT_ZOOM,
     });
     mapRef.current = map;
+    map.addControl(new NavigationControl(), 'top-right');
 
     map.on('error', () => setLoadError(true));
 

@@ -9,11 +9,14 @@
 class StubMap {
   on(): void {}
   off(): void {}
+  addControl(): void {}
   remove(): void {}
   getBounds() {
     return { getNorth: () => 90, getSouth: () => -90, getEast: () => 180, getWest: () => -180 };
   }
 }
+
+class StubNavigationControl {}
 
 class StubMarker {
   setLngLat(): this {
@@ -34,6 +37,6 @@ class StubPopup {
   }
 }
 
-const stub = { Map: StubMap, Marker: StubMarker, Popup: StubPopup };
+const stub = { Map: StubMap, Marker: StubMarker, Popup: StubPopup, NavigationControl: StubNavigationControl };
 export default stub;
-export { StubMap as Map, StubMarker as Marker, StubPopup as Popup };
+export { StubMap as Map, StubMarker as Marker, StubPopup as Popup, StubNavigationControl as NavigationControl };

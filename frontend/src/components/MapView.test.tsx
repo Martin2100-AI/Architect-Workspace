@@ -18,8 +18,11 @@ jest.mock('maplibre-gl', () => {
     getBounds() {
       return mockBounds;
     }
+    addControl(): void {}
     remove(): void {}
   }
+
+  class FakeNavigationControl {}
 
   class FakeMarker {
     setLngLat = jest.fn().mockReturnThis();
@@ -37,10 +40,11 @@ jest.mock('maplibre-gl', () => {
 
   return {
     __esModule: true,
-    default: { Map: FakeMap, Marker: FakeMarker, Popup: FakePopup },
+    default: { Map: FakeMap, Marker: FakeMarker, Popup: FakePopup, NavigationControl: FakeNavigationControl },
     Map: FakeMap,
     Marker: FakeMarker,
     Popup: FakePopup,
+    NavigationControl: FakeNavigationControl,
   };
 });
 
