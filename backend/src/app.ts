@@ -2,11 +2,13 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import { createCorsMiddleware } from './middleware/cors';
 import { requireHttps } from './middleware/requireHttps';
 import { AuditLog } from './models/AuditLog';
+import { BuyerProfile } from './models/BuyerProfile';
 import { Favorite } from './models/Favorite';
 import { PasswordResetToken } from './models/PasswordResetToken';
 import { TokenBlocklist } from './models/TokenBlocklist';
 import { User } from './models/User';
 import { createAuthRouter } from './routes/authRoutes';
+import { createBuyerProfileRouter } from './routes/buyerProfileRoutes';
 import { createFavoritesRouter } from './routes/favoritesRoutes';
 import { createPropertyRouter } from './routes/propertyRoutes';
 import { createSearchRouter } from './routes/searchRoutes';
@@ -20,6 +22,7 @@ export interface AppDependencies {
   blocklistModel: typeof TokenBlocklist;
   favoriteModel: typeof Favorite;
   auditLogModel: typeof AuditLog;
+  buyerProfileModel: typeof BuyerProfile;
   emailSender: EmailSender;
   mlsClient: MlsClient;
   aiClient: AiClient;
@@ -52,6 +55,15 @@ export function createApp(deps: AppDependencies): Express {
     '/favorites',
     createFavoritesRouter({
       favoriteModel: deps.favoriteModel,
+      blocklistModel: deps.blocklistModel,
+      jwtSecret: deps.jwtSecret,
+    }),
+  );
+  app.use(
+    '/profile',
+    createBuyerProfileRouter({
+      buyerProfileModel: deps.buyerProfileModel,
+      auditLogModel: deps.auditLogModel,
       blocklistModel: deps.blocklistModel,
       jwtSecret: deps.jwtSecret,
     }),

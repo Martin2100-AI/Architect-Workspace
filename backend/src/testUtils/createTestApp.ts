@@ -2,6 +2,7 @@ import { Express } from 'express';
 import { Sequelize } from 'sequelize';
 import { createApp } from '../app';
 import { AuditLog, initAuditLogModel } from '../models/AuditLog';
+import { BuyerProfile, initBuyerProfileModel } from '../models/BuyerProfile';
 import { Favorite, initFavoriteModel } from '../models/Favorite';
 import { initPasswordResetTokenModel, PasswordResetToken } from '../models/PasswordResetToken';
 import { initTokenBlocklistModel, TokenBlocklist } from '../models/TokenBlocklist';
@@ -17,6 +18,7 @@ export interface TestApp {
   BlocklistModel: typeof TokenBlocklist;
   FavoriteModel: typeof Favorite;
   AuditLogModel: typeof AuditLog;
+  BuyerProfileModel: typeof BuyerProfile;
   emailSender: CapturingEmailSender;
   app: Express;
 }
@@ -32,6 +34,7 @@ export async function createTestApp(
   const BlocklistModel = initTokenBlocklistModel(sequelize);
   const FavoriteModel = initFavoriteModel(sequelize);
   const AuditLogModel = initAuditLogModel(sequelize);
+  const BuyerProfileModel = initBuyerProfileModel(sequelize);
   await sequelize.sync();
 
   const emailSender = new CapturingEmailSender();
@@ -42,6 +45,7 @@ export async function createTestApp(
     blocklistModel: BlocklistModel,
     favoriteModel: FavoriteModel,
     auditLogModel: AuditLogModel,
+    buyerProfileModel: BuyerProfileModel,
     emailSender,
     mlsClient,
     aiClient,
@@ -49,5 +53,15 @@ export async function createTestApp(
     nodeEnv: 'test',
   });
 
-  return { sequelize, UserModel, ResetTokenModel, BlocklistModel, FavoriteModel, AuditLogModel, emailSender, app };
+  return {
+    sequelize,
+    UserModel,
+    ResetTokenModel,
+    BlocklistModel,
+    FavoriteModel,
+    AuditLogModel,
+    BuyerProfileModel,
+    emailSender,
+    app,
+  };
 }
