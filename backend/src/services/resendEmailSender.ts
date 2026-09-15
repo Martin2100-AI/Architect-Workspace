@@ -1,6 +1,6 @@
 import { createHash } from 'crypto';
 import { Resend } from 'resend';
-import { EmailSender } from './notificationService';
+import { EmailSender, TourConfirmationDetails } from './notificationService';
 
 const RESEND_TIMEOUT_MS = 10000;
 
@@ -66,6 +66,50 @@ export class ResendEmailSender implements EmailSender {
               `If this was you, reset your password here: ${resetUrl}`,
               '',
               "If you didn't request this, you can safely ignore this email.",
+            ].join('\n'),
+          },
+          { idempotencyKey },
+        ),
+        RESEND_TIMEOUT_MS,
+      );
+    } catch (err) {
+      const errorClass = err instanceof Error ? err.constructor.name : 'UnknownError';
+      console.error(JSON.stringify({ level: 'error', event: 'resend_call_failed', error_class: errorClass }));
+      throw new ResendUpstreamError();
+    }
+
+    if (result.error) {
+      console.error(
+        JSON.stringify({ level: 'error', event: 'resend_send_failed', error_class: result.error.name }),
+      );
+      throw new ResendUpstreamError();
+    }
+  }
+
+  // No automatic retry here either, for the same reason as sendPasswordResetEmail:
+  // the caller (tourRequestRoutes.ts) never lets a delivery failure change the tour
+  // request's own success response -- the booking is real either way, and a blind
+  // retry on top of that risks a duplicate email once a transient error clears with
+  // no benefit. The idempotencyKey below still protects against this class ever
+  // double-sending for the exact same tour request.
+  async sendTourConfirmationEmail(to: string, details: TourConfirmationDetails): Promise<void> {
+    const idempotencyKey = createHash('sha256').update(`tour-confirmation-${details.tourRequestId}`).digest('hex');
+
+    let result;
+    try {
+      result = await withTimeout(
+        this.client.emails.send(
+          {
+            from: this.fromEmail,
+            to,
+            subject: 'Your Keysy property tour is confirmed',
+            text: [
+              'Your property tour request has been received and confirmed.',
+              '',
+              `Property: ${details.propertyAddress}`,
+              `Requested time: ${details.requestedAt.toISOString()}`,
+              '',
+              'A Keysy agent will meet you there. Reply to this email if you need to reschedule.',
             ].join('\n'),
           },
           { idempotencyKey },

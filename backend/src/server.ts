@@ -7,6 +7,7 @@ import { BuyerProfile, initBuyerProfileModel } from './models/BuyerProfile';
 import { Favorite, initFavoriteModel } from './models/Favorite';
 import { initPasswordResetTokenModel } from './models/PasswordResetToken';
 import { initTokenBlocklistModel } from './models/TokenBlocklist';
+import { initTourRequestModel, TourRequest } from './models/TourRequest';
 import { initUserModel } from './models/User';
 import { AiClient, AnthropicAiClient, StubAiClient } from './services/anthropicClient';
 import { MlsClient, SimplyRetsMlsClient } from './services/mlsClient';
@@ -24,6 +25,7 @@ const BlocklistModel = initTokenBlocklistModel(sequelize);
 const FavoriteModel: typeof Favorite = initFavoriteModel(sequelize);
 const AuditLogModel: typeof AuditLog = initAuditLogModel(sequelize);
 const BuyerProfileModel: typeof BuyerProfile = initBuyerProfileModel(sequelize);
+const TourRequestModel: typeof TourRequest = initTourRequestModel(sequelize);
 
 // ConsoleEmailSender only when no Resend key is configured — otherwise the rest of
 // the app (login, the plain property feed) still boots and works either way, same
@@ -57,6 +59,7 @@ const app = createApp({
   favoriteModel: FavoriteModel,
   auditLogModel: AuditLogModel,
   buyerProfileModel: BuyerProfileModel,
+  tourRequestModel: TourRequestModel,
   emailSender,
   mlsClient,
   aiClient,

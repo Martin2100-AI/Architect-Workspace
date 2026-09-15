@@ -6,6 +6,7 @@ import { BuyerProfile, initBuyerProfileModel } from '../models/BuyerProfile';
 import { Favorite, initFavoriteModel } from '../models/Favorite';
 import { initPasswordResetTokenModel, PasswordResetToken } from '../models/PasswordResetToken';
 import { initTokenBlocklistModel, TokenBlocklist } from '../models/TokenBlocklist';
+import { initTourRequestModel, TourRequest } from '../models/TourRequest';
 import { initUserModel, User } from '../models/User';
 import { AiClient, StubAiClient } from '../services/anthropicClient';
 import { MlsClient, StubMlsClient } from '../services/mlsClient';
@@ -19,6 +20,7 @@ export interface TestApp {
   FavoriteModel: typeof Favorite;
   AuditLogModel: typeof AuditLog;
   BuyerProfileModel: typeof BuyerProfile;
+  TourRequestModel: typeof TourRequest;
   emailSender: CapturingEmailSender;
   app: Express;
 }
@@ -35,6 +37,7 @@ export async function createTestApp(
   const FavoriteModel = initFavoriteModel(sequelize);
   const AuditLogModel = initAuditLogModel(sequelize);
   const BuyerProfileModel = initBuyerProfileModel(sequelize);
+  const TourRequestModel = initTourRequestModel(sequelize);
   await sequelize.sync();
 
   const emailSender = new CapturingEmailSender();
@@ -46,6 +49,7 @@ export async function createTestApp(
     favoriteModel: FavoriteModel,
     auditLogModel: AuditLogModel,
     buyerProfileModel: BuyerProfileModel,
+    tourRequestModel: TourRequestModel,
     emailSender,
     mlsClient,
     aiClient,
@@ -61,6 +65,7 @@ export async function createTestApp(
     FavoriteModel,
     AuditLogModel,
     BuyerProfileModel,
+    TourRequestModel,
     emailSender,
     app,
   };

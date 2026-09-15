@@ -4,6 +4,7 @@ import { MapView } from '../components/MapView';
 import { PropertyCard } from '../components/PropertyCard';
 import { ComparisonPage } from './ComparisonPage';
 import { PropertyDetailPage } from './PropertyDetailPage';
+import { TourRequestPage } from './TourRequestPage';
 import { fetchFavoritePropertyIds } from '../services/favoritesService';
 import { fetchPropertyFeed, MlsUnavailableError } from '../services/propertyService';
 import { MatchInfo, Property } from '../types/property';
@@ -29,6 +30,7 @@ const MAX_COMPARE_SELECTION = 4;
 export function PropertyFeedPage(): JSX.Element {
   const [feed, setFeed] = useState<FeedState>({ status: 'loading' });
   const [selected, setSelected] = useState<SelectedProperty | null>(null);
+  const [tourRequestPropertyId, setTourRequestPropertyId] = useState<string | null>(null);
   const [compareIds, setCompareIds] = useState<Set<string>>(new Set());
   const [showComparison, setShowComparison] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -70,12 +72,19 @@ export function PropertyFeedPage(): JSX.Element {
     };
   }, []);
 
+  if (selected && tourRequestPropertyId) {
+    return (
+      <TourRequestPage propertyId={tourRequestPropertyId} onBack={() => setTourRequestPropertyId(null)} />
+    );
+  }
+
   if (selected) {
     return (
       <PropertyDetailPage
         propertyId={selected.id}
         matchInfo={selected.matchInfo}
         onBack={() => setSelected(null)}
+        onRequestTour={setTourRequestPropertyId}
       />
     );
   }

@@ -1,5 +1,12 @@
+export interface TourConfirmationDetails {
+  tourRequestId: number;
+  propertyAddress: string;
+  requestedAt: Date;
+}
+
 export interface EmailSender {
   sendPasswordResetEmail(to: string, resetToken: string): Promise<void>;
+  sendTourConfirmationEmail(to: string, details: TourConfirmationDetails): Promise<void>;
 }
 
 /**
@@ -15,6 +22,18 @@ export class ConsoleEmailSender implements EmailSender {
         event: 'password_reset_email_not_sent',
         to,
         note: 'No production email service is configured — the reset token was not delivered to the user.',
+      }),
+    );
+  }
+
+  async sendTourConfirmationEmail(to: string, details: TourConfirmationDetails): Promise<void> {
+    console.log(
+      JSON.stringify({
+        level: 'info',
+        event: 'tour_confirmation_email_not_sent',
+        to,
+        tourRequestId: details.tourRequestId,
+        note: 'No production email service is configured — the tour confirmation was not delivered to the user.',
       }),
     );
   }

@@ -26,9 +26,16 @@ interface PropertyDetailPageProps {
   onBack: () => void;
   /** Only present when this property was reached from a search result. */
   matchInfo?: MatchInfo;
+  /** Only present where the caller actually has a tour-request page to link to. */
+  onRequestTour?: (propertyId: string) => void;
 }
 
-export function PropertyDetailPage({ propertyId, onBack, matchInfo }: PropertyDetailPageProps): JSX.Element {
+export function PropertyDetailPage({
+  propertyId,
+  onBack,
+  matchInfo,
+  onRequestTour,
+}: PropertyDetailPageProps): JSX.Element {
   const [state, setState] = useState<DetailState>({ status: 'loading' });
 
   useEffect(() => {
@@ -90,6 +97,16 @@ export function PropertyDetailPage({ propertyId, onBack, matchInfo }: PropertyDe
           <p className="property-detail__disclaimer">
             Estimated monthly payments are estimates only and are not lending offers or financial advice.
           </p>
+
+          {onRequestTour && (
+            <button
+              type="button"
+              className="property-detail__request-tour"
+              onClick={() => onRequestTour(propertyId)}
+            >
+              Request a tour
+            </button>
+          )}
 
           {matchInfo ? (
             <section

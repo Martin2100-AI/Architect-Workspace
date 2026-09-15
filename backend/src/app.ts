@@ -6,12 +6,14 @@ import { BuyerProfile } from './models/BuyerProfile';
 import { Favorite } from './models/Favorite';
 import { PasswordResetToken } from './models/PasswordResetToken';
 import { TokenBlocklist } from './models/TokenBlocklist';
+import { TourRequest } from './models/TourRequest';
 import { User } from './models/User';
 import { createAuthRouter } from './routes/authRoutes';
 import { createBuyerProfileRouter } from './routes/buyerProfileRoutes';
 import { createFavoritesRouter } from './routes/favoritesRoutes';
 import { createPropertyRouter } from './routes/propertyRoutes';
 import { createSearchRouter } from './routes/searchRoutes';
+import { createTourRequestRouter } from './routes/tourRequestRoutes';
 import { AiClient } from './services/anthropicClient';
 import { MlsClient } from './services/mlsClient';
 import { EmailSender } from './services/notificationService';
@@ -23,6 +25,7 @@ export interface AppDependencies {
   favoriteModel: typeof Favorite;
   auditLogModel: typeof AuditLog;
   buyerProfileModel: typeof BuyerProfile;
+  tourRequestModel: typeof TourRequest;
   emailSender: EmailSender;
   mlsClient: MlsClient;
   aiClient: AiClient;
@@ -66,6 +69,17 @@ export function createApp(deps: AppDependencies): Express {
       auditLogModel: deps.auditLogModel,
       blocklistModel: deps.blocklistModel,
       jwtSecret: deps.jwtSecret,
+    }),
+  );
+  app.use(
+    '/tours',
+    createTourRequestRouter({
+      tourRequestModel: deps.tourRequestModel,
+      auditLogModel: deps.auditLogModel,
+      blocklistModel: deps.blocklistModel,
+      jwtSecret: deps.jwtSecret,
+      mlsClient: deps.mlsClient,
+      emailSender: deps.emailSender,
     }),
   );
 

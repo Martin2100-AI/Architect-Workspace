@@ -6,11 +6,20 @@ export interface TourRequestAttributes {
   buyerEmail: string;
   requestedAt: Date;
   notes: string | null;
+  // Nullable/additive (STORY-008, REQ-005) -- the pre-existing MCP `schedule_property_tour`
+  // tool has no concept of these fields, so they stay optional at the DB level rather than
+  // forcing a breaking change onto that existing consumer. The REST route STORY-008 adds
+  // requires them at the Zod validation layer instead.
+  buyerName: string | null;
+  phoneNumber: string | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-export type TourRequestCreationAttributes = Optional<TourRequestAttributes, 'id' | 'notes'>;
+export type TourRequestCreationAttributes = Optional<
+  TourRequestAttributes,
+  'id' | 'notes' | 'buyerName' | 'phoneNumber'
+>;
 
 export class TourRequest
   extends Model<TourRequestAttributes, TourRequestCreationAttributes>
@@ -21,6 +30,8 @@ export class TourRequest
   declare buyerEmail: string;
   declare requestedAt: Date;
   declare notes: string | null;
+  declare buyerName: string | null;
+  declare phoneNumber: string | null;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
 }
@@ -47,6 +58,16 @@ export function initTourRequestModel(sequelize: Sequelize): typeof TourRequest {
       },
       notes: {
         type: DataTypes.STRING(300),
+        allowNull: true,
+        defaultValue: null,
+      },
+      buyerName: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
+      phoneNumber: {
+        type: DataTypes.STRING,
         allowNull: true,
         defaultValue: null,
       },

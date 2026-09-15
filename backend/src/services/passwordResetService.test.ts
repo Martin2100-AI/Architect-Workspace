@@ -9,6 +9,10 @@ class ThrowingEmailSender implements EmailSender {
   async sendPasswordResetEmail(): Promise<void> {
     throw new Error('Resend is down');
   }
+
+  async sendTourConfirmationEmail(): Promise<void> {
+    throw new Error('Resend is down');
+  }
 }
 
 describe('requestPasswordReset', () => {

@@ -14,6 +14,8 @@ export interface ScheduleTourInput {
   requestedAt: Date;
   buyerEmail: string;
   notes?: string;
+  buyerName?: string;
+  phoneNumber?: string;
 }
 
 export interface ScheduleTourResult {
@@ -67,6 +69,8 @@ export async function scheduleTour(
       buyerEmail: input.buyerEmail,
       requestedAt: input.requestedAt,
       notes: input.notes ?? null,
+      buyerName: input.buyerName ?? null,
+      phoneNumber: input.phoneNumber ?? null,
     },
   });
 
