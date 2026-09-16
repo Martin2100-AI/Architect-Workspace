@@ -5,6 +5,7 @@ import { createSequelize } from './config/database';
 import { AuditLog, initAuditLogModel } from './models/AuditLog';
 import { BuyerProfile, initBuyerProfileModel } from './models/BuyerProfile';
 import { Favorite, initFavoriteModel } from './models/Favorite';
+import { initNotificationPreferenceModel, NotificationPreference } from './models/NotificationPreference';
 import { initPasswordResetTokenModel } from './models/PasswordResetToken';
 import { initTokenBlocklistModel } from './models/TokenBlocklist';
 import { initTourRequestModel, TourRequest } from './models/TourRequest';
@@ -26,6 +27,7 @@ const FavoriteModel: typeof Favorite = initFavoriteModel(sequelize);
 const AuditLogModel: typeof AuditLog = initAuditLogModel(sequelize);
 const BuyerProfileModel: typeof BuyerProfile = initBuyerProfileModel(sequelize);
 const TourRequestModel: typeof TourRequest = initTourRequestModel(sequelize);
+const NotificationPreferenceModel: typeof NotificationPreference = initNotificationPreferenceModel(sequelize);
 
 // ConsoleEmailSender only when no Resend key is configured — otherwise the rest of
 // the app (login, the plain property feed) still boots and works either way, same
@@ -60,6 +62,7 @@ const app = createApp({
   auditLogModel: AuditLogModel,
   buyerProfileModel: BuyerProfileModel,
   tourRequestModel: TourRequestModel,
+  notificationPreferenceModel: NotificationPreferenceModel,
   emailSender,
   mlsClient,
   aiClient,

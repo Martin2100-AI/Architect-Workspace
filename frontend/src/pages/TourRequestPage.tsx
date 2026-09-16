@@ -72,11 +72,16 @@ export function TourRequestPage({ propertyId, onBack }: TourRequestPageProps): J
         email,
         message: message.trim().length > 0 ? message : undefined,
       });
-      setSuccessMessage(
-        result.confirmationSent
-          ? `Your tour request has been submitted. A confirmation email has been sent to ${email}.`
-          : 'Your tour request has been submitted. We could not send a confirmation email right now, but your request was received.',
-      );
+      let confirmationNote: string;
+      if (result.confirmationSent) {
+        confirmationNote = `A confirmation email has been sent to ${email}.`;
+      } else if (result.confirmationSkippedByPreference) {
+        confirmationNote =
+          "You've turned off tour confirmation emails in your notification preferences, so none was sent.";
+      } else {
+        confirmationNote = 'We could not send a confirmation email right now, but your request was received.';
+      }
+      setSuccessMessage(`Your tour request has been submitted. ${confirmationNote}`);
     } catch (err) {
       setError(
         err instanceof TourRequestValidationError || err instanceof NotAuthenticatedError

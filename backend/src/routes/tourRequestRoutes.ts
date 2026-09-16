@@ -2,9 +2,11 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { AuthenticatedRequest, requireAuth } from '../middleware/requireAuth';
 import { AuditLog } from '../models/AuditLog';
+import { NotificationPreference } from '../models/NotificationPreference';
 import { TokenBlocklist } from '../models/TokenBlocklist';
 import { TourRequest } from '../models/TourRequest';
 import { recordAuditEvent } from '../services/auditLogService';
+import { getOrCreateNotificationPreferences, isNotificationEnabled } from '../services/notificationPreferenceService';
 import { EmailSender } from '../services/notificationService';
 import { getPropertyById, PropertyNotFoundError } from '../services/propertyLookupService';
 import { InvalidTourDatetimeError, scheduleTour } from '../services/tourService';
@@ -27,10 +29,12 @@ export interface TourRequestRouterDependencies {
   jwtSecret: string;
   mlsClient: MlsClient;
   emailSender: EmailSender;
+  notificationPreferenceModel: typeof NotificationPreference;
 }
 
 export function createTourRequestRouter(deps: TourRequestRouterDependencies): Router {
-  const { tourRequestModel, auditLogModel, blocklistModel, jwtSecret, mlsClient, emailSender } = deps;
+  const { tourRequestModel, auditLogModel, blocklistModel, jwtSecret, mlsClient, emailSender, notificationPreferenceModel } =
+    deps;
   const router = Router();
   const auth = requireAuth(blocklistModel, jwtSecret);
 
@@ -72,22 +76,39 @@ export function createTourRequestRouter(deps: TourRequestRouterDependencies): Ro
     // failure path this story names explicitly) -- mirrors passwordResetService.ts's
     // handling of email-send failures. The response honestly reports whether it went
     // out so the happy path and this failure path stay independently observable.
+    //
+    // STORY-009 (REQ-012) gate: a buyer who has disabled tour-confirmation
+    // notifications must never receive one, regardless of delivery succeeding --
+    // checked before the send is even attempted, not after.
     let confirmationSent = false;
-    try {
-      const property = await getPropertyById(mlsClient, propertyId);
-      await emailSender.sendTourConfirmationEmail(email, {
-        tourRequestId: result.tourRequest.id,
-        propertyAddress: property.address,
-        requestedAt: result.tourRequest.requestedAt,
-      });
-      confirmationSent = true;
-    } catch (err) {
-      const errorClass = err instanceof Error ? err.constructor.name : 'UnknownError';
-      console.error(
+    let confirmationSkippedByPreference = false;
+    const preferences = await getOrCreateNotificationPreferences(notificationPreferenceModel, req.userId as number);
+    if (isNotificationEnabled(preferences, 'tourConfirmation')) {
+      try {
+        const property = await getPropertyById(mlsClient, propertyId);
+        await emailSender.sendTourConfirmationEmail(email, {
+          tourRequestId: result.tourRequest.id,
+          propertyAddress: property.address,
+          requestedAt: result.tourRequest.requestedAt,
+        });
+        confirmationSent = true;
+      } catch (err) {
+        const errorClass = err instanceof Error ? err.constructor.name : 'UnknownError';
+        console.error(
+          JSON.stringify({
+            level: 'error',
+            event: 'tour_confirmation_email_failed',
+            error_class: errorClass,
+            tourRequestId: result.tourRequest.id,
+          }),
+        );
+      }
+    } else {
+      confirmationSkippedByPreference = true;
+      console.log(
         JSON.stringify({
-          level: 'error',
-          event: 'tour_confirmation_email_failed',
-          error_class: errorClass,
+          level: 'info',
+          event: 'tour_confirmation_email_skipped_by_preference',
           tourRequestId: result.tourRequest.id,
         }),
       );
@@ -110,6 +131,7 @@ export function createTourRequestRouter(deps: TourRequestRouterDependencies): Ro
         alreadyScheduled: result.alreadyScheduled,
       },
       confirmationSent,
+      confirmationSkippedByPreference,
     });
   });
 

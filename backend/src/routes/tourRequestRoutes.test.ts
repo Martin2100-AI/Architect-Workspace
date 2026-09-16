@@ -103,6 +103,35 @@ describe('tour requests', () => {
     expect(await ctx.TourRequestModel.count()).toBe(1);
   });
 
+  // STORY-009 / REQ-012: given a notification is disabled, it should not be sent.
+  // The tour is still booked -- disabling a notification preference must never
+  // affect whether the underlying action succeeds.
+  it('skips the confirmation email entirely when the buyer has disabled tour-confirmation notifications', async () => {
+    const token = await signUpAndLogIn(ctx);
+    await request(ctx.app)
+      .put('/notification-preferences')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        newMatch: true,
+        priceReduction: true,
+        openHouse: true,
+        statusChange: true,
+        backOnMarket: true,
+        underContract: true,
+        tourConfirmation: false,
+      });
+
+    const res = await request(ctx.app).post('/tours').set('Authorization', `Bearer ${token}`).send(validTourRequest);
+
+    expect(res.status).toBe(200);
+    expect(res.body.confirmationSent).toBe(false);
+    expect(res.body.confirmationSkippedByPreference).toBe(true);
+    expect(await ctx.TourRequestModel.count()).toBe(1);
+    // Never even attempted -- distinct from the delivery-failure test above, where
+    // the send is attempted and captured before throwing.
+    expect(ctx.emailSender.sentTourConfirmationTo).toBeUndefined();
+  });
+
   it('rejects an attempt to request a tour without being logged in', async () => {
     const res = await request(ctx.app).post('/tours').send(validTourRequest);
 

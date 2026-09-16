@@ -27,6 +27,7 @@ export interface TourRequestRecord {
 export interface TourRequestResult {
   tourRequest: TourRequestRecord;
   confirmationSent: boolean;
+  confirmationSkippedByPreference: boolean;
 }
 
 export class NotAuthenticatedError extends Error {

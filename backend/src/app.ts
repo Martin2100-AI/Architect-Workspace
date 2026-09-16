@@ -4,6 +4,7 @@ import { requireHttps } from './middleware/requireHttps';
 import { AuditLog } from './models/AuditLog';
 import { BuyerProfile } from './models/BuyerProfile';
 import { Favorite } from './models/Favorite';
+import { NotificationPreference } from './models/NotificationPreference';
 import { PasswordResetToken } from './models/PasswordResetToken';
 import { TokenBlocklist } from './models/TokenBlocklist';
 import { TourRequest } from './models/TourRequest';
@@ -11,6 +12,7 @@ import { User } from './models/User';
 import { createAuthRouter } from './routes/authRoutes';
 import { createBuyerProfileRouter } from './routes/buyerProfileRoutes';
 import { createFavoritesRouter } from './routes/favoritesRoutes';
+import { createNotificationPreferenceRouter } from './routes/notificationPreferenceRoutes';
 import { createPropertyRouter } from './routes/propertyRoutes';
 import { createSearchRouter } from './routes/searchRoutes';
 import { createTourRequestRouter } from './routes/tourRequestRoutes';
@@ -26,6 +28,7 @@ export interface AppDependencies {
   auditLogModel: typeof AuditLog;
   buyerProfileModel: typeof BuyerProfile;
   tourRequestModel: typeof TourRequest;
+  notificationPreferenceModel: typeof NotificationPreference;
   emailSender: EmailSender;
   mlsClient: MlsClient;
   aiClient: AiClient;
@@ -80,6 +83,15 @@ export function createApp(deps: AppDependencies): Express {
       jwtSecret: deps.jwtSecret,
       mlsClient: deps.mlsClient,
       emailSender: deps.emailSender,
+      notificationPreferenceModel: deps.notificationPreferenceModel,
+    }),
+  );
+  app.use(
+    '/notification-preferences',
+    createNotificationPreferenceRouter({
+      notificationPreferenceModel: deps.notificationPreferenceModel,
+      blocklistModel: deps.blocklistModel,
+      jwtSecret: deps.jwtSecret,
     }),
   );
 

@@ -3,6 +3,7 @@ import { AppHeader } from './components/AppHeader';
 import { BuyerProfilePage } from './pages/BuyerProfilePage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
 import { LoginPage } from './pages/LoginPage';
+import { NotificationPreferencesPage } from './pages/NotificationPreferencesPage';
 import { PropertyFeedPage } from './pages/PropertyFeedPage';
 import { ResetPasswordPage } from './pages/ResetPasswordPage';
 import { SavedHomesPage } from './pages/SavedHomesPage';
@@ -11,7 +12,7 @@ import { logout } from './services/authService';
 import { getAuthToken, setAuthToken } from './services/authTokenStore';
 
 type AuthView = 'login' | 'signup' | 'forgot-password';
-type LoggedInView = 'feed' | 'saved-homes' | 'profile';
+type LoggedInView = 'feed' | 'saved-homes' | 'profile' | 'notification-preferences';
 
 function getResetTokenFromUrl(): string | null {
   return new URLSearchParams(window.location.search).get('token');
@@ -82,9 +83,15 @@ function App(): JSX.Element {
         onLogout={handleLogout}
         onNavigateSavedHomes={loggedInView === 'feed' ? () => setLoggedInView('saved-homes') : undefined}
         onNavigateProfile={loggedInView === 'feed' ? () => setLoggedInView('profile') : undefined}
+        onNavigateNotificationPreferences={
+          loggedInView === 'feed' ? () => setLoggedInView('notification-preferences') : undefined
+        }
       />
       {loggedInView === 'saved-homes' && <SavedHomesPage onBack={() => setLoggedInView('feed')} />}
       {loggedInView === 'profile' && <BuyerProfilePage onBack={() => setLoggedInView('feed')} />}
+      {loggedInView === 'notification-preferences' && (
+        <NotificationPreferencesPage onBack={() => setLoggedInView('feed')} />
+      )}
       {loggedInView === 'feed' && <PropertyFeedPage />}
     </>
   );

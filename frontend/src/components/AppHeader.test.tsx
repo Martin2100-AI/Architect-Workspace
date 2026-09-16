@@ -26,4 +26,21 @@ describe('AppHeader', () => {
     fireEvent.click(screen.getByRole('button', { name: /saved homes/i }));
     expect(onNavigateSavedHomes).toHaveBeenCalled();
   });
+
+  it('does not render a "Notifications" button when onNavigateNotificationPreferences is not provided', () => {
+    render(<AppHeader onLogout={jest.fn()} />);
+
+    expect(screen.queryByRole('button', { name: /notifications/i })).not.toBeInTheDocument();
+  });
+
+  it('calls onNavigateNotificationPreferences when "Notifications" is clicked', () => {
+    const onNavigateNotificationPreferences = jest.fn();
+
+    render(
+      <AppHeader onLogout={jest.fn()} onNavigateNotificationPreferences={onNavigateNotificationPreferences} />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /notifications/i }));
+    expect(onNavigateNotificationPreferences).toHaveBeenCalled();
+  });
 });

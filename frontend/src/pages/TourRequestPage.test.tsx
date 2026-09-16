@@ -62,6 +62,7 @@ describe('TourRequestPage', () => {
         alreadyScheduled: false,
       },
       confirmationSent: true,
+      confirmationSkippedByPreference: false,
     });
 
     render(<TourRequestPage propertyId="p1" onBack={jest.fn()} />);
@@ -98,6 +99,7 @@ describe('TourRequestPage', () => {
         alreadyScheduled: false,
       },
       confirmationSent: false,
+      confirmationSkippedByPreference: false,
     });
 
     render(<TourRequestPage propertyId="p1" onBack={jest.fn()} />);
@@ -107,6 +109,36 @@ describe('TourRequestPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /request tour/i }));
 
     expect(await screen.findByText(/could not send a confirmation email/i)).toBeInTheDocument();
+  });
+
+  // STORY-009 / REQ-012: given a notification is disabled, the page must say so
+  // honestly -- distinct from an actual delivery failure, since disabling was the
+  // buyer's own choice, not a problem with the app.
+  it('shows a distinct message when the buyer has disabled tour-confirmation notifications', async () => {
+    mockedFetchPropertyById.mockResolvedValueOnce(sampleProperty);
+    mockedRequestTour.mockResolvedValueOnce({
+      tourRequest: {
+        id: 1,
+        propertyId: 'p1',
+        requestedAt: '2026-10-01T14:30:00.000Z',
+        buyerEmail: 'jordan@example.com',
+        buyerName: 'Jordan Buyer',
+        phoneNumber: '555-0100',
+        notes: null,
+        alreadyScheduled: false,
+      },
+      confirmationSent: false,
+      confirmationSkippedByPreference: true,
+    });
+
+    render(<TourRequestPage propertyId="p1" onBack={jest.fn()} />);
+    await screen.findByText('1 Test St');
+    fillRequiredFields();
+
+    fireEvent.click(screen.getByRole('button', { name: /request tour/i }));
+
+    expect(await screen.findByText(/turned off tour confirmation emails/i)).toBeInTheDocument();
+    expect(screen.queryByText(/could not send a confirmation email/i)).not.toBeInTheDocument();
   });
 
   it('shows an error message when the backend rejects incomplete or invalid details', async () => {
