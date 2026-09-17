@@ -107,4 +107,26 @@ describe('PropertyDetailPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /request a tour/i }));
     expect(onRequestTour).toHaveBeenCalledWith('p1');
   });
+
+  it('does not show a "Calculate affordability" button when no onCalculateAffordability handler is given', async () => {
+    mockedFetchPropertyById.mockResolvedValueOnce(sampleProperty);
+
+    render(<PropertyDetailPage propertyId="p1" onBack={jest.fn()} />);
+    await screen.findByTestId('property-detail');
+
+    expect(screen.queryByRole('button', { name: /calculate affordability/i })).not.toBeInTheDocument();
+  });
+
+  it('calls onCalculateAffordability with the property id when "Calculate affordability" is clicked', async () => {
+    mockedFetchPropertyById.mockResolvedValueOnce(sampleProperty);
+    const onCalculateAffordability = jest.fn();
+
+    render(
+      <PropertyDetailPage propertyId="p1" onBack={jest.fn()} onCalculateAffordability={onCalculateAffordability} />,
+    );
+    await screen.findByTestId('property-detail');
+
+    fireEvent.click(screen.getByRole('button', { name: /calculate affordability/i }));
+    expect(onCalculateAffordability).toHaveBeenCalledWith('p1');
+  });
 });

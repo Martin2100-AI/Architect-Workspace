@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AiSearchBox } from '../components/AiSearchBox';
 import { MapView } from '../components/MapView';
 import { PropertyCard } from '../components/PropertyCard';
+import { AffordabilityCalculatorPage } from './AffordabilityCalculatorPage';
 import { ComparisonPage } from './ComparisonPage';
 import { PropertyDetailPage } from './PropertyDetailPage';
 import { TourRequestPage } from './TourRequestPage';
@@ -31,6 +32,7 @@ export function PropertyFeedPage(): JSX.Element {
   const [feed, setFeed] = useState<FeedState>({ status: 'loading' });
   const [selected, setSelected] = useState<SelectedProperty | null>(null);
   const [tourRequestPropertyId, setTourRequestPropertyId] = useState<string | null>(null);
+  const [affordabilityPropertyId, setAffordabilityPropertyId] = useState<string | null>(null);
   const [compareIds, setCompareIds] = useState<Set<string>>(new Set());
   const [showComparison, setShowComparison] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -78,6 +80,15 @@ export function PropertyFeedPage(): JSX.Element {
     );
   }
 
+  if (selected && affordabilityPropertyId) {
+    return (
+      <AffordabilityCalculatorPage
+        propertyId={affordabilityPropertyId}
+        onBack={() => setAffordabilityPropertyId(null)}
+      />
+    );
+  }
+
   if (selected) {
     return (
       <PropertyDetailPage
@@ -85,6 +96,7 @@ export function PropertyFeedPage(): JSX.Element {
         matchInfo={selected.matchInfo}
         onBack={() => setSelected(null)}
         onRequestTour={setTourRequestPropertyId}
+        onCalculateAffordability={setAffordabilityPropertyId}
       />
     );
   }

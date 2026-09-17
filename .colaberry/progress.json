@@ -397,15 +397,15 @@
       "criteria": [
         {
           "text": "Given a property, when affordability is calculated, then all cost components should be displayed.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Given a calculation, when inputs are changed, then results should update.",
-          "passed": false
+          "passed": true
         },
         {
           "text": "Trust: Calculations are accurate and disclaimers are visible.",
-          "passed": false
+          "passed": true
         }
       ],
       "files_touched": [],

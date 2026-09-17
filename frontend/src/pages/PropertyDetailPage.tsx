@@ -28,6 +28,8 @@ interface PropertyDetailPageProps {
   matchInfo?: MatchInfo;
   /** Only present where the caller actually has a tour-request page to link to. */
   onRequestTour?: (propertyId: string) => void;
+  /** Only present where the caller actually has an affordability calculator page to link to. */
+  onCalculateAffordability?: (propertyId: string) => void;
 }
 
 export function PropertyDetailPage({
@@ -35,6 +37,7 @@ export function PropertyDetailPage({
   onBack,
   matchInfo,
   onRequestTour,
+  onCalculateAffordability,
 }: PropertyDetailPageProps): JSX.Element {
   const [state, setState] = useState<DetailState>({ status: 'loading' });
 
@@ -105,6 +108,16 @@ export function PropertyDetailPage({
               onClick={() => onRequestTour(propertyId)}
             >
               Request a tour
+            </button>
+          )}
+
+          {onCalculateAffordability && (
+            <button
+              type="button"
+              className="property-detail__calculate-affordability"
+              onClick={() => onCalculateAffordability(propertyId)}
+            >
+              Calculate affordability
             </button>
           )}
 
