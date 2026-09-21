@@ -1,0 +1,103 @@
+.property-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.property-card__image {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  /* Reserves the image's space before it finishes loading, so the rest of the card
+     doesn't jump into place once the network request completes. */
+  background: var(--color-bg);
+  display: block;
+}
+
+.property-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+}
+
+.property-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.property-card__price {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.property-card__favorite {
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-lg);
+  line-height: 1;
+}
+
+.property-card__address {
+  color: var(--color-text);
+  margin: 0;
+}
+
+.property-card__stats,
+.property-card__payment {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.property-card__category-save {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.property-card__category-label {
+  margin: 0;
+  flex-basis: 100%;
+}
+
+.property-card__compare {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.property-card__match {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-2);
+}
+
+.property-card__match-badge {
+  display: inline-block;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-primary);
+}
+
+.property-card__match-detail {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: var(--space-1) 0 0;
+}

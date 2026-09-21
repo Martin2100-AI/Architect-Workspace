@@ -1,6 +1,7 @@
 import { createHash } from 'crypto';
 import { Resend } from 'resend';
-import { EmailSender, TourConfirmationDetails } from './notificationService';
+import { EmailSender, PropertyShareDetails, TourConfirmationDetails } from './notificationService';
+import { buildShareUrl } from './propertyShareService';
 
 const RESEND_TIMEOUT_MS = 10000;
 
@@ -110,6 +111,50 @@ export class ResendEmailSender implements EmailSender {
               `Requested time: ${details.requestedAt.toISOString()}`,
               '',
               'A Keysy agent will meet you there. Reply to this email if you need to reschedule.',
+            ].join('\n'),
+          },
+          { idempotencyKey },
+        ),
+        RESEND_TIMEOUT_MS,
+      );
+    } catch (err) {
+      const errorClass = err instanceof Error ? err.constructor.name : 'UnknownError';
+      console.error(JSON.stringify({ level: 'error', event: 'resend_call_failed', error_class: errorClass }));
+      throw new ResendUpstreamError();
+    }
+
+    if (result.error) {
+      console.error(
+        JSON.stringify({ level: 'error', event: 'resend_send_failed', error_class: result.error.name }),
+      );
+      throw new ResendUpstreamError();
+    }
+  }
+
+  // Unlike sendTourConfirmationEmail, this send IS the entire point of the action that
+  // triggered it -- there is no already-real booking behind it to fall back on -- so the
+  // caller (propertyShareRoutes.ts) lets a failure here fail the whole request rather than
+  // treating it as best-effort. The idempotencyKey still protects a retried request (same
+  // requestId) from double-sending; a genuinely new share attempt gets a new requestId.
+  async sendPropertyShareEmail(to: string, details: PropertyShareDetails): Promise<void> {
+    const shareUrl = buildShareUrl(this.appBaseUrl, details.propertyId);
+    const idempotencyKey = createHash('sha256').update(`property-share-${details.requestId}`).digest('hex');
+
+    let result;
+    try {
+      result = await withTimeout(
+        this.client.emails.send(
+          {
+            from: this.fromEmail,
+            to,
+            subject: `A property on Keysy: ${details.propertyAddress}`,
+            text: [
+              'Someone using Keysy thought you might like this property:',
+              '',
+              `${details.propertyAddress}`,
+              `Listed at $${details.listingPrice.toLocaleString()}`,
+              '',
+              `View it here: ${shareUrl}`,
             ].join('\n'),
           },
           { idempotencyKey },

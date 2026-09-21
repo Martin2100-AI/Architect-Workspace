@@ -1,0 +1,141 @@
+@import './tokens.css';
+
+/**
+ * Global base styles only -- no page-specific layout here. Every existing page in
+ * this app already uses plain semantic HTML (button, input, h1, role="alert", etc.)
+ * with no shared stylesheet, so styling these elements once here gives every page an
+ * immediate, consistent baseline before any page-specific restyling happens.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--color-primary);
+  font-weight: 600;
+  margin: 0 0 var(--space-3);
+}
+
+h1 {
+  font-size: var(--font-size-xl);
+}
+
+h2 {
+  font-size: var(--font-size-lg);
+}
+
+p {
+  margin: 0 0 var(--space-3);
+}
+
+a {
+  color: var(--color-accent);
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+button {
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: var(--space-2) var(--space-4);
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--color-accent);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Primary call-to-action buttons opt in with this class in page-specific styling
+   passes -- the plain `button` reset above stays neutral so back/close/secondary
+   actions don't accidentally look like the main action on a page. */
+button.btn-primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-accent-contrast);
+}
+
+button.btn-primary:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
+}
+
+label {
+  display: block;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-1);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* This app uses role="alert" consistently for every error message across every
+   page -- styling it once here makes every existing error message look intentional
+   without touching a single page's markup. */
+[role='alert'] {
+  color: var(--color-error);
+  background: var(--color-error-bg);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  margin: var(--space-2) 0;
+}
+
+/* Loading/informational text (role="status") -- neutral, not alarming like an alert. */
+[role='status'] {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}

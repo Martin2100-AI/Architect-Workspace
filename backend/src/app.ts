@@ -14,6 +14,7 @@ import { createBuyerProfileRouter } from './routes/buyerProfileRoutes';
 import { createFavoritesRouter } from './routes/favoritesRoutes';
 import { createNotificationPreferenceRouter } from './routes/notificationPreferenceRoutes';
 import { createPropertyRouter } from './routes/propertyRoutes';
+import { createPropertyShareRouter } from './routes/propertyShareRoutes';
 import { createSearchRouter } from './routes/searchRoutes';
 import { createTourRequestRouter } from './routes/tourRequestRoutes';
 import { AiClient } from './services/anthropicClient';
@@ -35,6 +36,7 @@ export interface AppDependencies {
   jwtSecret: string;
   nodeEnv: string;
   corsOrigin?: string;
+  appBaseUrl: string;
 }
 
 export function createApp(deps: AppDependencies): Express {
@@ -56,6 +58,17 @@ export function createApp(deps: AppDependencies): Express {
 
   app.use('/auth', createAuthRouter(deps));
   app.use('/properties', createPropertyRouter({ mlsClient: deps.mlsClient }));
+  app.use(
+    '/properties',
+    createPropertyShareRouter({
+      auditLogModel: deps.auditLogModel,
+      blocklistModel: deps.blocklistModel,
+      jwtSecret: deps.jwtSecret,
+      mlsClient: deps.mlsClient,
+      emailSender: deps.emailSender,
+      appBaseUrl: deps.appBaseUrl,
+    }),
+  );
   app.use('/search', createSearchRouter({ aiClient: deps.aiClient, mlsClient: deps.mlsClient }));
   app.use(
     '/favorites',

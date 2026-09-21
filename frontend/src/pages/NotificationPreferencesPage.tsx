@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import '../styles/formPage.css';
 import {
   fetchNotificationPreferences,
   NotAuthenticatedError,
@@ -70,45 +71,51 @@ export function NotificationPreferencesPage({ onBack }: NotificationPreferencesP
   }
 
   return (
-    <main className="notification-preferences-page">
-      <h1>Notification preferences</h1>
-      <p>Choose which updates you&apos;d like to receive. Turn off anything you don&apos;t want.</p>
+    <main className="notification-preferences-page form-page">
+      <div className="form-page__card">
+        <h1>Notification preferences</h1>
+        <p>Choose which updates you&apos;d like to receive. Turn off anything you don&apos;t want.</p>
 
-      {loadState.status === 'loading' && <p role="status">Loading your preferences…</p>}
+        {loadState.status === 'loading' && <p role="status">Loading your preferences…</p>}
 
-      {loadState.status === 'error' && (
-        <p role="alert">Something went wrong loading your notification preferences. Please try again.</p>
-      )}
+        {loadState.status === 'error' && (
+          <p role="alert">Something went wrong loading your notification preferences. Please try again.</p>
+        )}
 
-      {loadState.status === 'loaded' && preferences && (
-        <form onSubmit={handleSubmit}>
-          {NOTIFICATION_TYPES.map((type) => (
-            <label key={type} htmlFor={`notification-${type}`} className="notification-preferences-page__row">
-              <input
-                id={`notification-${type}`}
-                type="checkbox"
-                checked={preferences[type]}
-                onChange={() => toggle(type)}
-              />
-              {NOTIFICATION_TYPE_LABELS[type]}
-            </label>
-          ))}
+        {loadState.status === 'loaded' && preferences && (
+          <form onSubmit={handleSubmit}>
+            {NOTIFICATION_TYPES.map((type) => (
+              <label
+                key={type}
+                htmlFor={`notification-${type}`}
+                className="notification-preferences-page__row form-page__checkbox-row"
+              >
+                <input
+                  id={`notification-${type}`}
+                  type="checkbox"
+                  checked={preferences[type]}
+                  onChange={() => toggle(type)}
+                />
+                {NOTIFICATION_TYPE_LABELS[type]}
+              </label>
+            ))}
 
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Saving…' : 'Save preferences'}
-          </button>
-          {error && (
-            <p role="alert" className="notification-preferences-page__error">
-              {error}
-            </p>
-          )}
-          {successMessage && <p className="notification-preferences-page__success">{successMessage}</p>}
-        </form>
-      )}
+            <button type="submit" className="btn-primary" disabled={isSubmitting}>
+              {isSubmitting ? 'Saving…' : 'Save preferences'}
+            </button>
+            {error && (
+              <p role="alert" className="notification-preferences-page__error">
+                {error}
+              </p>
+            )}
+            {successMessage && <p className="notification-preferences-page__success">{successMessage}</p>}
+          </form>
+        )}
 
-      <button type="button" onClick={onBack}>
-        Back
-      </button>
+        <button type="button" onClick={onBack}>
+          Back
+        </button>
+      </div>
     </main>
   );
 }

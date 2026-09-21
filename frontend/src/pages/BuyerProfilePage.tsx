@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../styles/formPage.css';
 import {
   BUYER_PROFILE_PROPERTY_TYPES,
   BuyerProfilePropertyType,
@@ -61,7 +62,8 @@ export function BuyerProfilePage({ onBack }: BuyerProfilePageProps): JSX.Element
   }
 
   return (
-    <main className="buyer-profile-page">
+    <main className="buyer-profile-page form-page">
+      <div className="form-page__card">
       <h1>Create your buyer profile</h1>
       <p>Tell us what you&apos;re looking for so we can personalize your property search.</p>
       <form onSubmit={handleSubmit}>
@@ -144,7 +146,7 @@ export function BuyerProfilePage({ onBack }: BuyerProfilePageProps): JSX.Element
           placeholder="pool, garage"
         />
 
-        <button type="submit" disabled={isSubmitting}>
+        <button type="submit" className="btn-primary" disabled={isSubmitting}>
           {isSubmitting ? 'Saving…' : 'Save profile'}
         </button>
         {error && (
@@ -157,6 +159,7 @@ export function BuyerProfilePage({ onBack }: BuyerProfilePageProps): JSX.Element
       <button type="button" onClick={onBack}>
         Back
       </button>
+      </div>
     </main>
   );
 }

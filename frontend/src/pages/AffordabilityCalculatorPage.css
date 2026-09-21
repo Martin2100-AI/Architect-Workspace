@@ -1,0 +1,88 @@
+.affordability-calculator {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-6);
+}
+
+.affordability-calculator__back {
+  margin-bottom: var(--space-4);
+}
+
+.affordability-calculator__property {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.affordability-calculator__layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.affordability-calculator__layout form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.affordability-calculator__results {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-6);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: var(--space-6);
+}
+
+.affordability-calculator__results dl {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+}
+
+.affordability-calculator__results dt {
+  color: var(--color-text-secondary);
+  font-weight: 400;
+}
+
+.affordability-calculator__results dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+}
+
+.affordability-calculator__total-label {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-2);
+  margin-top: var(--space-2);
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.affordability-calculator__total-value {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-2);
+  margin-top: var(--space-2);
+  color: var(--color-primary);
+  font-size: var(--font-size-lg);
+}
+
+.affordability-calculator__disclaimer {
+  margin-top: var(--space-6);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+/* Mobile-first app -- side-by-side form/results only once there's room for both. */
+@media (max-width: 700px) {
+  .affordability-calculator__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .affordability-calculator__results {
+    position: static;
+  }
+}

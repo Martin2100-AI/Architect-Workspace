@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './PropertyCard.css';
 import { FAVORITE_CATEGORIES, FavoriteCategory, NotAuthenticatedError, saveFavorite } from '../services/favoritesService';
 import { MatchInfo, Property } from '../types/property';
 
@@ -111,7 +112,7 @@ export function PropertyCard({
         {onViewDetails && (
           <button
             type="button"
-            className="property-card__details"
+            className="property-card__details btn-primary"
             onClick={() => onViewDetails(property.id, matchInfo)}
           >
             View details

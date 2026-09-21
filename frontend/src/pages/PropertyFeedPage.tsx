@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './PropertyFeedPage.css';
 import { AiSearchBox } from '../components/AiSearchBox';
 import { MapView } from '../components/MapView';
 import { PropertyCard } from '../components/PropertyCard';
@@ -97,6 +98,7 @@ export function PropertyFeedPage(): JSX.Element {
         onBack={() => setSelected(null)}
         onRequestTour={setTourRequestPropertyId}
         onCalculateAffordability={setAffordabilityPropertyId}
+        allowSharing
       />
     );
   }

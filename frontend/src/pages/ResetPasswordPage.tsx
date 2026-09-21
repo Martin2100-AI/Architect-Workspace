@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../styles/authPage.css';
 import { confirmPasswordReset, InvalidOrExpiredResetTokenError } from '../services/authService';
 
 interface ResetPasswordPageProps {
@@ -31,34 +32,38 @@ export function ResetPasswordPage({ token, onResetSuccess }: ResetPasswordPagePr
 
   if (succeeded) {
     return (
-      <main className="reset-password-page">
-        <h1>Password updated</h1>
-        <p role="status">Your password has been reset. You can now log in.</p>
-        <button type="button" onClick={onResetSuccess}>
-          Go to log in
-        </button>
+      <main className="reset-password-page auth-page">
+        <div className="auth-page__card">
+          <h1>Password updated</h1>
+          <p role="status">Your password has been reset. You can now log in.</p>
+          <button type="button" className="btn-primary" onClick={onResetSuccess}>
+            Go to log in
+          </button>
+        </div>
       </main>
     );
   }
 
   return (
-    <main className="reset-password-page">
-      <h1>Choose a new password</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="newPassword">New password</label>
-        <input
-          id="newPassword"
-          type="password"
-          minLength={8}
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          required
-        />
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving…' : 'Reset password'}
-        </button>
-        {error && <p role="alert">{error}</p>}
-      </form>
+    <main className="reset-password-page auth-page">
+      <div className="auth-page__card">
+        <h1>Choose a new password</h1>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="newPassword">New password</label>
+          <input
+            id="newPassword"
+            type="password"
+            minLength={8}
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+          />
+          <button type="submit" className="btn-primary" disabled={isSubmitting}>
+            {isSubmitting ? 'Saving…' : 'Reset password'}
+          </button>
+          {error && <p role="alert">{error}</p>}
+        </form>
+      </div>
     </main>
   );
 }

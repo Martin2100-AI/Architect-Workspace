@@ -1,0 +1,30 @@
+.property-feed {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-6);
+}
+
+.property-feed__disclaimer {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.property-feed__view-toggle {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.property-feed__all-heading {
+  margin-top: var(--space-6);
+}
+
+.property-feed__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-6);
+}
+
+.property-feed__compare-trigger {
+  margin-bottom: var(--space-4);
+}

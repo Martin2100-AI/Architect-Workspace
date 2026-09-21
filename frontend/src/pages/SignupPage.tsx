@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../styles/authPage.css';
 import { EmailAlreadyExistsError, login, signup } from '../services/authService';
 import { setAuthToken } from '../services/authTokenStore';
 
@@ -43,38 +44,42 @@ export function SignupPage({ onSignupSuccess, onBackToLogin }: SignupPageProps):
   }
 
   return (
-    <main className="signup-page">
-      <h1>Create your Keysy account</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          minLength={8}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Creating account…' : 'Sign up'}
-        </button>
-        {error && (
-          <p role="alert" className="signup-page__error">
-            {error}
-          </p>
-        )}
-      </form>
-      <button type="button" onClick={onBackToLogin}>
-        Already have an account? Log in
-      </button>
+    <main className="signup-page auth-page">
+      <div className="auth-page__card">
+        <h1>Create your Keysy account</h1>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            minLength={8}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit" className="btn-primary" disabled={isSubmitting}>
+            {isSubmitting ? 'Creating account…' : 'Sign up'}
+          </button>
+          {error && (
+            <p role="alert" className="signup-page__error">
+              {error}
+            </p>
+          )}
+        </form>
+        <div className="auth-page__links">
+          <button type="button" className="auth-page__link-button" onClick={onBackToLogin}>
+            Already have an account? Log in
+          </button>
+        </div>
+      </div>
     </main>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import '../styles/formPage.css';
 import { fetchPropertyById, MlsUnavailableError, PropertyNotFoundError } from '../services/propertyService';
 import {
   NotAuthenticatedError,
@@ -94,12 +95,10 @@ export function TourRequestPage({ propertyId, onBack }: TourRequestPageProps): J
   }
 
   return (
-    <main className="tour-request-page">
+    <main className="tour-request-page form-page">
       <button type="button" className="tour-request-page__back" onClick={onBack}>
         ← Back to property
       </button>
-
-      <h1>Request a tour</h1>
 
       {lookup.status === 'loading' && <p role="status">Loading property details…</p>}
       {lookup.status === 'not-found' && <p role="alert">This property could not be found.</p>}
@@ -109,7 +108,8 @@ export function TourRequestPage({ propertyId, onBack }: TourRequestPageProps): J
       {lookup.status === 'error' && <p role="alert">Something went wrong loading this property.</p>}
 
       {lookup.status === 'loaded' && (
-        <>
+        <div className="form-page__card">
+          <h1>Request a tour</h1>
           <p className="tour-request-page__property">{lookup.property.address}</p>
 
           <form onSubmit={handleSubmit}>
@@ -155,7 +155,7 @@ export function TourRequestPage({ propertyId, onBack }: TourRequestPageProps): J
             <label htmlFor="message">Message (optional)</label>
             <textarea id="message" value={message} onChange={(e) => setMessage(e.target.value)} />
 
-            <button type="submit" disabled={isSubmitting}>
+            <button type="submit" className="btn-primary" disabled={isSubmitting}>
               {isSubmitting ? 'Submitting…' : 'Request tour'}
             </button>
             {error && (
@@ -165,7 +165,7 @@ export function TourRequestPage({ propertyId, onBack }: TourRequestPageProps): J
             )}
             {successMessage && <p className="tour-request-page__success">{successMessage}</p>}
           </form>
-        </>
+        </div>
       )}
     </main>
   );

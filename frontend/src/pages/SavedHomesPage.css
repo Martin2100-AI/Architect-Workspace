@@ -1,0 +1,52 @@
+.saved-homes {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--space-6);
+}
+
+.saved-homes__back {
+  margin-bottom: var(--space-4);
+}
+
+/* Flex-wrap so the entry cards (siblings of the heading, with no wrapper div of
+   their own) lay out as a wrapping row; the heading and empty-state text are forced
+   onto their own full-width line so they don't sit beside the first card. */
+.saved-homes__category {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.saved-homes__category h2,
+.saved-homes__category > p {
+  flex-basis: 100%;
+  margin: 0 0 var(--space-1);
+}
+
+.saved-homes__category > p {
+  color: var(--color-text-secondary);
+}
+
+.saved-homes__entry {
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-4);
+}
+
+.saved-homes__address {
+  color: var(--color-text);
+  font-weight: 600;
+  margin: 0;
+}
+
+.saved-homes__price {
+  color: var(--color-primary);
+  margin: 0;
+}

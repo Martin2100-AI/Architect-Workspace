@@ -4,9 +4,20 @@ export interface TourConfirmationDetails {
   requestedAt: Date;
 }
 
+export interface PropertyShareDetails {
+  propertyId: string;
+  propertyAddress: string;
+  listingPrice: number;
+  /** Client-supplied, stable per share attempt -- used to derive an idempotency key so a
+   * retried request can't double-send the same share. A new deliberate share generates a
+   * new requestId, so this never blocks a genuine second share. */
+  requestId: string;
+}
+
 export interface EmailSender {
   sendPasswordResetEmail(to: string, resetToken: string): Promise<void>;
   sendTourConfirmationEmail(to: string, details: TourConfirmationDetails): Promise<void>;
+  sendPropertyShareEmail(to: string, details: PropertyShareDetails): Promise<void>;
 }
 
 /**
@@ -34,6 +45,18 @@ export class ConsoleEmailSender implements EmailSender {
         to,
         tourRequestId: details.tourRequestId,
         note: 'No production email service is configured — the tour confirmation was not delivered to the user.',
+      }),
+    );
+  }
+
+  async sendPropertyShareEmail(to: string, details: PropertyShareDetails): Promise<void> {
+    console.log(
+      JSON.stringify({
+        level: 'info',
+        event: 'property_share_email_not_sent',
+        to,
+        propertyId: details.propertyId,
+        note: 'No production email service is configured — the shared property was not delivered to the recipient.',
       }),
     );
   }

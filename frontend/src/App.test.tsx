@@ -42,6 +42,14 @@ jest.mock('./pages/ResetPasswordPage', () => ({
   ),
 }));
 jest.mock('./pages/PropertyFeedPage', () => ({ PropertyFeedPage: () => <div>feed page</div> }));
+jest.mock('./pages/PropertyDetailPage', () => ({
+  PropertyDetailPage: ({ propertyId, onBack }: any) => (
+    <div>
+      shared property detail for {propertyId}
+      <button onClick={onBack}>fake back from shared property</button>
+    </div>
+  ),
+}));
 
 const mockedGetAuthToken = getAuthToken as jest.MockedFunction<typeof getAuthToken>;
 const mockedSetAuthToken = setAuthToken as jest.MockedFunction<typeof setAuthToken>;
@@ -103,6 +111,38 @@ describe('App', () => {
 
     fireEvent.click(screen.getByText('fake reset success'));
     expect(screen.getByText('login page')).toBeInTheDocument();
+  });
+
+  // Trust: shared links are valid and lead to the correct property details.
+  it('shows the shared property when ?property= is present in the URL, ahead of the login gate', () => {
+    window.history.pushState({}, '', '/?property=stub-1');
+    mockedGetAuthToken.mockReturnValue(null);
+
+    render(<App />);
+
+    expect(screen.getByText(/shared property detail for stub-1/i)).toBeInTheDocument();
+    expect(screen.queryByText('login page')).not.toBeInTheDocument();
+  });
+
+  it('shows the shared property even when the visitor is already logged in', () => {
+    window.history.pushState({}, '', '/?property=stub-1');
+    mockedGetAuthToken.mockReturnValue('a-real-token');
+
+    render(<App />);
+
+    expect(screen.getByText(/shared property detail for stub-1/i)).toBeInTheDocument();
+    expect(screen.queryByText('feed page')).not.toBeInTheDocument();
+  });
+
+  it('returns to the normal view and clears the query param when leaving a shared property', () => {
+    window.history.pushState({}, '', '/?property=stub-1');
+    mockedGetAuthToken.mockReturnValue(null);
+
+    render(<App />);
+    fireEvent.click(screen.getByText('fake back from shared property'));
+
+    expect(screen.getByText('login page')).toBeInTheDocument();
+    expect(window.location.search).toBe('');
   });
 
   it('logs out: revokes the session, clears the local token, and returns to login', async () => {

@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import './AffordabilityCalculatorPage.css';
 import { calculateAffordability } from '../utils/affordabilityCalculator';
 import { fetchPropertyById, MlsUnavailableError, PropertyNotFoundError } from '../services/propertyService';
 import { Property } from '../types/property';
@@ -120,6 +121,7 @@ export function AffordabilityCalculatorPage({ propertyId, onBack }: Affordabilit
         <>
           <p className="affordability-calculator__property">{lookup.property.address}</p>
 
+          <div className="affordability-calculator__layout">
           <form onSubmit={(event) => event.preventDefault()}>
             <label htmlFor="purchasePrice">Purchase price</label>
             <input
@@ -217,6 +219,7 @@ export function AffordabilityCalculatorPage({ propertyId, onBack }: Affordabilit
               </dd>
             </dl>
           </section>
+          </div>
 
           <p className="affordability-calculator__disclaimer" role="note">
             This calculation is an estimate only and is not a lending offer or financial advice.

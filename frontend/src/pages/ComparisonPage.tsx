@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './ComparisonPage.css';
 import { fetchPropertyById } from '../services/propertyService';
 import { Property } from '../types/property';
 

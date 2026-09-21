@@ -39,6 +39,26 @@ describe('PropertyDetailPage', () => {
     expect(screen.getByText(/search to see how well this matches/i)).toBeInTheDocument();
   });
 
+  it('shows "Not available" and "No HOA" when the MLS listing lacks that data, rather than fabricating a value', async () => {
+    mockedFetchPropertyById.mockResolvedValueOnce(sampleProperty);
+
+    render(<PropertyDetailPage propertyId="p1" onBack={jest.fn()} />);
+    await screen.findByTestId('property-detail');
+
+    expect(screen.getByText('Not available')).toBeInTheDocument();
+    expect(screen.getByText('No HOA')).toBeInTheDocument();
+  });
+
+  it('shows the real year built and HOA fee when the MLS listing has them', async () => {
+    mockedFetchPropertyById.mockResolvedValueOnce({ ...sampleProperty, yearBuilt: 1998, hoaFeeMonthly: 250 });
+
+    render(<PropertyDetailPage propertyId="p1" onBack={jest.fn()} />);
+    await screen.findByTestId('property-detail');
+
+    expect(screen.getByText('1998')).toBeInTheDocument();
+    expect(screen.getByText('$250/mo')).toBeInTheDocument();
+  });
+
   it('shows the match score and criteria breakdown when reached from a search result', async () => {
     mockedFetchPropertyById.mockResolvedValueOnce(sampleProperty);
 
@@ -128,5 +148,23 @@ describe('PropertyDetailPage', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /calculate affordability/i }));
     expect(onCalculateAffordability).toHaveBeenCalledWith('p1');
+  });
+
+  it('does not show the share panel unless allowSharing is true', async () => {
+    mockedFetchPropertyById.mockResolvedValueOnce(sampleProperty);
+
+    render(<PropertyDetailPage propertyId="p1" onBack={jest.fn()} />);
+    await screen.findByTestId('property-detail');
+
+    expect(screen.queryByRole('button', { name: /^share$/i })).not.toBeInTheDocument();
+  });
+
+  it('shows the share panel when allowSharing is true', async () => {
+    mockedFetchPropertyById.mockResolvedValueOnce(sampleProperty);
+
+    render(<PropertyDetailPage propertyId="p1" onBack={jest.fn()} allowSharing />);
+    await screen.findByTestId('property-detail');
+
+    expect(screen.getByRole('button', { name: /^share$/i })).toBeInTheDocument();
   });
 });

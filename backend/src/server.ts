@@ -69,6 +69,7 @@ const app = createApp({
   jwtSecret: env.jwtSecret,
   nodeEnv: env.nodeEnv,
   corsOrigin: env.corsOrigin,
+  appBaseUrl: env.appBaseUrl,
 });
 
 app.listen(env.port, () => {

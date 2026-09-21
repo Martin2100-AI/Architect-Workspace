@@ -59,6 +59,7 @@ export async function createTestApp(
     aiClient,
     jwtSecret,
     nodeEnv: 'test',
+    appBaseUrl: 'http://localhost:3000',
   });
 
   return {

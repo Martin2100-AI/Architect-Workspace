@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import './PropertyDetailPage.css';
+import { SharePropertyPanel } from '../components/SharePropertyPanel';
 import { fetchPropertyById, MlsUnavailableError, PropertyNotFoundError } from '../services/propertyService';
 import { MatchInfo, Property } from '../types/property';
 
@@ -30,6 +32,10 @@ interface PropertyDetailPageProps {
   onRequestTour?: (propertyId: string) => void;
   /** Only present where the caller actually has an affordability calculator page to link to. */
   onCalculateAffordability?: (propertyId: string) => void;
+  /** Sharing requires being logged in (the backend route is auth-gated), so this is only
+   * true from the authenticated feed -- a property reached via a shared link (see App.tsx)
+   * does not get its own re-share panel. */
+  allowSharing?: boolean;
 }
 
 export function PropertyDetailPage({
@@ -38,6 +44,7 @@ export function PropertyDetailPage({
   matchInfo,
   onRequestTour,
   onCalculateAffordability,
+  allowSharing,
 }: PropertyDetailPageProps): JSX.Element {
   const [state, setState] = useState<DetailState>({ status: 'loading' });
 
@@ -101,10 +108,21 @@ export function PropertyDetailPage({
             Estimated monthly payments are estimates only and are not lending offers or financial advice.
           </p>
 
+          <dl className="property-detail__facts">
+            <dt>Year built</dt>
+            <dd>{state.property.yearBuilt ?? 'Not available'}</dd>
+            <dt>HOA</dt>
+            <dd>
+              {state.property.hoaFeeMonthly
+                ? `${currencyFormatter.format(state.property.hoaFeeMonthly)}/mo`
+                : 'No HOA'}
+            </dd>
+          </dl>
+
           {onRequestTour && (
             <button
               type="button"
-              className="property-detail__request-tour"
+              className="property-detail__request-tour btn-primary"
               onClick={() => onRequestTour(propertyId)}
             >
               Request a tour
@@ -120,6 +138,8 @@ export function PropertyDetailPage({
               Calculate affordability
             </button>
           )}
+
+          {allowSharing && <SharePropertyPanel propertyId={propertyId} />}
 
           {matchInfo ? (
             <section

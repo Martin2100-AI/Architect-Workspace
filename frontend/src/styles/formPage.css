@@ -1,0 +1,53 @@
+/**
+ * Shared layout for single-form utility pages reached from within the app (Tour
+ * Request, Buyer Profile, Notification Preferences) -- same shape as authPage.css
+ * (one card, one form) but top-aligned rather than vertically centered, since these
+ * are reached mid-session rather than being the first thing on screen.
+ */
+.form-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--space-6);
+}
+
+.form-page__card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-6);
+}
+
+.form-page__card > p {
+  color: var(--color-text-secondary);
+}
+
+.form-page__card form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.form-page__card form button[type='submit'] {
+  margin-top: var(--space-3);
+}
+
+.form-page__card > button {
+  margin-top: var(--space-4);
+}
+
+/* A checkbox + label row (e.g. one notification-type toggle) -- horizontal, not the
+   stacked label-above-input shape the rest of this app's forms use. */
+.form-page__checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+}
+
+.form-page__checkbox-row input {
+  width: auto;
+}

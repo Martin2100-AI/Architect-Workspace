@@ -1,4 +1,5 @@
 import React from 'react';
+import './AppHeader.css';
 
 interface AppHeaderProps {
   onLogout: () => void;

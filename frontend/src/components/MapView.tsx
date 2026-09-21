@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { LngLatBounds, Map as MaplibreMap, Marker, NavigationControl, Popup } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import './MapView.css';
 import { filterPropertiesInBounds, MapBounds } from '../utils/mapBounds';
 import { Property } from '../types/property';
 
@@ -108,9 +109,9 @@ export function MapView({ properties }: MapViewProps): JSX.Element {
 
   return (
     <div className="map-view">
-      {/* This app has no stylesheet anywhere (see STORY-006's PROGRESS.md note) — a map
-          needs concrete pixel dimensions to render at all, so this is set inline rather
-          than left to rely on CSS that doesn't exist yet. */}
+      {/* A map needs concrete pixel dimensions to render at all -- kept inline rather
+          than in MapView.css, since this is a hard functional requirement (see
+          STORY-007's PROGRESS.md note on the 0x0 map bug), not a style choice. */}
       <div
         ref={containerRef}
         data-testid="map-container"

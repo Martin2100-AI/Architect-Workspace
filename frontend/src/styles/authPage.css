@@ -1,0 +1,59 @@
+/**
+ * Shared layout for every single-form auth page (Login, Signup, Forgot Password,
+ * Reset Password) -- all four are the same shape (centered card, title, one form,
+ * 0-2 secondary actions below), so one stylesheet covers all of them rather than
+ * duplicating the same rules four times.
+ */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg);
+  padding: var(--space-6);
+}
+
+.auth-page__card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-8);
+}
+
+.auth-page__card h1 {
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+
+.auth-page__card form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.auth-page__card form button[type='submit'] {
+  margin-top: var(--space-3);
+}
+
+.auth-page__links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--space-4);
+}
+
+/* A secondary action styled as a plain text link rather than a bordered button --
+   these are "or do this instead" actions, not competing calls to action. */
+.auth-page__link-button {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.auth-page__link-button:hover {
+  color: var(--color-accent-hover);
+}

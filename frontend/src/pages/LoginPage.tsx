@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../styles/authPage.css';
 import { login } from '../services/authService';
 import { setAuthToken } from '../services/authTokenStore';
 
@@ -30,40 +31,44 @@ export function LoginPage({ onLoginSuccess, onSignupClick, onForgotPasswordClick
   }
 
   return (
-    <main className="login-page">
-      <h1>Log in to Keysy</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Logging in…' : 'Log in'}
-        </button>
-        {error && (
-          <p role="alert" className="login-page__error">
-            {error}
-          </p>
-        )}
-      </form>
-      <button type="button" onClick={onForgotPasswordClick}>
-        Forgot password?
-      </button>
-      <button type="button" onClick={onSignupClick}>
-        Sign up
-      </button>
+    <main className="login-page auth-page">
+      <div className="auth-page__card">
+        <h1>Log in to Keysy</h1>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit" className="btn-primary" disabled={isSubmitting}>
+            {isSubmitting ? 'Logging in…' : 'Log in'}
+          </button>
+          {error && (
+            <p role="alert" className="login-page__error">
+              {error}
+            </p>
+          )}
+        </form>
+        <div className="auth-page__links">
+          <button type="button" className="auth-page__link-button" onClick={onForgotPasswordClick}>
+            Forgot password?
+          </button>
+          <button type="button" className="auth-page__link-button" onClick={onSignupClick}>
+            Sign up
+          </button>
+        </div>
+      </div>
     </main>
   );
 }

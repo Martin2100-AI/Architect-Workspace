@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './SavedHomesPage.css';
 import {
   FAVORITE_CATEGORIES,
   FavoriteCategory,
