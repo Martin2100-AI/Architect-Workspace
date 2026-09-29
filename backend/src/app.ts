@@ -1,6 +1,7 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import { createCorsMiddleware } from './middleware/cors';
 import { requireHttps } from './middleware/requireHttps';
+import { securityHeaders } from './middleware/securityHeaders';
 import { AuditLog } from './models/AuditLog';
 import { BuyerProfile } from './models/BuyerProfile';
 import { Favorite } from './models/Favorite';
@@ -47,6 +48,7 @@ export function createApp(deps: AppDependencies): Express {
     // trust its X-Forwarded-Proto header instead — that's what requireHttps checks.
     app.set('trust proxy', 1);
     app.use(requireHttps);
+    app.use(securityHeaders);
   }
 
   app.use(createCorsMiddleware(deps.corsOrigin));
