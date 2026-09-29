@@ -20,7 +20,7 @@ describe('LoginPage', () => {
     );
 
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'buyer@example.com' } });
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'super-secret-1' } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'super-secret-1' } });
     fireEvent.click(screen.getByRole('button', { name: /^log in$/i }));
 
     await screen.findByRole('button', { name: /^log in$/i });
@@ -41,7 +41,7 @@ describe('LoginPage', () => {
     );
 
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'buyer@example.com' } });
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'wrong-password' } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'wrong-password' } });
     fireEvent.click(screen.getByRole('button', { name: /^log in$/i }));
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/incorrect email or password/i);
@@ -57,6 +57,19 @@ describe('LoginPage', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /sign up/i }));
     expect(onSignupClick).toHaveBeenCalled();
+  });
+
+  it('toggles the password field between hidden and visible', () => {
+    render(<LoginPage onLoginSuccess={jest.fn()} onSignupClick={jest.fn()} onForgotPasswordClick={jest.fn()} />);
+
+    const passwordInput = screen.getByLabelText('Password');
+    expect(passwordInput).toHaveAttribute('type', 'password');
+
+    fireEvent.click(screen.getByRole('button', { name: /show password/i }));
+    expect(passwordInput).toHaveAttribute('type', 'text');
+
+    fireEvent.click(screen.getByRole('button', { name: /hide password/i }));
+    expect(passwordInput).toHaveAttribute('type', 'password');
   });
 
   it('calls onForgotPasswordClick when "Forgot password?" is clicked', () => {

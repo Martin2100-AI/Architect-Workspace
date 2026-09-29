@@ -38,6 +38,33 @@
   margin-top: var(--space-3);
 }
 
+.auth-page__password-row {
+  position: relative;
+}
+
+.auth-page__password-row input {
+  width: 100%;
+  padding-right: var(--space-8);
+}
+
+.auth-page__password-toggle {
+  position: absolute;
+  top: 50%;
+  right: var(--space-2);
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-text-secondary);
+}
+
+.auth-page__password-toggle:hover {
+  color: var(--color-text);
+}
+
 .auth-page__links {
   display: flex;
   justify-content: space-between;

@@ -60,12 +60,43 @@ describe('App', () => {
     window.history.pushState({}, '', '/');
   });
 
-  it('shows the login page when there is no session token', () => {
+  it('shows the landing page (not the login popup) when there is no session token', () => {
     mockedGetAuthToken.mockReturnValue(null);
 
     render(<App />);
 
+    expect(screen.getByRole('button', { name: /^log in$/i })).toBeInTheDocument();
+    expect(screen.queryByText('login page')).not.toBeInTheDocument();
+  });
+
+  it('opens the login popup when "Log in" is clicked on the landing page', () => {
+    mockedGetAuthToken.mockReturnValue(null);
+
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: /^log in$/i }));
+
     expect(screen.getByText('login page')).toBeInTheDocument();
+  });
+
+  it('opens the signup popup directly from the landing page', () => {
+    mockedGetAuthToken.mockReturnValue(null);
+
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: /^sign up$/i }));
+
+    expect(screen.getByText('signup page')).toBeInTheDocument();
+  });
+
+  it('closes the popup and returns to the landing page when the modal is closed', () => {
+    mockedGetAuthToken.mockReturnValue(null);
+
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: /^log in$/i }));
+    expect(screen.getByText('login page')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /close/i }));
+
+    expect(screen.queryByText('login page')).not.toBeInTheDocument();
   });
 
   it('shows the property feed and header when a session token is already present', () => {
@@ -81,6 +112,7 @@ describe('App', () => {
     mockedGetAuthToken.mockReturnValue(null);
 
     render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: /^log in$/i }));
 
     fireEvent.click(screen.getByText('fake go to signup'));
     expect(screen.getByText('signup page')).toBeInTheDocument();
@@ -93,6 +125,7 @@ describe('App', () => {
     mockedGetAuthToken.mockReturnValue(null);
 
     render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: /^log in$/i }));
 
     fireEvent.click(screen.getByText('fake go to forgot password'));
     expect(screen.getByText('forgot password page')).toBeInTheDocument();
@@ -141,11 +174,11 @@ describe('App', () => {
     render(<App />);
     fireEvent.click(screen.getByText('fake back from shared property'));
 
-    expect(screen.getByText('login page')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /^log in$/i })).toBeInTheDocument();
     expect(window.location.search).toBe('');
   });
 
-  it('logs out: revokes the session, clears the local token, and returns to login', async () => {
+  it('logs out: revokes the session, clears the local token, and returns to the landing page', async () => {
     mockedGetAuthToken.mockReturnValue('a-real-token');
     mockedLogout.mockResolvedValueOnce(undefined);
 
@@ -154,28 +187,30 @@ describe('App', () => {
     fireEvent.click(screen.getByRole('button', { name: /log out/i }));
 
     expect(mockedLogout).toHaveBeenCalled();
-    await screen.findByText('login page');
+    await screen.findByRole('button', { name: /^log in$/i });
     expect(mockedSetAuthToken).toHaveBeenCalledWith(null);
   });
 
-  it('returns to the login view (not a previously-visited signup/forgot-password view) after logout', async () => {
+  it('returns to the landing page (not a previously-visited signup/forgot-password popup) after logout', async () => {
     // Regression: authView previously wasn't reset on logout, so a user who visited
     // Sign up before logging in would land back on the Signup form after logging out.
     mockedGetAuthToken.mockReturnValue(null);
     mockedLogout.mockResolvedValueOnce(undefined);
 
     render(<App />);
-    fireEvent.click(screen.getByText('fake go to signup'));
+    fireEvent.click(screen.getByRole('button', { name: /^sign up$/i }));
     expect(screen.getByText('signup page')).toBeInTheDocument();
 
     fireEvent.click(screen.getByText('fake signup success'));
     expect(screen.getByText('feed page')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /log out/i }));
-    await screen.findByText('login page');
+    await screen.findByRole('button', { name: /^log in$/i });
+    expect(screen.queryByText('signup page')).not.toBeInTheDocument();
+    expect(screen.queryByText('login page')).not.toBeInTheDocument();
   });
 
-  it('still returns to login if the logout network call fails', async () => {
+  it('still returns to the landing page if the logout network call fails', async () => {
     mockedGetAuthToken.mockReturnValue('a-real-token');
     mockedLogout.mockRejectedValueOnce(new Error('network drop'));
 
@@ -183,7 +218,7 @@ describe('App', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /log out/i }));
 
-    await screen.findByText('login page');
+    await screen.findByRole('button', { name: /^log in$/i });
     expect(mockedSetAuthToken).toHaveBeenCalledWith(null);
   });
 });

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { AppHeader } from './components/AppHeader';
+import { Modal } from './components/Modal';
 import { BuyerProfilePage } from './pages/BuyerProfilePage';
 import { ForgotPasswordPage } from './pages/ForgotPasswordPage';
+import { LandingPage } from './pages/LandingPage';
 import { LoginPage } from './pages/LoginPage';
 import { NotificationPreferencesPage } from './pages/NotificationPreferencesPage';
 import { PropertyDetailPage } from './pages/PropertyDetailPage';
@@ -12,7 +14,7 @@ import { SignupPage } from './pages/SignupPage';
 import { logout } from './services/authService';
 import { getAuthToken, setAuthToken } from './services/authTokenStore';
 
-type AuthView = 'login' | 'signup' | 'forgot-password';
+type AuthView = 'none' | 'login' | 'signup' | 'forgot-password';
 type LoggedInView = 'feed' | 'saved-homes' | 'profile' | 'notification-preferences';
 
 function getResetTokenFromUrl(): string | null {
@@ -33,7 +35,7 @@ function clearShareLinkFromUrl(): void {
 
 function App(): JSX.Element {
   const [isLoggedIn, setIsLoggedIn] = useState(() => getAuthToken() !== null);
-  const [authView, setAuthView] = useState<AuthView>('login');
+  const [authView, setAuthView] = useState<AuthView>('none');
   const [loggedInView, setLoggedInView] = useState<LoggedInView>('feed');
   const [resetToken, setResetToken] = useState<string | null>(getResetTokenFromUrl);
   const [sharedPropertyId, setSharedPropertyId] = useState<string | null>(getSharedPropertyIdFromUrl);
@@ -51,7 +53,7 @@ function App(): JSX.Element {
     }
     setAuthToken(null);
     setIsLoggedIn(false);
-    setAuthView('login');
+    setAuthView('none');
   }
 
   // A password-reset link takes priority over whatever else is on screen, since
@@ -84,25 +86,34 @@ function App(): JSX.Element {
   }
 
   if (!isLoggedIn) {
-    if (authView === 'signup') {
-      return (
-        <SignupPage
-          onSignupSuccess={() => setIsLoggedIn(true)}
-          onBackToLogin={() => setAuthView('login')}
-        />
-      );
-    }
-
-    if (authView === 'forgot-password') {
-      return <ForgotPasswordPage onBackToLogin={() => setAuthView('login')} />;
-    }
-
     return (
-      <LoginPage
-        onLoginSuccess={() => setIsLoggedIn(true)}
-        onSignupClick={() => setAuthView('signup')}
-        onForgotPasswordClick={() => setAuthView('forgot-password')}
-      />
+      <>
+        <LandingPage onLoginClick={() => setAuthView('login')} onSignupClick={() => setAuthView('signup')} />
+        {authView !== 'none' && (
+          <Modal onClose={() => setAuthView('none')}>
+            {authView === 'signup' && (
+              <SignupPage
+                onSignupSuccess={() => {
+                  setIsLoggedIn(true);
+                  setAuthView('none');
+                }}
+                onBackToLogin={() => setAuthView('login')}
+              />
+            )}
+            {authView === 'forgot-password' && <ForgotPasswordPage onBackToLogin={() => setAuthView('login')} />}
+            {authView === 'login' && (
+              <LoginPage
+                onLoginSuccess={() => {
+                  setIsLoggedIn(true);
+                  setAuthView('none');
+                }}
+                onSignupClick={() => setAuthView('signup')}
+                onForgotPasswordClick={() => setAuthView('forgot-password')}
+              />
+            )}
+          </Modal>
+        )}
+      </>
     );
   }
 
