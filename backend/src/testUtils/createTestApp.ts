@@ -31,6 +31,7 @@ export async function createTestApp(
   jwtSecret = 'test-secret',
   mlsClient: MlsClient = new StubMlsClient(),
   aiClient: AiClient = new StubAiClient(),
+  nodeEnv = 'test',
 ): Promise<TestApp> {
   const sequelize = new Sequelize({ dialect: 'sqlite', storage: ':memory:', logging: false });
   const UserModel = initUserModel(sequelize);
@@ -58,7 +59,7 @@ export async function createTestApp(
     mlsClient,
     aiClient,
     jwtSecret,
-    nodeEnv: 'test',
+    nodeEnv,
     appBaseUrl: 'http://localhost:3000',
   });
 
