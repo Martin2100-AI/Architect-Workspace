@@ -123,10 +123,13 @@
     realBtn.addEventListener("click", function () { setMode("real"); });
     var toggle = el("div", { class: "cc-mode-toggle" }, [sampleBtn, realBtn]);
 
+    // Project name/descriptor come from plan.project at runtime, never typed in here.
+    var project = (data.plan && data.plan.project) || {};
+    document.title = (project.name ? project.name + " — " : "") + "Command Center";
     var top = el("div", { class: "cc-header__top" }, [
       el("div", {}, [
-        el("p", { class: "cc-header__title", text: "Keysy — Command Center" }),
-        el("p", { class: "cc-header__subtitle", text: "Home Buying App — build & delivery tracking" })
+        el("p", { class: "cc-header__title", text: (project.name ? project.name + " — " : "") + "Command Center" }),
+        project.descriptor ? el("p", { class: "cc-header__subtitle", text: truncate(project.descriptor, 110) }) : null
       ]),
       el("div", {}, [stampEl, el("div", { style: "height:8px" }), toggle])
     ]);

@@ -1,11 +1,39 @@
 (function (global) {
   "use strict";
   var UI = global.CCUI;
+  var RELEASE_PREFIX = "release:";
+
+  // Release detail: dates, demo-target flag, and its stories (each drilling
+  // on to the story detail) — all from plan.releases joined to progress.
+  function renderRelease(main, releases, stories, key) {
+    var r = releases.filter(function (x) { return x.key === key; })[0];
+    main.appendChild(UI.breadcrumb("project-management", "Project Management", r ? (r.name || r.key) : key));
+    if (!r) { main.appendChild(UI.emptyState("This release was not found in the current plan data.")); return; }
+    main.appendChild(UI.el("h1", { class: "cc-detail-title", text: r.key + (r.name ? " — " + r.name : "") }));
+    main.appendChild(UI.el("div", { class: "cc-card", style: "margin-bottom:14px" }, [
+      UI.el("p", { class: "cc-card__label", text: "Runs " + (r.starts_on || "not set") + " → " + (r.ends_on || "not set") }),
+      r.is_demo_target ? UI.pill("demo target") : null
+    ]));
+    var ids = r.story_ids || [];
+    if (!ids.length) { main.appendChild(UI.emptyState("No stories are assigned to this release yet.")); return; }
+    main.appendChild(UI.sectionTitle("Stories in this release"));
+    ids.forEach(function (id) {
+      var s = stories.filter(function (x) { return x.id === id; })[0];
+      main.appendChild(UI.cardLink("project-management", id, id, s && s.title ? s.title : "not in the current plan",
+        UI.el("p", {}, [UI.statusDot(UI.verificationLevel(s && s.verification)), document.createTextNode(UI.verificationLabel(s && s.verification))]),
+        { text: true }));
+    });
+  }
 
   function render(main, data, subId) {
     var plan = data.plan, progress = data.progress;
     var releases = (plan && plan.releases) || [];
     var stories = plan ? global.CCData.joinStories(plan, progress) : [];
+
+    if (subId && subId.indexOf(RELEASE_PREFIX) === 0) {
+      renderRelease(main, releases, stories, subId.slice(RELEASE_PREFIX.length));
+      return;
+    }
 
     if (subId) {
       var story = stories.filter(function (s) { return s.id === subId; })[0];
@@ -49,7 +77,7 @@
           style: "left:" + startPct + "%; width:" + widthPct + "%;",
           text: r.starts_on + " → " + r.ends_on
         });
-        gantt.appendChild(UI.el("div", { class: "cc-gantt-row" }, [
+        gantt.appendChild(UI.el("a", { class: "cc-gantt-row", href: "#/project-management/" + encodeURIComponent(RELEASE_PREFIX + r.key) }, [
           UI.el("div", { class: "cc-gantt-row__label" }, [document.createTextNode((r.name || r.key) + " "), r.is_demo_target ? UI.pill("demo target") : null]),
           UI.el("div", { class: "cc-gantt-row__track" }, [bar])
         ]));

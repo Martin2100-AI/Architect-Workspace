@@ -546,3 +546,16 @@ Tracks completed implementation changes. Format and hard-gate rules defined in r
   - What changed: Added `docs/STORY_EVIDENCE.md` mapping every acceptance criterion of STORY-002 to STORY-012, 014 and 015 to named passing tests or live checks, ready to paste into the portal.
   - Verification: Every cited test name taken from this session's full-suite JSON run (backend 155/155, frontend 174/174).
   - Notes: STORY-004 flagged honestly: the match score shows only when a property is opened from a search, and is based on the search rather than the saved Buyer Profile. STORY-013 does not exist in plan, progress or git history.
+
+- [x] STORY-000: bring the Command Center up to the current brief (repair, not rebuild)
+  - Date: 2026-10-01
+  - Session: CC-20261001-x3pn
+  - What changed: Took stock first (all 9 tabs present and reachable; `profile.json` and `docs/stories/STORY-000.md` absent; 2 of the brief's 5 Done-means lines missing from `progress.json`), then made the smallest repairs: header title/subtitle and `<title>` now read `plan.project` at runtime instead of hard-coding "Keysy"/"Home Buying App" (`assets/cc-ui.js`, `index.html`); Gantt release rows in `assets/cc-tab-project-management.js` now drill down to a release detail view (dates, demo-target flag, its stories with status, each linking on) with matching link styling in `assets/cc.css`; Data Model banner no longer claims "no tables have been created" (`assets/cc-tab-data-model.js`). Reconciled `.colaberry/progress.json` STORY-000: added the two missing Done-means lines word for word, then ticked them because both now hold; older-wording lines left untouched.
+  - Verification: Throwaway Playwright run (scratchpad, not committed) against a local static server: all 9 tabs render with zero page errors in Real and Sample mode; 38 (Real) + 43 (Sample) drill-downs each reach a detail view, including the new release view; sample banner on every Sample tab; "Data as of August 19, 2026 (43 days ago) — sync from the portal to refresh" shown as a warning on every tab; litmus test (plan.json served with STORY-003 removed and project renamed) removes the story from the page and renames the header.
+  - Notes: `plan.json` is still the thin hand-authored file (no schedule/releases/roles/measures/systems/agents, 2 of 18 requirements, placeholder guardrail ids) — not hand-filled from the brief since the platform owns it; user to try "Sync from GitHub". Push webhook (brief Step 1) not set up: `gh` is not installed. Data Model tab remains authored content, per the brief's own "derive from requirements" instruction.
+
+- [x] Move story evidence out of the platform-owned docs/ folder
+  - Date: 2026-10-01
+  - Session: CC-20261001-x3pn
+  - What changed: `docs/STORY_EVIDENCE.md` → `evidence/STORY_EVIDENCE.md`, since the Colaberry brief says the platform rewrites `docs/` on every sync.
+  - Verification: `git mv` recorded as a rename; no other file references the old path except this session's earlier PROGRESS.md entry.

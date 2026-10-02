@@ -287,7 +287,10 @@ a { color: var(--cc-accent); }
   gap: 12px;
   margin-bottom: 8px;
   min-width: 640px;
+  color: inherit;
+  text-decoration: none;
 }
+a.cc-gantt-row:hover .cc-gantt-row__bar { outline: 2px solid var(--cc-accent); }
 
 .cc-gantt-row__label {
   width: 220px;

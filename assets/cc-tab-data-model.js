@@ -3,8 +3,8 @@
   var UI = global.CCUI;
 
   // Proposed data model — authored by working through the requirements,
-  // not fetched from a plan file. This is a starting point for review,
-  // not a schema that has been implemented; no tables exist yet.
+  // not fetched from a plan file. This is a starting point for review, not
+  // the implemented schema — the real tables live in backend/src/models.
   var ENTITIES = [
     {
       name: "User", from: "REQ-001, REQ-009, REQ-014",
@@ -66,7 +66,7 @@
   function render(main, data, subId) {
     main.appendChild(UI.el("div", { class: "cc-pause-banner" }, [
       UI.el("strong", { text: "Starting point, not the answer." }),
-      UI.el("span", { text: "This model is derived from the requirements for review. No tables have been created from it yet." })
+      UI.el("span", { text: "This model is derived from the requirements for review. It is not generated from the running system: some of these entities now exist as real tables in the backend (backend/src/models), named and shaped as built — check there for the current schema." })
     ]));
     if (subId) {
       var e = ENTITIES.filter(function (x) { return x.name === subId; })[0];
