@@ -77,6 +77,7 @@ export function createAuthRouter(deps: AuthRouterDependencies): Router {
     try {
       const user = await login(userModel, parseResult.data.email, parseResult.data.password);
       const token = createSessionToken(user.id, jwtSecret);
+      await recordAuditEvent(auditLogModel, user.id, 'user_logged_in');
       res.status(200).json({ token, user: { id: user.id, email: user.email } });
     } catch (err) {
       if (err instanceof InvalidCredentialsError) {
@@ -90,6 +91,7 @@ export function createAuthRouter(deps: AuthRouterDependencies): Router {
   router.post('/logout', requireAuth(blocklistModel, jwtSecret), async (req: AuthenticatedRequest, res, next) => {
     try {
       await revokeToken(blocklistModel, req.tokenJti as string, req.tokenExpiresAt as Date);
+      await recordAuditEvent(auditLogModel, req.userId as number, 'user_logged_out');
       res.status(200).json({ message: 'Logged out.' });
     } catch (err) {
       next(err);
@@ -119,7 +121,8 @@ export function createAuthRouter(deps: AuthRouterDependencies): Router {
     }
 
     try {
-      await resetPassword(userModel, resetTokenModel, parseResult.data.token, parseResult.data.newPassword);
+      const userId = await resetPassword(userModel, resetTokenModel, parseResult.data.token, parseResult.data.newPassword);
+      await recordAuditEvent(auditLogModel, userId, 'password_reset_completed');
       res.status(200).json({ message: 'Password reset successful.' });
     } catch (err) {
       if (err instanceof InvalidOrExpiredResetTokenError) {

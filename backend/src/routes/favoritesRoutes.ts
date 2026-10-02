@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import { AuthenticatedRequest, requireAuth } from '../middleware/requireAuth';
+import { AuditLog } from '../models/AuditLog';
 import { FAVORITE_CATEGORIES, Favorite } from '../models/Favorite';
 import { TokenBlocklist } from '../models/TokenBlocklist';
+import { recordAuditEvent } from '../services/auditLogService';
 import { listFavorites, removeFavorite, saveFavorite } from '../services/favoritesService';
 
 const saveBodySchema = z.object({
@@ -15,12 +17,13 @@ const removeBodySchema = z.object({
 
 export interface FavoritesRouterDependencies {
   favoriteModel: typeof Favorite;
+  auditLogModel: typeof AuditLog;
   blocklistModel: typeof TokenBlocklist;
   jwtSecret: string;
 }
 
 export function createFavoritesRouter(deps: FavoritesRouterDependencies): Router {
-  const { favoriteModel, blocklistModel, jwtSecret } = deps;
+  const { favoriteModel, auditLogModel, blocklistModel, jwtSecret } = deps;
   const router = Router();
   const auth = requireAuth(blocklistModel, jwtSecret);
 
@@ -33,6 +36,7 @@ export function createFavoritesRouter(deps: FavoritesRouterDependencies): Router
 
     try {
       await saveFavorite(favoriteModel, req.userId as number, req.params.propertyId, parseResult.data.category);
+      await recordAuditEvent(auditLogModel, req.userId as number, 'favorite_saved');
       res.status(200).json({ propertyId: req.params.propertyId, category: parseResult.data.category ?? 'favorites' });
     } catch (err) {
       next(err);
@@ -48,6 +52,7 @@ export function createFavoritesRouter(deps: FavoritesRouterDependencies): Router
 
     try {
       await removeFavorite(favoriteModel, req.userId as number, req.params.propertyId, parseResult.data.category);
+      await recordAuditEvent(auditLogModel, req.userId as number, 'favorite_removed');
       res.status(200).json({ propertyId: req.params.propertyId, category: parseResult.data.category });
     } catch (err) {
       next(err);

@@ -63,7 +63,7 @@ export async function resetPassword(
   resetTokenModel: typeof PasswordResetToken,
   token: string,
   newPassword: string,
-): Promise<void> {
+): Promise<number> {
   const resetRecord = await resetTokenModel.findOne({
     where: { tokenHash: hashResetToken(token), used: false },
   });
@@ -82,4 +82,5 @@ export async function resetPassword(
 
   resetRecord.used = true;
   await resetRecord.save();
+  return user.id;
 }

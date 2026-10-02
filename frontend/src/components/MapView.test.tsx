@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, render, screen, waitFor } from '@testing-library/react';
-import { MapView } from './MapView';
+import { buildPreviewElement, MapView } from './MapView';
 import { Property } from '../types/property';
 
 type Handler = () => void;
@@ -35,7 +35,7 @@ jest.mock('maplibre-gl', () => {
   }
 
   class FakePopup {
-    setHTML = jest.fn().mockReturnThis();
+    setDOMContent = jest.fn().mockReturnThis();
   }
 
   return {
@@ -124,5 +124,27 @@ describe('MapView', () => {
     fire('moveend');
 
     await waitFor(() => expect(mockMarkerInstances).toHaveLength(2));
+  });
+
+  it('attaches a preview to each marker showing the price, address, and size', async () => {
+    render(<MapView properties={[makeProperty({ address: '1 Test St, Houston, Texas 77096' })]} />);
+    fire('load');
+
+    await waitFor(() => expect(mockMarkerInstances).toHaveLength(1));
+    const popup = mockMarkerInstances[0].setPopup.mock.calls[0][0];
+    const preview: HTMLElement = popup.setDOMContent.mock.calls[0][0];
+
+    expect(preview).toHaveTextContent('$400,000');
+    expect(preview).toHaveTextContent('1 Test St, Houston, Texas 77096');
+    expect(preview).toHaveTextContent('3 bd | 2 ba | 1,500 sqft');
+  });
+});
+
+describe('buildPreviewElement', () => {
+  it('renders markup in an MLS address as plain text, not HTML', () => {
+    const preview = buildPreviewElement(makeProperty({ address: '<img src=x onerror="alert(1)">' }));
+
+    expect(preview.querySelector('img')).toBeNull();
+    expect(preview).toHaveTextContent('<img src=x onerror="alert(1)">');
   });
 });

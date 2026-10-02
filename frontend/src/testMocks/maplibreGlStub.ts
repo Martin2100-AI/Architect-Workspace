@@ -32,7 +32,7 @@ class StubMarker {
 }
 
 class StubPopup {
-  setHTML(): this {
+  setDOMContent(): this {
     return this;
   }
 }

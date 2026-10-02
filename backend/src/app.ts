@@ -76,6 +76,7 @@ export function createApp(deps: AppDependencies): Express {
     '/favorites',
     createFavoritesRouter({
       favoriteModel: deps.favoriteModel,
+      auditLogModel: deps.auditLogModel,
       blocklistModel: deps.blocklistModel,
       jwtSecret: deps.jwtSecret,
     }),
@@ -105,6 +106,7 @@ export function createApp(deps: AppDependencies): Express {
     '/notification-preferences',
     createNotificationPreferenceRouter({
       notificationPreferenceModel: deps.notificationPreferenceModel,
+      auditLogModel: deps.auditLogModel,
       blocklistModel: deps.blocklistModel,
       jwtSecret: deps.jwtSecret,
     }),

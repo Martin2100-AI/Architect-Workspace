@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import { AuthenticatedRequest, requireAuth } from '../middleware/requireAuth';
+import { AuditLog } from '../models/AuditLog';
 import { NotificationPreference } from '../models/NotificationPreference';
 import { TokenBlocklist } from '../models/TokenBlocklist';
+import { recordAuditEvent } from '../services/auditLogService';
 import {
   getOrCreateNotificationPreferences,
   upsertNotificationPreferences,
@@ -20,12 +22,13 @@ const notificationPreferenceBodySchema = z.object({
 
 export interface NotificationPreferenceRouterDependencies {
   notificationPreferenceModel: typeof NotificationPreference;
+  auditLogModel: typeof AuditLog;
   blocklistModel: typeof TokenBlocklist;
   jwtSecret: string;
 }
 
 export function createNotificationPreferenceRouter(deps: NotificationPreferenceRouterDependencies): Router {
-  const { notificationPreferenceModel, blocklistModel, jwtSecret } = deps;
+  const { notificationPreferenceModel, auditLogModel, blocklistModel, jwtSecret } = deps;
   const router = Router();
   const auth = requireAuth(blocklistModel, jwtSecret);
 
@@ -49,6 +52,7 @@ export function createNotificationPreferenceRouter(deps: NotificationPreferenceR
     try {
       const userId = req.userId as number;
       const preferences = await upsertNotificationPreferences(notificationPreferenceModel, userId, parseResult.data);
+      await recordAuditEvent(auditLogModel, userId, 'notification_preferences_updated');
       res.status(200).json({ preferences });
     } catch (err) {
       next(err);

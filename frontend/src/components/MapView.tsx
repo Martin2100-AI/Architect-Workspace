@@ -21,15 +21,20 @@ function toMapBounds(bounds: LngLatBounds): MapBounds {
   };
 }
 
-function formatPreviewHtml(property: Property): string {
+/** Built from DOM nodes with textContent, never an HTML string: the address is
+ * untrusted MLS data, so it must not be able to inject markup into the popup. */
+export function buildPreviewElement(property: Property): HTMLElement {
   const price = property.listingPrice.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
-  return `
-    <div class="map-preview">
-      <strong>${price}</strong>
-      <div>${property.address}</div>
-      <div>${property.bedrooms} bd | ${property.bathrooms} ba | ${property.squareFootage.toLocaleString()} sqft</div>
-    </div>
-  `;
+  const root = document.createElement('div');
+  root.className = 'map-preview';
+  const priceEl = document.createElement('strong');
+  priceEl.textContent = price;
+  const addressEl = document.createElement('div');
+  addressEl.textContent = property.address;
+  const statsEl = document.createElement('div');
+  statsEl.textContent = `${property.bedrooms} bd | ${property.bathrooms} ba | ${property.squareFootage.toLocaleString()} sqft`;
+  root.append(priceEl, addressEl, statsEl);
+  return root;
 }
 
 /** REQ-008/REQ-016 (STORY-007): interactive map with property markers, previews, and
@@ -91,7 +96,7 @@ export function MapView({ properties }: MapViewProps): JSX.Element {
     markersRef.current = visibleProperties
       .filter((property) => property.latitude != null && property.longitude != null)
       .map((property) => {
-        const popup = new Popup({ offset: 25 }).setHTML(formatPreviewHtml(property));
+        const popup = new Popup({ offset: 25 }).setDOMContent(buildPreviewElement(property));
         return new Marker()
           .setLngLat([property.longitude as number, property.latitude as number])
           .setPopup(popup)

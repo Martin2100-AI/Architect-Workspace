@@ -526,3 +526,23 @@ Tracks completed implementation changes. Format and hard-gate rules defined in r
   - What changed: No code change — recorded live verification that STORY-002's last outstanding criterion ("Property data is fetched from the MLS and displayed accurately") is met by the existing `SimplyRetsMlsClient` wired in `backend/src/server.ts` (the portal's 2026-08-19 "submitted 2/3" verdict predates the switch off `StubMlsClient`).
   - Verification: `mlsClient.test.ts` + `propertyRoutes.test.ts` 16/16 passing. Throwaway live script (deleted after run, not committed) pulled 50 listings from api.simplyrets.com and compared them with `getPropertyFeed()` output: 7 rentals excluded by design, 43 listings × 7 fields (price, beds, baths, sqft, street, city, photo) = 301 comparisons, 0 mismatches.
   - Notes: Portal still needs to re-verify STORY-002 for the Command Center to show it as verified; listings are SimplyRETS's public demo dataset (disclosed in mlsClient.ts), not live real-world inventory.
+
+- [x] STORY-007: map marker preview no longer injects MLS address text as HTML
+  - Date: 2026-10-01
+  - Session: CC-20261001-x3pn
+  - What changed: `frontend/src/components/MapView.tsx` built each marker popup with `Popup.setHTML()` from an interpolated string containing `property.address` (untrusted MLS data). Replaced with exported `buildPreviewElement()` (DOM nodes + `textContent`) and `Popup.setDOMContent()`. Updated the jest maplibre stub (`frontend/src/testMocks/maplibreGlStub.ts`) and `MapView.test.tsx` mock to match; added two tests: marker carries a price/address/size preview (STORY-007 criterion 2 had no direct test before), and a `<img onerror>` address renders as plain text.
+  - Verification: Frontend `tsc --noEmit` clean; frontend 20 suites / 174 tests passing (was 172; +2).
+
+- [x] STORY-015: audit trail now records every user action
+  - Date: 2026-10-01
+  - Session: CC-20261001-x3pn
+  - What changed: Only registration, password-reset request, buyer-profile creation, tour request and email share were audited, which left STORY-015's "all user actions" criterion false. Added `recordAuditEvent` for `user_logged_in` and `user_logged_out` and `password_reset_completed` (`backend/src/routes/authRoutes.ts`; `resetPassword` in `passwordResetService.ts` now returns the user id), `favorite_saved` and `favorite_removed` (`favoritesRoutes.ts`), `notification_preferences_updated` (`notificationPreferenceRoutes.ts`); both routers take `auditLogModel` from `app.ts`. New `backend/src/auditTrail.test.ts` drives one user through every action and asserts the full ordered trail with timestamps, and that failed logins and invalid reset tokens are not logged.
+  - Verification: Backend `tsc --noEmit` clean; backend 27 suites / 155 tests passing (was 152; +3).
+  - Notes: `recordAuditEvent` never throws, so an audit-write failure cannot break login or logout. Read-only actions (viewing feed, preferences, favorites) are intentionally not audited.
+
+- [x] Per-story verification evidence for portal re-submission (STORY-002 to STORY-015)
+  - Date: 2026-10-01
+  - Session: CC-20261001-x3pn
+  - What changed: Added `docs/STORY_EVIDENCE.md` mapping every acceptance criterion of STORY-002 to STORY-012, 014 and 015 to named passing tests or live checks, ready to paste into the portal.
+  - Verification: Every cited test name taken from this session's full-suite JSON run (backend 155/155, frontend 174/174).
+  - Notes: STORY-004 flagged honestly: the match score shows only when a property is opened from a search, and is based on the search rather than the saved Buyer Profile. STORY-013 does not exist in plan, progress or git history.
