@@ -467,6 +467,27 @@ Tracks completed implementation changes. Format and hard-gate rules defined in r
   - Verification: CSS-only change; no test coverage exists or is warranted for a size value.
   - Notes: Not tied to any numbered STORY or REQ.
 
+- [x] Fix the popup close (×) button's position — was floating outside the card, moved inside it
+  - Date: 2026-09-30
+  - Session: CC-20260921-q8mz
+  - What changed: User pasted a screenshot showing the login popup's × sitting inside the white card's top-right corner; the actual rendering had it positioned with a negative offset (`top/right: calc(-1 * var(--space-3))`), placing it outside the card's edge, floating over the dimmed backdrop — also at risk of being clipped by `.modal-dialog`'s `overflow-y: auto`/`max-height: 90vh` since an absolutely-positioned child with a negative offset can fall outside its own scroll box. Moved it to `top/right: var(--space-3)` (inside the card's own padding) and dropped the circular border/background/shadow chrome for a plain glyph, matching the reference. `Modal.tsx` is the one shared component behind all three popups (login/signup/forgot-password), so this single CSS fix applies everywhere that button exists — no per-page changes needed.
+  - Verification: CSS-only change. `App.test.tsx`'s close-button test (queries by `aria-label`, unaffected by the visual reposition) still passes; full 14/14 `App.test.tsx` suite re-run clean.
+  - Notes: Not tied to any numbered STORY or REQ.
+
+- [x] Increase the popup close (×) button size
+  - Date: 2026-09-30
+  - Session: CC-20260921-q8mz
+  - What changed: `.modal-dialog__close` bumped from 1.75rem/`--font-size-lg` (28px box, 20px glyph) to 2.25rem/`--font-size-xl` (36px box, 28px glyph), per direct request right after the position fix.
+  - Verification: CSS-only change; no test coverage exists or is warranted for a size value.
+  - Notes: Not tied to any numbered STORY or REQ.
+
+- [x] Set the popup close (×) button to exactly 44px
+  - Date: 2026-09-30
+  - Session: CC-20260921-q8mz
+  - What changed: `.modal-dialog__close` box and glyph both set to a literal `44px` (previously 2.25rem/`--font-size-xl`), per direct follow-up request with a specific number.
+  - Verification: CSS-only change; no test coverage exists or is warranted for a size value.
+  - Notes: Not tied to any numbered STORY or REQ.
+
 ## Release r4 · Security and Integration (closeout)
 
 - [x] STORY-012: closeout to 100% — production-wiring transport-security tests, real TLS handshake proof, live check of all five REQ-013 integrations, criteria flipped
@@ -475,6 +496,22 @@ Tracks completed implementation changes. Format and hard-gate rules defined in r
   - What changed: Added `backend/src/app.transportSecurity.test.ts` (4 tests driving the real `createApp` with `nodeEnv: 'production'`: plain-HTTP login rejected 403 `HttpsRequired` before the password reaches the auth handler; no-forwarded-proto rejected; HTTPS request served with HSTS + nosniff; non-production does not enforce). Added an optional `nodeEnv` param (default `'test'`) to `createTestApp` so the production wiring is testable — no existing caller changes. Flipped STORY-012's 3 criteria to `passed: true` in `.colaberry/progress.json`. REQ-013 scope decided by the user (AskUserQuestion, 2026-09-30): accept existing, non-paid integrations — SimplyRETS as MLS + Real Estate API, Resend (free tier, `onboarding@resend.dev` sandbox sender) as Email, the `sms:` OS hand-off plus Resend as Messaging, MapTiler (free tier) in place of Google Maps (approved earlier). No paid service added.
   - Verification: Backend `tsc --noEmit` clean; backend jest 26 suites / 152 tests passing (was 148; +4 new). Frontend 19 suites / 142 tests passing. Real TLS proof via throwaway script (deleted after run; self-signed cert kept only in session scratchpad): production-wired app served over `https.createServer` negotiated TLSv1.3 / TLS_AES_256_GCM_SHA384, returned 200 with `Strict-Transport-Security: max-age=31536000; includeSubDomains`; plain HTTP to the TLS port was refused (ECONNRESET). Live integration checks (no keys printed): SimplyRETS 200; MapTiler style.json 200; Resend send to Resend's official sink `delivered@resend.dev` returned 200 with a message id (Idempotency-Key set, so a retry cannot double-send).
   - Notes: Corrects the 2026-09-21 entry's claim that `app.test.ts` already had a production-wiring test — it did not; this entry adds one. Google Maps, a dedicated Real Estate API, and an SMS provider remain disclosed, user-approved substitutions rather than literal integrations, because each would require a paid account. The TLS proof is against a local TLS listener, not a deployed staging host (none exists); in production TLS terminates at the proxy, which the X-Forwarded-Proto tests cover.
+
+## Ad Hoc UI Improvements (cont.)
+
+- [x] Quick property lookup — one search box that filters by zip code, square feet, estimated monthly payment, bedrooms, bathrooms, or price
+  - Date: 2026-09-30
+  - Session: CC-20260930-k4v7
+  - What changed: User reported the Search button "still not working" and asked for a single lookup over zip / sq ft / est. monthly payment / bedrooms / bathrooms / price. Added `frontend/src/utils/propertyLookup.ts` (pure, deterministic filter over the already-loaded feed: zip = exact 5-digit match from the end of the address, ZIP+4 tolerated; bedrooms/bathrooms/sq ft = single value is a minimum; price/monthly = single value is a maximum budget; any field accepts a `low-high` range; accepts `$450,000` / `450k` / `1.2m`), `frontend/src/components/PropertyLookup.tsx` + `.css` ("Search by" picker + value box + Search/Clear, inline validation message, 44px targets, stacks on mobile). `PropertyFeedPage.tsx` renders it above the Grid/Map toggle so it filters both views, with a "N of M homes match …" heading and an explicit no-match message. The existing STORY-003 AI search is kept, not deleted — moved into a collapsed "Or describe the home in your own words (AI search)" section, its button relabeled "Ask AI" so "Search" unambiguously means the new lookup (2 existing test selectors updated to match). Separately fixed (untracked throwaway, not committed): the local demo server `backend/src/__verifyServer.ts` hardcoded `StubAiClient`, which is why AI search always returned 503 `AiSearchNotConfigured` locally; it now picks the client from env like `server.ts`.
+  - Verification: Frontend `tsc --noEmit` clean; frontend 20 suites / 165 tests passing (was 142): 19 new `propertyLookup.test.ts` unit tests (parsing, every field, ranges, no-match, malformed input, idempotent rerun) + 4 new `PropertyFeedPage` lookup tests (zip filter without calling AI search, bedrooms + price, malformed zip keeps all homes + shows alert, no-match message + Clear restores all). Real-browser check (cached Playwright/Chromium, throwaway script in session scratchpad) against the running app with live SimplyRETS data: zip 77433 → 6/43, zip 77018 → 4/43 (both match the API's own zip counts), price 500k → 2, monthly 3000 → 2, bedrooms 4 → 25, bathrooms 3 → 40, sq ft 2000-4000 → 20, zip "12" → validation alert with all 43 still shown, Clear → all homes; desktop and 390px mobile screenshots reviewed.
+  - Notes: Assumption (logged, reversible in one table in `propertyLookup.ts`): single-value semantics are min for rooms/size and max for price/payment, matching how buyers phrase those searches. Lookup is client-side because the feed endpoint already returns every listing (43); if the feed ever paginates, this should move server-side. Not committed yet.
+
+- [x] Quick property lookup — add City as a search option
+  - Date: 2026-09-30
+  - Session: CC-20260930-k4v7
+  - What changed: Added `city` to `LookupField` / "Search by" picker in `frontend/src/utils/propertyLookup.ts`. City is read as the second-to-last comma part of the address ("street, City, State ZIP" — true for all 43 live listings). Matching is case-insensitive from the start of any word in the city name ("katy" → Katy, "woodlands" / "The Woodlands" → The Woodlands, "hou" → Houston; "uston" does not match). Implemented with plain string compares, not a regex built from user input, so characters like `.*` or `(` are treated as literal text. Input with no letters is rejected with "Enter a city name, e.g. Houston."
+  - Verification: Frontend `tsc --noEmit` clean; frontend 20 suites / 172 tests passing (was 165): +2 `cityOf` tests, +4 city-lookup tests (case/prefix/multi-word, no mid-word match, regex characters literal, no-letter rejection), +1 `PropertyFeedPage` city filter test. Real-browser check against live SimplyRETS data: Houston → 8, oak ridge → 12, woodlands → 4, katy → 7, Dallas → 0 — each equals the count computed directly from the API's addresses; screenshot reviewed.
+  - Notes: Not committed yet.
 
 - [x] Command Center: publish .colaberry/ data on GitHub Pages
   - Date: 2026-10-01

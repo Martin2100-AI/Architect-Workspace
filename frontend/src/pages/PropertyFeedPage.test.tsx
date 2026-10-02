@@ -100,7 +100,7 @@ describe('PropertyFeedPage', () => {
     render(<PropertyFeedPage />);
 
     fireEvent.change(await screen.findByLabelText(/describe the home/i), { target: { value: 'homes in Testville' } });
-    fireEvent.click(screen.getByRole('button', { name: /^search$/i }));
+    fireEvent.click(screen.getByRole('button', { name: /ask ai/i }));
 
     const searchResults = await screen.findByTestId('ai-search-results');
     fireEvent.click(within(searchResults).getByRole('button', { name: /view details/i }));
@@ -156,7 +156,7 @@ describe('PropertyFeedPage', () => {
     await screen.findByText('1 Test St');
 
     fireEvent.change(screen.getByLabelText(/describe the home/i), { target: { value: 'homes in Testville' } });
-    fireEvent.click(screen.getByRole('button', { name: /^search$/i }));
+    fireEvent.click(screen.getByRole('button', { name: /ask ai/i }));
     const searchResults = await screen.findByTestId('ai-search-results');
 
     fireEvent.click(within(searchResults).getByRole('checkbox', { name: /compare/i }));
@@ -225,5 +225,84 @@ describe('PropertyFeedPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /grid view/i }));
     expect(await screen.findByText('1 Test St')).toBeInTheDocument();
     expect(screen.queryByTestId('map-container')).not.toBeInTheDocument();
+  });
+
+  describe('quick lookup', () => {
+    const houstonHome = { ...sampleProperty, id: 'h1', address: '1 Main St, Houston, Texas 77018' };
+    const dallasHome = {
+      ...sampleProperty,
+      id: 'd1',
+      address: '2 Oak Ave, Dallas, Texas 75201',
+      bedrooms: 5,
+      listingPrice: 900000,
+    };
+
+    async function renderLoadedFeed() {
+      mockedFetchPropertyFeed.mockResolvedValueOnce([houstonHome, dallasHome]);
+      render(<PropertyFeedPage />);
+      await screen.findByText(houstonHome.address);
+    }
+
+    function lookUp(field: string, value: string) {
+      fireEvent.change(screen.getByLabelText(/search by/i), { target: { value: field } });
+      fireEvent.change(screen.getByLabelText(/^value$/i), { target: { value } });
+      fireEvent.click(screen.getByRole('button', { name: /^search$/i }));
+    }
+
+    it('filters the grid by zip code without calling the AI search', async () => {
+      await renderLoadedFeed();
+
+      lookUp('zip', '77018');
+
+      expect(screen.getByText(houstonHome.address)).toBeInTheDocument();
+      expect(screen.queryByText(dallasHome.address)).not.toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: /1 of 2 homes match zip code 77018/i })).toBeInTheDocument();
+      expect(mockedSearchProperties).not.toHaveBeenCalled();
+    });
+
+    it('filters the grid by city, ignoring case', async () => {
+      await renderLoadedFeed();
+
+      lookUp('city', 'dallas');
+
+      expect(screen.getByText(dallasHome.address)).toBeInTheDocument();
+      expect(screen.queryByText(houstonHome.address)).not.toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: /1 of 2 homes match city "dallas"/i })).toBeInTheDocument();
+    });
+
+    it('filters by bedrooms and by price', async () => {
+      await renderLoadedFeed();
+
+      lookUp('bedrooms', '4');
+      expect(screen.queryByText(houstonHome.address)).not.toBeInTheDocument();
+      expect(screen.getByText(dallasHome.address)).toBeInTheDocument();
+
+      lookUp('price', '500k');
+      expect(screen.getByText(houstonHome.address)).toBeInTheDocument();
+      expect(screen.queryByText(dallasHome.address)).not.toBeInTheDocument();
+    });
+
+    it('shows a validation message for a malformed zip and keeps every home listed', async () => {
+      await renderLoadedFeed();
+
+      lookUp('zip', '123');
+
+      expect(screen.getByRole('alert')).toHaveTextContent(/5-digit zip code/i);
+      expect(screen.getByText(houstonHome.address)).toBeInTheDocument();
+      expect(screen.getByText(dallasHome.address)).toBeInTheDocument();
+    });
+
+    it('says so when nothing matches, and Clear brings every home back', async () => {
+      await renderLoadedFeed();
+
+      lookUp('zip', '90210');
+      expect(screen.getByText(/no homes match that search/i)).toBeInTheDocument();
+      expect(screen.queryByText(houstonHome.address)).not.toBeInTheDocument();
+
+      fireEvent.click(screen.getByRole('button', { name: /clear/i }));
+      expect(screen.getByRole('heading', { name: /browse all homes/i })).toBeInTheDocument();
+      expect(screen.getByText(houstonHome.address)).toBeInTheDocument();
+      expect(screen.getByText(dallasHome.address)).toBeInTheDocument();
+    });
   });
 });

@@ -41,7 +41,7 @@ function emptyFilters(overrides: Record<string, unknown> = {}) {
 
 async function submitSearch(query: string): Promise<void> {
   fireEvent.change(screen.getByLabelText(/describe the home/i), { target: { value: query } });
-  fireEvent.click(screen.getByRole('button', { name: /search/i }));
+  fireEvent.click(screen.getByRole('button', { name: /ask ai/i }));
 }
 
 function renderAiSearchBox(overrides: Partial<React.ComponentProps<typeof AiSearchBox>> = {}) {

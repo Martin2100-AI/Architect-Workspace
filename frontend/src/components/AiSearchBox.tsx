@@ -75,7 +75,7 @@ export function AiSearchBox({
             onChange={(e) => setQuery(e.target.value)}
           />
           <button type="submit" className="ai-search__submit" disabled={state.status === 'searching' || !query.trim()}>
-            {state.status === 'searching' ? 'Searching…' : 'Search'}
+            {state.status === 'searching' ? 'Searching…' : 'Ask AI'}
           </button>
         </div>
       </form>

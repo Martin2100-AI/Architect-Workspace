@@ -2,6 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { registerCalculateAffordabilityTool } from './tools/calculateAffordability';
 import { registerReadPropertyDocumentTool } from './tools/readPropertyDocument';
+import { registerAssessPropertyFitTool } from './tools/assessPropertyFit';
 import { registerFavoritesResource } from './resources/favorites';
 import { registerDraftPropertyShareMessagePrompt } from './prompts/draftPropertyShareMessage';
 
@@ -11,6 +12,7 @@ const server = new McpServer({ name: 'mcp-server', version: '0.1.0' }, { capabil
 
 registerCalculateAffordabilityTool(server);
 registerReadPropertyDocumentTool(server);
+registerAssessPropertyFitTool(server);
 registerFavoritesResource(server);
 registerDraftPropertyShareMessagePrompt(server);
 

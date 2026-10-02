@@ -3,8 +3,13 @@ import { join } from 'path';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod/v3';
 import { startInvocationLog } from '../mcpLogger';
+import { createProgressReporter } from '../progress';
 import { findPropertyDocumentsDir } from '../data/propertyDocuments';
 import { assertPathWithinDeclaredRoots, RootsAccessDeniedError } from '../security/pathRootsGuard';
+
+// This tool always does exactly these two steps -- not an estimate, a fact about its own
+// control flow -- so "2" is a real total, never a fabricated one.
+const TOTAL_STEPS = 2;
 
 const MCP_LOGGER_NAME = 'mcp-server';
 
@@ -33,10 +38,11 @@ export function registerReadPropertyDocumentTool(server: McpServer): void {
         'Call this when a buyer asks what a specific document says -- not for general property details.',
       inputSchema: readPropertyDocumentInputShape,
     },
-    async ({ property_id, document_name }) => {
+    async ({ property_id, document_name }, extra) => {
       const rl = startInvocationLog(server, MCP_LOGGER_NAME, 'tool', 'read_property_document', {
         property_id,
       });
+      const progress = createProgressReporter(extra);
 
       const documentsDir = findPropertyDocumentsDir(property_id);
       if (!documentsDir) {
@@ -57,7 +63,11 @@ export function registerReadPropertyDocumentTool(server: McpServer): void {
             reason: event.reason,
           });
         });
+        progress.tick(1, { total: TOTAL_STEPS, message: 'Verified the path is inside an allowed root.' });
+
         const text = await readFile(realPath, 'utf8');
+        progress.tick(TOTAL_STEPS, { total: TOTAL_STEPS, message: 'Document read.' });
+
         rl.finish('success');
         return { content: [{ type: 'text', text }] };
       } catch (error) {

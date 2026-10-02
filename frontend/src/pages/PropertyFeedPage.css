@@ -28,3 +28,16 @@
 .property-feed__compare-trigger {
   margin-bottom: var(--space-4);
 }
+
+.property-feed__ai-search {
+  margin-top: var(--space-8);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.property-feed__ai-search > summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}

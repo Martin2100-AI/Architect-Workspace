@@ -3,6 +3,7 @@ import './PropertyFeedPage.css';
 import { AiSearchBox } from '../components/AiSearchBox';
 import { MapView } from '../components/MapView';
 import { PropertyCard } from '../components/PropertyCard';
+import { PropertyLookup } from '../components/PropertyLookup';
 import { AffordabilityCalculatorPage } from './AffordabilityCalculatorPage';
 import { ComparisonPage } from './ComparisonPage';
 import { PropertyDetailPage } from './PropertyDetailPage';
@@ -10,6 +11,7 @@ import { TourRequestPage } from './TourRequestPage';
 import { fetchFavoritePropertyIds } from '../services/favoritesService';
 import { fetchPropertyFeed, MlsUnavailableError } from '../services/propertyService';
 import { MatchInfo, Property } from '../types/property';
+import { LookupField, lookupProperties } from '../utils/propertyLookup';
 
 type FeedState =
   | { status: 'loading' }
@@ -37,6 +39,7 @@ export function PropertyFeedPage(): JSX.Element {
   const [compareIds, setCompareIds] = useState<Set<string>>(new Set());
   const [showComparison, setShowComparison] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [lookup, setLookup] = useState<{ field: LookupField; value: string } | null>(null);
 
   function handleToggleCompare(propertyId: string): void {
     setCompareIds((prev) => {
@@ -117,6 +120,15 @@ export function PropertyFeedPage(): JSX.Element {
     setSelected({ id: propertyId, matchInfo });
   }
 
+  // Quick lookup filters the already-loaded feed in the browser — no network call.
+  const allProperties = feed.status === 'loaded' ? feed.properties : [];
+  const lookupResult = lookup ? lookupProperties(allProperties, lookup.field, lookup.value) : null;
+  const visibleProperties = lookupResult?.ok ? lookupResult.properties : allProperties;
+  const lookupError = lookupResult && !lookupResult.ok ? lookupResult.error : null;
+  const gridHeading = lookupResult?.ok
+    ? `${lookupResult.properties.length} of ${allProperties.length} homes match ${lookupResult.description}`
+    : 'Browse all homes';
+
   return (
     <main className="property-feed">
       <h1>Homes for you</h1>
@@ -147,6 +159,12 @@ export function PropertyFeedPage(): JSX.Element {
 
       {feed.status === 'loaded' && (
         <>
+          <PropertyLookup
+            onSearch={(field, value) => setLookup({ field, value })}
+            onClear={() => setLookup(null)}
+            error={lookupError}
+          />
+
           <div className="property-feed__view-toggle" role="group" aria-label="View mode">
             <button
               type="button"
@@ -167,19 +185,17 @@ export function PropertyFeedPage(): JSX.Element {
           </div>
 
           {viewMode === 'map' ? (
-            <MapView properties={feed.properties} />
+            <MapView properties={visibleProperties} />
           ) : (
             <>
-              <AiSearchBox
-                favoritedIds={feed.favoritedIds}
-                onViewDetails={handleViewDetails}
-                compareIds={compareIds}
-                onToggleCompare={handleToggleCompare}
-                maxCompareSelection={MAX_COMPARE_SELECTION}
-              />
-              <h2 className="property-feed__all-heading">Browse all homes</h2>
+              <h2 className="property-feed__all-heading" aria-live="polite">
+                {gridHeading}
+              </h2>
+              {lookupResult?.ok && lookupResult.properties.length === 0 && (
+                <p role="status">No homes match that search. Try a wider range, or clear the search.</p>
+              )}
               <div className="property-feed__grid">
-                {feed.properties.map((property) => (
+                {visibleProperties.map((property) => (
                   <PropertyCard
                     key={property.id}
                     property={property}
@@ -189,6 +205,16 @@ export function PropertyFeedPage(): JSX.Element {
                   />
                 ))}
               </div>
+              <details className="property-feed__ai-search">
+                <summary>Or describe the home in your own words (AI search)</summary>
+                <AiSearchBox
+                  favoritedIds={feed.favoritedIds}
+                  onViewDetails={handleViewDetails}
+                  compareIds={compareIds}
+                  onToggleCompare={handleToggleCompare}
+                  maxCompareSelection={MAX_COMPARE_SELECTION}
+                />
+              </details>
             </>
           )}
         </>

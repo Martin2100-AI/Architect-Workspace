@@ -1,0 +1,103 @@
+.property-lookup {
+  display: grid;
+  grid-template-columns: minmax(180px, 220px) 1fr auto;
+  column-gap: var(--space-3);
+  row-gap: var(--space-1);
+  align-items: end;
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.property-lookup__label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+/* The two labels sit above the picker and the value box; the actions column has none. */
+.property-lookup__label:nth-of-type(2) {
+  grid-column: 2 / 4;
+}
+
+.property-lookup__field,
+.property-lookup__value {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.property-lookup__value[aria-invalid='true'] {
+  border-color: var(--color-error);
+}
+
+.property-lookup__actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.property-lookup__submit,
+.property-lookup__clear {
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  font: inherit;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.property-lookup__submit {
+  color: var(--color-primary-contrast);
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.property-lookup__submit:hover {
+  background: var(--color-primary-hover);
+}
+
+.property-lookup__clear {
+  color: var(--color-text);
+  background: transparent;
+  border: 1px solid var(--color-border);
+}
+
+.property-lookup__error {
+  grid-column: 1 / -1;
+  margin: var(--space-2) 0 0;
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-error);
+  background: var(--color-error-bg);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+}
+
+@media (max-width: 640px) {
+  .property-lookup {
+    grid-template-columns: 1fr;
+  }
+
+  .property-lookup__label:nth-of-type(2) {
+    grid-column: auto;
+    grid-row: 3;
+  }
+
+  .property-lookup__field {
+    grid-row: 2;
+  }
+
+  .property-lookup__value {
+    grid-row: 4;
+  }
+
+  .property-lookup__actions > button {
+    flex: 1;
+  }
+}
